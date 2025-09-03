@@ -14,8 +14,36 @@
         body {
             font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
-            background: linear-gradient(135deg, #ffffff 0%, #fef7f7 50%, #f0fdf4 100%);
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 霧化背景效果 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxmaWx0ZXIgaWQ9Im5vaXNlIj4KICAgICAgPGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMDMiLz4KPC9zdmc+'),
+                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
         }
 
         /* 導航欄 */
@@ -23,12 +51,14 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             padding: 1rem 2rem;
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
 
         .nav-container {
@@ -42,8 +72,12 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #2563eb;
+            color: #059669;
             text-decoration: none;
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .nav-menu {
@@ -54,23 +88,52 @@
 
         .nav-item {
             cursor: pointer;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            color: #374151;
+            padding: 0.7rem 1.2rem;
+            border-radius: 15px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            color: #475569;
             font-weight: 500;
+            position: relative;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-item:hover::before {
+            opacity: 1;
         }
 
         .nav-item:hover {
-            background: rgba(37, 99, 235, 0.1);
-            color: #2563eb;
+            color: #059669;
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.6);
         }
 
         .nav-item.active {
-            background: #2563eb;
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            background: rgba(255, 255, 255, 0.6);
+            color: #059669;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-item.active::before {
+            opacity: 0;
         }
 
         /* 主要內容區 */
@@ -92,38 +155,73 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #f8b5d9, #a8e6cf);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             margin: 0 auto 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            color: white;
+            color: #059669;
             font-weight: bold;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.15),
+                0 8px 16px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .profile-image::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.8;
+            filter: blur(8px);
         }
 
         .profile-image:hover {
-            transform: scale(1.05);
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.2),
+                0 12px 24px rgba(0, 0, 0, 0.12);
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.7);
         }
 
         .intro-text {
             max-width: 600px;
             margin: 0 auto;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
 
         .intro-text h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 1rem;
-            color: #1f2937;
+            color: #1e293b;
             font-weight: 300;
+            background: linear-gradient(135deg, #1e293b, #475569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .intro-text p {
             font-size: 1.1rem;
-            color: #6b7280;
+            color: #64748b;
             line-height: 1.8;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
         /* 卡片網格樣式 */
@@ -135,48 +233,96 @@
         }
 
         .content-card {
-            background: white;
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
             padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .content-card:hover::before {
+            opacity: 1;
         }
 
         .content-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-            border-color: rgba(37, 99, 235, 0.2);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.15),
+                0 8px 24px rgba(0, 0, 0, 0.1);
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.45);
         }
 
         .card-thumbnail {
             width: 100%;
             height: 200px;
-            border-radius: 12px;
-            background: linear-gradient(45deg, #f8b5d9, #a8e6cf);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            color: white;
-            transition: transform 0.3s ease;
+            color: #059669;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-thumbnail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .content-card:hover .card-thumbnail::before {
+            left: 100%;
         }
 
         .content-card:hover .card-thumbnail {
-            transform: scale(1.02);
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.7);
         }
 
         .card-title {
             font-size: 1.25rem;
             font-weight: 600;
-            color: #1f2937;
+            color: #1e293b;
             margin-bottom: 0.5rem;
         }
 
         .card-summary {
-            color: #6b7280;
+            color: #64748b;
             line-height: 1.6;
             font-size: 0.95rem;
         }
@@ -187,26 +333,36 @@
             align-items: center;
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 1px solid #f3f4f6;
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
             font-size: 0.875rem;
-            color: #9ca3af;
+            color: #94a3b8;
         }
 
         /* 頁面標題 */
         .page-title {
             text-align: center;
             margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
         }
 
         .page-title h2 {
             font-size: 2.5rem;
-            color: #1f2937;
+            color: #1e293b;
             font-weight: 300;
             margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #1e293b, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .page-title p {
-            color: #6b7280;
+            color: #64748b;
             font-size: 1.1rem;
         }
 
@@ -223,6 +379,7 @@
         @media (max-width: 768px) {
             .navbar {
                 padding: 1rem;
+                background: rgba(255, 255, 255, 0.5);
             }
 
             .nav-menu {
@@ -230,8 +387,9 @@
             }
 
             .nav-item {
-                padding: 0.5rem;
+                padding: 0.5rem 0.8rem;
                 font-size: 0.9rem;
+                background: rgba(255, 255, 255, 0.4);
             }
 
             .main-content {
@@ -256,16 +414,93 @@
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.6s ease;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* 滾動條樣式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 特殊裝飾元素 */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: floatShapes 20s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        @keyframes floatShapes {
+            0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) translateX(10px) rotate(120deg); }
+            66% { transform: translateY(10px) translateX(-5px) rotate(240deg); }
+        }
     </style>
 </head>
 <body>
+    <!-- 浮動裝飾形狀 -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
     <!-- 導航欄 -->
     <nav class="navbar">
         <div class="nav-container">

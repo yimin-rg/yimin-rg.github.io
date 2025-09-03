@@ -6,7 +6,7 @@
     <title>Yimin 個人網站</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,56 +14,140 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: "Cactus Classical Serif", serif;
-            font-weight: 400;
-            font-style: normal;
-            line-height: 1.6;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --border: rgba(255, 255, 255, 0.1);
+            --glow: rgba(99, 102, 241, 0.4);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
 
-        /* 霧化背景效果 */
-        body::before {
-            content: '';
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .animated-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxmaWx0ZXIgaWQ9Im5vaXNlIj4KICAgICAgPGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMDMiLz4KPC9zdmc+'),
-                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
-            pointer-events: none;
             z-index: -1;
-            animation: float 20s ease-in-out infinite;
+            background: var(--bg-primary);
+            overflow: hidden;
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            filter: blur(60px);
+            opacity: 0.3;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .bg-orb:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .bg-orb:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            right: -150px;
+            background: var(--gradient-secondary);
+            animation-delay: 5s;
+        }
+
+        .bg-orb:nth-child(3) {
+            width: 350px;
+            height: 350px;
+            bottom: -175px;
+            left: 30%;
+            background: var(--gradient-accent);
+            animation-delay: 10s;
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(1deg); }
+            0%, 100% { 
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            33% { 
+                transform: translate(-30px, -30px) rotate(120deg) scale(1.1);
+            }
+            66% { 
+                transform: translate(30px, 20px) rotate(240deg) scale(0.9);
+            }
         }
 
-        /* 導航欄 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--text-primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: particleFloat 20s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         .navbar {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 1rem 2rem;
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
             z-index: 1000;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .navbar.scrolled {
+            background: rgba(15, 15, 35, 0.95);
+            padding: 0.5rem 0;
         }
 
         .nav-container {
@@ -72,36 +156,52 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: #059669;
-            text-decoration: none;
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        .logo:hover::after {
+            width: 100%;
         }
 
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 0.5rem;
         }
 
         .nav-item {
             cursor: pointer;
-            padding: 0.7rem 1.2rem;
-            border-radius: 15px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            color: #475569;
+            color: var(--text-secondary);
             font-weight: 500;
             position: relative;
-            background: rgba(255, 255, 255, 0.3);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .nav-item::before {
@@ -111,314 +211,241 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 15px;
+            background: var(--gradient-primary);
+            border-radius: 50px;
             opacity: 0;
             transition: opacity 0.3s ease;
             z-index: -1;
         }
 
-        .nav-item:hover::before {
+        .nav-item:hover::before,
+        .nav-item.active::before {
             opacity: 1;
         }
 
-        .nav-item:hover {
-            color: #059669;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            background: rgba(255, 255, 255, 0.5);
-            border-color: rgba(255, 255, 255, 0.6);
-        }
-
+        .nav-item:hover,
         .nav-item.active {
-            background: rgba(255, 255, 255, 0.6);
-            color: #059669;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.7);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--glow);
+            border-color: transparent;
         }
 
-        .nav-item.active::before {
-            opacity: 0;
-        }
-
-        /* 側邊目錄 */
-        .sidebar {
-            position: fixed;
-            left: -300px;
-            top: 80px;
-            width: 300px;
-            height: calc(100vh - 80px);
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(25px) saturate(180%);
-            border-right: 1px solid rgba(255, 255, 255, 0.3);
-            transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 999;
-            overflow-y: auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        .sidebar-toggle {
-            position: fixed;
-            left: 20px;
-            bottom: 20px;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 1001;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .sidebar-toggle:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .sidebar-toggle::before {
-            content: '▶';
-            font-size: 16px;
-            color: #059669;
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar-toggle.active::before {
-            transform: rotate(180deg);
-        }
-
-        .sidebar-content {
-            padding: 2rem 1rem;
-        }
-
-        .sidebar-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .category-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .category-header {
-            padding: 0.8rem 1rem;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .category-header:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateX(5px);
-        }
-
-        .category-title {
-            font-weight: 600;
-            color: #475569;
-        }
-
-        .category-arrow {
-            transition: transform 0.3s ease;
-            color: #059669;
-        }
-
-        .category-expanded .category-arrow {
-            transform: rotate(90deg);
-        }
-
-        .category-items {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            margin-top: 0.5rem;
-        }
-
-        .category-expanded .category-items {
-            max-height: 500px;
-        }
-
-        .category-item {
-            padding: 0.6rem 1.5rem;
-            color: #64748b;
-            cursor: pointer;
-            border-radius: 8px;
-            margin: 0.2rem 0;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .category-item:hover {
-            color: #059669;
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateX(10px);
-        }
-
-        /* 主要內容區 */
         .main-content {
             margin-top: 80px;
-            padding: 2rem;
+            padding: 0 2rem;
             max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
-            transition: margin-left 0.3s ease;
+            min-height: calc(100vh - 80px);
         }
 
-        .main-content.sidebar-active {
-            margin-left: 320px;
-        }
-
-        /* 首頁樣式 */
-        .home-section {
-            text-align: center;
-            padding: 4rem 0;
-        }
-
-        .profile-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            margin: 0 auto 2rem;
+        .hero-section {
+            min-height: calc(100vh - 80px);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            color: #059669;
-            font-weight: bold;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.15),
-                0 8px 16px rgba(0, 0, 0, 0.08);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-align: center;
             position: relative;
+            padding: 2rem 0;
         }
 
-        .profile-image::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.3));
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.8;
-            filter: blur(8px);
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
         }
 
-        .profile-image:hover {
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.2),
-                0 12px 24px rgba(0, 0, 0, 0.12);
-            background: rgba(255, 255, 255, 0.5);
-            border-color: rgba(255, 255, 255, 0.7);
+        .profile-container {
+            position: relative;
+            margin-bottom: 3rem;
         }
 
-        .intro-text {
-            max-width: 600px;
+        .profile-image {
+            width: 200px;
+            height: 200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            position: relative;
+            cursor: pointer;
         }
 
-        .intro-text h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            color: #1e293b;
-            font-weight: 400;
-            background: linear-gradient(135deg, #1e293b, #475569);
+        .profile-ring {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            animation: profileRotate 10s linear infinite;
+        }
+
+        .profile-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .profile-image:hover .profile-inner {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px var(--glow);
+        }
+
+        @keyframes profileRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            line-height: 1.2;
         }
 
-        .intro-text p {
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-description {
             font-size: 1.1rem;
-            color: #64748b;
+            color: var(--text-secondary);
             line-height: 1.8;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* 分區標籤樣式 */
-        .category-tabs {
+        .cta-buttons {
             display: flex;
             gap: 1rem;
-            margin-bottom: 2rem;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .category-tab {
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 15px;
+        .cta-button {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            color: #475569;
-            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-primary {
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+            box-shadow: 0 4px 20px var(--glow);
+        }
+
+        .cta-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
             backdrop-filter: blur(10px);
         }
 
-        .category-tab:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px var(--glow);
         }
 
-        .category-tab.active {
-            background: rgba(255, 255, 255, 0.5);
-            color: #059669;
-            border-color: rgba(255, 255, 255, 0.6);
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary);
+            text-align: center;
+            animation: bounce 2s infinite;
         }
 
-        /* 卡片網格樣式 */
+        .scroll-arrow {
+            width: 2px;
+            height: 30px;
+            background: var(--gradient-primary);
+            margin: 0.5rem auto;
+            border-radius: 1px;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .content-section {
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
         .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
-            padding: 2rem 0;
+            margin-top: 2rem;
         }
 
         .content-card {
-            background: rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.1),
-                0 1px 2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            backdrop-filter: blur(20px);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            cursor: pointer;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .content-card::before {
@@ -428,118 +455,63 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--gradient-primary);
             opacity: 0;
             transition: opacity 0.3s ease;
-            pointer-events: none;
+            z-index: -1;
         }
 
         .content-card:hover::before {
-            opacity: 1;
+            opacity: 0.05;
         }
 
         .content-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.15),
-                0 8px 24px rgba(0, 0, 0, 0.1);
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.45);
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
         }
 
-        .card-thumbnail {
-            width: 100%;
-            height: 200px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            margin-bottom: 1rem;
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: var(--gradient-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            color: #059669;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .card-thumbnail::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .content-card:hover .card-thumbnail::before {
-            left: 100%;
-        }
-
-        .content-card:hover .card-thumbnail {
-            transform: scale(1.05);
-            background: rgba(255, 255, 255, 0.5);
-            border-color: rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
         }
 
         .card-title {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
         }
 
-        .card-summary {
-            color: #64748b;
+        .card-description {
+            color: var(--text-secondary);
             line-height: 1.6;
-            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
         }
 
-        .card-meta {
-            display: flex;
-            justify-content: space-between;
+        .card-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
             align-items: center;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.4);
-            font-size: 0.875rem;
-            color: #94a3b8;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
         }
 
-        /* 頁面標題 */
-        .page-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(15px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        .card-link:hover {
+            color: var(--primary-dark);
+            transform: translateX(5px);
         }
 
-        .page-title h2 {
-            font-size: 2.5rem;
-            color: #1e293b;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #1e293b, #059669);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .page-title p {
-            color: #64748b;
-            font-size: 1.1rem;
-        }
-
-        /* 隱藏所有section */
         .section {
             display: none;
         }
@@ -548,82 +520,9 @@
             display: block;
         }
 
-        .circle-img {
-            width: 20vw;
-            height: 20vw;
-            max-width: 200px;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background-image: url("me_pic.jpg");
-            background-size: cover;
-            background-position: center;
-        }
-
-        /* 響應式設計 */
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 1rem;
-                background: rgba(255, 255, 255, 0.5);
-            }
-
-            .nav-menu {
-                gap: 1rem;
-            }
-
-            .nav-item {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.9rem;
-                background: rgba(255, 255, 255, 0.4);
-            }
-
-            .main-content {
-                padding: 1rem;
-            }
-
-            .main-content.sidebar-active {
-                margin-left: 0;
-            }
-
-            .sidebar {
-                width: 100%;
-                left: -100%;
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .intro-text h1 {
-                font-size: 2rem;
-            }
-
-            .page-title h2 {
-                font-size: 2rem;
-            }
-
-            .category-tabs {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .category-tab {
-                width: 200px;
-                text-align: center;
-            }
-        }
-
-        /* 滾動動畫 */
         .fade-in {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(50px);
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
@@ -632,297 +531,247 @@
             transform: translateY(0);
         }
 
-        /* 滾動條樣式 */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .nav-menu {
+                gap: 0.25rem;
+            }
+
+            .nav-item {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .main-content {
+                padding: 0 1rem;
+            }
+
+            .hero-section {
+                padding: 1rem 0;
+            }
+
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .profile-inner {
+                font-size: 3rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-button {
+                width: 200px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .content-section {
+                padding: 2rem 0;
+            }
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.3);
+            background: var(--bg-secondary);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.5);
+            background: var(--gradient-primary);
             border-radius: 4px;
-            backdrop-filter: blur(10px);
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.7);
-        }
-
-        /* 特殊裝飾元素 */
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            animation: floatShapes 20s ease-in-out infinite;
-        }
-
-        .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .shape:nth-child(2) {
-            width: 60px;
-            height: 60px;
-            top: 60%;
-            right: 15%;
-            animation-delay: 5s;
-        }
-
-        .shape:nth-child(3) {
-            width: 100px;
-            height: 100px;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 10s;
-        }
-
-        @keyframes floatShapes {
-            0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) translateX(10px) rotate(120deg); }
-            66% { transform: translateY(10px) translateX(-5px) rotate(240deg); }
+            background: var(--primary-dark);
         }
     </style>
 </head>
 <body>
-    <!-- 浮動裝飾形狀 -->
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
+    <div class="animated-bg">
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
+        <div class="bg-orb"></div>
     </div>
 
-    <!-- 側邊目錄 -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-content">
-            <div class="sidebar-title" id="sidebar-title">目錄</div>
-            <div id="sidebar-categories">
-                <!-- 動態生成目錄內容 -->
-            </div>
-        </div>
-    </div>
+    <div class="particles" id="particles"></div>
 
-    <!-- 側邊目錄切換按鈕 -->
-    <div class="sidebar-toggle" id="sidebar-toggle">
-    </div>
-
-    <!-- 導航欄 -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
             <a href="#" class="logo">Yimin</a>
             <ul class="nav-menu">
-                <li class="nav-item active" onclick="showSection('home')">首頁</li>
-                <li class="nav-item" onclick="showSection('uva')">UVA題庫</li>
-                <li class="nav-item" onclick="showSection('notes')">筆記</li>
-                <li class="nav-item" onclick="showSection('thoughts')">心得</li>
+                <li class="nav-item active" onclick="showSection(this, 'home')">首頁</li>
+                <li class="nav-item" onclick="showSection(this, 'uva')">UVA題庫</li>
+                <li class="nav-item" onclick="showSection(this, 'notes')">筆記</li>
+                <li class="nav-item" onclick="showSection(this, 'thoughts')">心得</li>
             </ul>
         </div>
     </nav>
 
-    <!-- 主要內容 -->
-    <main class="main-content" id="main-content">
-        <!-- 首頁 -->
+    <main class="main-content">
         <section id="home" class="section active">
-            <div class="home-section fade-in">
-                <div class="profile-image">
-                    <div class="circle">
-                        <img src="me_pic.jpg" class="circle-img" alt="我的照片">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="profile-container fade-in">
+                        <div class="profile-image">
+                            <div class="profile-ring"></div>
+                            <div class="profile-inner">
+                                <img src="me_pic.jpg" alt="我的照片" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h1 class="hero-title fade-in">Hello, I'm 誼旻</h1>
+                    <p class="hero-subtitle fade-in">Full Stack Developer & Problem Solver</p>
+                    <p class="hero-description fade-in">
+                        歡迎來到我的個人網站！我是一名熱愛程式設計和學習的開發者。 在這裡你可以找到我的專案作品、程式練習記錄、學習筆記以及個人心得分享。 希望我的經驗和想法能夠對你有所幫助，也歡迎與我交流討論！
+                    </p>
+                    
+                    <div class="cta-buttons fade-in">
+                        <button class="cta-button cta-primary" onclick="document.querySelector('[onclick*=uva]').click()">
+                            探索我的作品
+                        </button>
+                        <button class="cta-button cta-secondary" onclick="document.querySelector('[onclick*=thoughts]').click()">
+                            了解更多
+                        </button>
                     </div>
                 </div>
                 
-                <div class="intro-text">
-                    <h1>Hello, I'm 誼旻</h1>
-                    <p>歡迎來到我的個人網站！我是一名熱愛程式設計和學習的開發者。
-                    在這裡你可以找到我的專案作品、程式練習記錄、學習筆記以及個人心得分享。
-                    希望我的經驗和想法能夠對你有所幫助，也歡迎與我交流討論！</p>
+                <div class="scroll-indicator">
+                    <div class="scroll-arrow"></div>
+                    <small>向下滾動</small>
                 </div>
             </div>
         </section>
 
-        <!-- UVA題庫 -->
         <section id="uva" class="section">
-            <div class="page-title fade-in">
-                <h2>UVA 題庫練習</h2>
-                <p>演算法問題解析和程式碼實現記錄</p>
-            </div>
-            
-            <div class="category-tabs">
-                <div class="category-tab active" onclick="showUVACategory('cpe')">CPE必考49題</div>
-                <div class="category-tab" onclick="showUVACategory('others')">其他題目</div>
-            </div>
-
-            <div id="uva-cpe" class="content-grid">
-                <!-- CPE題目內容 -->
-            </div>
-            
-            <div id="uva-others" class="content-grid" style="display: none;">
-                <!-- 其他題目內容 -->
+            <div class="content-section">
+                <div class="section-title fade-in">
+                    <h2>UVA 題庫練習</h2>
+                    <p>演算法問題解析和程式碼實現記錄</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card fade-in">
+                        <div class="card-icon">💻</div>
+                        <h3 class="card-title">CPE 必考題目</h3>
+                        <p class="card-description">大學程式能力檢定必考的49道經典題目，涵蓋基礎演算法和資料結構。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                    
+                    <div class="content-card fade-in">
+                        <div class="card-icon">🔢</div>
+                        <h3 class="card-title">數學相關題目</h3>
+                        <p class="card-description">涉及數論、幾何、組合數學等數學概念的程式設計題目。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                    
+                    <div class="content-card fade-in">
+                        <div class="card-icon">🌟</div>
+                        <h3 class="card-title">經典演算法</h3>
+                        <p class="card-description">包含排序、搜尋、動態規劃、圖論等經典演算法的實作練習。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- 筆記 -->
         <section id="notes" class="section">
-            <div class="page-title fade-in">
-                <h2>學習筆記</h2>
-                <p>程式設計學習心得和技術筆記整理</p>
-            </div>
-            
-            <div class="category-tabs">
-                <div class="category-tab active" onclick="showNotesCategory('computer')">計算機概論</div>
-                <div class="category-tab" onclick="showNotesCategory('calculus')">微積分</div>
-                <div class="category-tab" onclick="showNotesCategory('english')">英文</div>
-            </div>
-
-            <div id="notes-computer" class="content-grid">
-                <!-- 計算機概論筆記 -->
-            </div>
-            
-            <div id="notes-calculus" class="content-grid" style="display: none;">
-                <!-- 微積分筆記 -->
-            </div>
-            
-            <div id="notes-english" class="content-grid" style="display: none;">
-                <!-- 英文筆記 -->
+            <div class="content-section">
+                <div class="section-title fade-in">
+                    <h2>學習筆記</h2>
+                    <p>程式設計學習心得和技術筆記整理</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card fade-in">
+                        <div class="card-icon">📚</div>
+                        <h3 class="card-title">計算機概論</h3>
+                        <p class="card-description">從基礎硬體架構到軟體系統，完整的計算機科學入門筆記。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                    
+                    <div class="content-card fade-in">
+                        <div class="card-icon">📐</div>
+                        <h3 class="card-title">微積分</h3>
+                        <p class="card-description">極限、導數、積分等微積分核心概念的學習筆記和解題技巧。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                    
+                    <div class="content-card fade-in">
+                        <div class="card-icon">🌍</div>
+                        <h3 class="card-title">英文學習</h3>
+                        <p class="card-description">文法、詞彙、閱讀、寫作等英語能力提升的系統性學習記錄。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- 心得 -->
         <section id="thoughts" class="section">
-            <div class="page-title fade-in">
-                <h2>個人心得</h2>
-                <p>學習過程的反思和程式設計路上的感悟</p>
-            </div>
-            <div class="content-grid">
-                <!-- 內容將由 JavaScript 動態生成 -->
+            <div class="content-section">
+                <div class="section-title fade-in">
+                    <h2>個人心得</h2>
+                    <p>學習過程的反思和程式設計路上的感悟</p>
+                </div>
+                
+                <div class="content-grid">
+                    <div class="content-card fade-in">
+                        <div class="card-icon">💭</div>
+                        <h3 class="card-title">程式學習心路歷程</h3>
+                        <p class="card-description">從零開始學習程式設計的過程中，遇到的挑戰和收穫的心得分享。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                    
+                    <div class="content-card fade-in">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">學習方法與技巧</h3>
+                        <p class="card-description">在學習過程中總結出的有效學習方法和提升效率的技巧。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                    
+                    <div class="content-card fade-in">
+                        <div class="card-icon">🚀</div>
+                        <h3 class="card-title">未來規劃與目標</h3>
+                        <p class="card-description">對於程式設計職涯的規劃思考和持續學習的動力來源。</p>
+                        <a href="#" class="card-link">查看更多 →</a>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
     <script>
-        // 側邊欄數據
-        const sidebarData = {
-            /*uva: {
-                title: 'UVA 題庫',
-                categories: {
-                    cpe: {
-                        name: 'CPE必考49題',
-                        items: [
-                            'UVA 100 - The 3n + 1 problem',
-                            'UVA 272 - TEX Quotes',
-                            'UVA 10055 - Hashmat the Brave Warrior',
-                            'UVA 10071 - Back to High School Physics',
-                            'UVA 10550 - Combination Lock',
-                            'UVA 11044 - Searching for Nessy',
-                            'UVA 11172 - Relational Operator',
-                            'UVA 11498 - Division of Nlogonia',
-                            'UVA 11727 - Cost Cutting'
-                        ]
-                    },
-                    others: {
-                        name: '其他題目',
-                        items: [
-                            'UVA 101 - The Blocks Problem',
-                            'UVA 102 - Ecological Bin Packing',
-                            'UVA 103 - Stacking Boxes',
-                            'UVA 104 - Arbitrage',
-                            'UVA 105 - The Skyline Problem',
-                            'UVA 106 - Fermat vs. Pythagoras',
-                            'UVA 107 - The Cat in the Hat'
-                        ]
-                    }
-                }
-            },
-            notes: {
-                title: '學習筆記',
-                categories: {
-                    computer: {
-                        name: '計算機概論',
-                        items: [
-                            '第一章 - 電腦系統概述',
-                            '第二章 - 數位系統與資料表示法',
-                            '第三章 - 電腦硬體架構',
-                            '第四章 - 作業系統基礎',
-                            '第五章 - 程式語言概論',
-                            '第六章 - 資料結構與演算法',
-                            '第七章 - 資料庫系統',
-                            '第八章 - 網路與通訊'
-                        ]
-                    },
-                    calculus: {
-                        name: '微積分',
-                        items: [
-                            '第一章 - 極限與連續',
-                            '第二章 - 導數與微分',
-                            '第三章 - 微分的應用',
-                            '第四章 - 積分概念',
-                            '第五章 - 積分技巧',
-                            '第六章 - 積分的應用',
-                            '第七章 - 無窮級數',
-                            '第八章 - 多變數函數'
-                        ]
-                    },
-                    english: {
-                        name: '英文',
-                        items: [
-                            '文法基礎 - 時態與語態',
-                            '文法進階 - 子句與句型',
-                            '詞彙建構 - 字根字首',
-                            '閱讀技巧 - 快速理解',
-                            '寫作技巧 - 段落組織',
-                            '聽力訓練 - 日常對話',
-                            '口說練習 - 發音與語調',
-                            '考試準備 - TOEIC/TOEFL'
-                        ]
-                    }
-                }
-            },
-            thoughts: {
-                title: '個人心得',
-                categories: {
-                    general: {
-                        name: '學習心得',
-                        items: [
-                            '程式學習之路的起點',
-                            '第一次寫程式的挫折與收穫',
-                            '演算法學習的心得分享',
-                            '資料結構的重要性',
-                            '如何有效率地學習新技術',
-                            '程式除錯的技巧與心態',
-                            '團隊合作的經驗談',
-                            '持續學習的動力來源'
-                        ]
-                    }
-                }
-            }*/
-        };
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = particle.style.height = Math.random() * 4 + 1 + 'px';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
 
-        let currentSection = 'home';
-        let currentCategory = '';
-
-        // 導航功能
-        function showSection(sectionId) {
+        function showSection(element, sectionId) {
             // 隱藏所有section
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
+            document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
 
@@ -930,154 +779,28 @@
             document.getElementById(sectionId).classList.add('active');
 
             // 更新導航項目狀態
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
+            document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.target.classList.add('active');
-
-            // 更新當前section
-            currentSection = sectionId;
-
-            // 根據section顯示或隱藏側邊欄按鈕和更新側邊欄內容
-            const sidebarToggle = document.getElementById('sidebar-toggle');
-            if (sectionId === 'home') {
-                sidebarToggle.style.display = 'none';
-                hideSidebar();
-            } else {
-                sidebarToggle.style.display = 'flex';
-                updateSidebarContent(sectionId);
-            }
+            element.classList.add('active');
 
             // 重新觸發動畫
             setTimeout(() => {
-                const fadeElements = document.querySelectorAll(`#${sectionId} .fade-in`);
-                fadeElements.forEach(element => {
-                    element.classList.add('visible');
+                document.querySelectorAll(`#${sectionId} .fade-in`).forEach((el, index) => {
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, index * 100);
                 });
             }, 100);
         }
 
-        // UVA分類切換
-        function showUVACategory(category) {
-            const tabs = document.querySelectorAll('#uva .category-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-
-            document.getElementById('uva-cpe').style.display = category === 'cpe' ? 'grid' : 'none';
-            document.getElementById('uva-others').style.display = category === 'others' ? 'grid' : 'none';
-            
-            currentCategory = category;
-            updateSidebarContent('uva');
-        }
-
-        // 筆記分類切換
-        function showNotesCategory(category) {
-            const tabs = document.querySelectorAll('#notes .category-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-
-            document.getElementById('notes-computer').style.display = category === 'computer' ? 'grid' : 'none';
-            document.getElementById('notes-calculus').style.display = category === 'calculus' ? 'grid' : 'none';
-            document.getElementById('notes-english').style.display = category === 'english' ? 'grid' : 'none';
-            
-            currentCategory = category;
-            updateSidebarContent('notes');
-        }
-
-        // 側邊欄切換
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const toggle = document.getElementById('sidebar-toggle');
-
-            sidebar.classList.toggle('active');
-            mainContent.classList.toggle('sidebar-active');
-            toggle.classList.toggle('active');
-        }
-
-        // 隱藏側邊欄
-        function hideSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('main-content');
-            const toggle = document.getElementById('sidebar-toggle');
-
-            sidebar.classList.remove('active');
-            mainContent.classList.remove('sidebar-active');
-            toggle.classList.remove('active');
-        }
-
-        // 更新側邊欄內容
-        function updateSidebarContent(section) {
-            const sidebarTitle = document.getElementById('sidebar-title');
-            const sidebarCategories = document.getElementById('sidebar-categories');
-            
-            if (!sidebarData[section]) return;
-
-            const data = sidebarData[section];
-            sidebarTitle.textContent = data.title;
-
-            let categoriesHTML = '';
-            
-            if (section === 'uva' || section === 'notes') {
-                // 對於有子分類的section，只顯示當前活躍的分類
-                const activeCategory = currentCategory || Object.keys(data.categories)[0];
-                const categoryData = data.categories[activeCategory];
-                
-                if (categoryData) {
-                    categoriesHTML = `
-                        <div class="category-group">
-                            <div class="category-header category-expanded" onclick="toggleCategory(this)">
-                                <span class="category-title">${categoryData.name}</span>
-                                <span class="category-arrow">▶</span>
-                            </div>
-                            <div class="category-items">
-                                ${categoryData.items.map(item => 
-                                    `<div class="category-item" onclick="selectItem('${item}')">${item}</div>`
-                                ).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
-            } else {
-                // 對於thoughts等section，顯示所有分類
-                categoriesHTML = Object.entries(data.categories).map(([key, category]) => `
-                    <div class="category-group">
-                        <div class="category-header" onclick="toggleCategory(this)">
-                            <span class="category-title">${category.name}</span>
-                            <span class="category-arrow">▶</span>
-                        </div>
-                        <div class="category-items">
-                            ${category.items.map(item => 
-                                `<div class="category-item" onclick="selectItem('${item}')">${item}</div>`
-                            ).join('')}
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            sidebarCategories.innerHTML = categoriesHTML;
-        }
-
-        // 切換分類展開/收合
-        function toggleCategory(element) {
-            const categoryGroup = element.parentElement;
-            categoryGroup.classList.toggle('category-expanded');
-        }
-
-        // 選擇項目
-        function selectItem(itemName) {
-            console.log('選擇項目:', itemName);
-            // 這裡可以添加選擇項目後的行為，例如顯示對應內容
-            alert(`你選擇了: ${itemName}`);
-        }
-
-        // 滾動動畫
         function observeElements() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
+                entries.forEach((entry, index) => {
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 100);
                     }
                 });
             }, {
@@ -1090,22 +813,18 @@
             });
         }
 
-        // 卡片點擊效果
-        function addCardClickEffect() {
-            document.querySelectorAll('.content-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    console.log('Card clicked:', this.querySelector('.card-title')?.textContent);
-                });
-            });
-        }
-
-        // 導航欄滾動效果
         function handleNavbarScroll() {
-            const navbar = document.querySelector('.navbar');
+            const navbar = document.getElementById('navbar');
             let lastScrollY = window.scrollY;
 
             window.addEventListener('scroll', () => {
                 const currentScrollY = window.scrollY;
+                
+                if (currentScrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
                 
                 if (currentScrollY > lastScrollY && currentScrollY > 100) {
                     navbar.style.transform = 'translateY(-100%)';
@@ -1117,148 +836,49 @@
             });
         }
 
-        // 生成示例內容
-        function generateSampleContent() {
-            // 生成CPE題目卡片
-           /* const cpeGrid = document.getElementById('uva-cpe');
-            const cpeProblems = [
-                { title: 'UVA 100 - The 3n + 1 problem', summary: '著名的3n+1猜想問題，需要計算循環長度', difficulty: '簡單', icon: '🔢' },
-                { title: 'UVA 272 - TEX Quotes', summary: '字符串處理問題，將引號轉換為TeX格式', difficulty: '簡單', icon: '📝' },
-                { title: 'UVA 10055 - Hashmat the Brave Warrior', summary: '計算兩個數字之間的絕對差值', difficulty: '簡單', icon: '⚔️' }
-            ];*/
+        function createMouseFollower() {
+            const follower = document.createElement('div');
+            follower.style.cssText = `
+                position: fixed;
+                width: 20px;
+                height: 20px;
+                background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                transition: transform 0.1s ease;
+            `;
+            document.body.appendChild(follower);
 
-            cpeGrid.innerHTML = cpeProblems.map(problem => `
-                <div class="content-card fade-in">
-                    <div class="card-thumbnail">${problem.icon}</div>
-                    <div class="card-title">${problem.title}</div>
-                    <div class="card-summary">${problem.summary}</div>
-                    <div class="card-meta">
-                        <span>難度: ${problem.difficulty}</span>
-                        <span>2024-01-15</span>
-                    </div>
-                </div>
-            `).join('');
-
-            // 生成其他題目卡片
-          /*  const othersGrid = document.getElementById('uva-others');
-            const otherProblems = [
-                { title: 'UVA 101 - The Blocks Problem', summary: '模擬積木移動的問題，需要實現堆疊操作', difficulty: '中等', icon: '🧱' },
-                { title: 'UVA 102 - Ecological Bin Packing', summary: '環保垃圾分類問題，尋找最少移動次數', difficulty: '中等', icon: '♻️' },
-                { title: 'UVA 103 - Stacking Boxes', summary: '動態規劃問題，計算最長的箱子堆疊序列', difficulty: '困難', icon: '📦' }
-            ];*/
-
-            othersGrid.innerHTML = otherProblems.map(problem => `
-                <div class="content-card fade-in">
-                    <div class="card-thumbnail">${problem.icon}</div>
-                    <div class="card-title">${problem.title}</div>
-                    <div class="card-summary">${problem.summary}</div>
-                    <div class="card-meta">
-                        <span>難度: ${problem.difficulty}</span>
-                        <span>2024-01-15</span>
-                    </div>
-                </div>
-            `).join('');
-
-            // 生成筆記內容
-            const computerGrid = document.getElementById('notes-computer');
-           /* const computerNotes = [
-                { title: '第一章 - 電腦系統概述', summary: '介紹電腦系統的基本組成和運作原理', category: '基礎概念', icon: '💻' },
-                { title: '第二章 - 數位系統與資料表示法', summary: '二進制、八進制、十六進制的轉換與運算', category: '數位系統', icon: '🔢' },
-                { title: '第三章 - 電腦硬體架構', summary: 'CPU、記憶體、I/O裝置的架構與功能', category: '硬體架構', icon: '🔧' }
-            ];*/
-
-            computerGrid.innerHTML = computerNotes.map(note => `
-                <div class="content-card fade-in">
-                    <div class="card-thumbnail">${note.icon}</div>
-                    <div class="card-title">${note.title}</div>
-                    <div class="card-summary">${note.summary}</div>
-                    <div class="card-meta">
-                        <span>${note.category}</span>
-                        <span>2024-01-10</span>
-                    </div>
-                </div>
-            `).join('');
-
-            const calculusGrid = document.getElementById('notes-calculus');
-           /* const calculusNotes = [
-                { title: '第一章 - 極限與連續', summary: '極限的定義、性質及連續函數的概念', category: '極限理論', icon: '∞' },
-                { title: '第二章 - 導數與微分', summary: '導數的定義、微分法則及其幾何意義', category: '微分學', icon: '📈' },
-                { title: '第三章 - 微分的應用', summary: '函數的單調性、極值及曲線描繪', category: '應用', icon: '📊' }
-            ];*/
-
-            calculusGrid.innerHTML = calculusNotes.map(note => `
-                <div class="content-card fade-in">
-                    <div class="card-thumbnail">${note.icon}</div>
-                    <div class="card-title">${note.title}</div>
-                    <div class="card-summary">${note.summary}</div>
-                    <div class="card-meta">
-                        <span>${note.category}</span>
-                        <span>2024-01-12</span>
-                    </div>
-                </div>
-            `).join('');
-
-            const englishGrid = document.getElementById('notes-english');
-           /* const englishNotes = [
-                { title: '文法基礎 - 時態與語態', summary: '過去式、現在式、未來式的用法及主被動語態', category: '文法', icon: '📚' },
-                { title: '詞彙建構 - 字根字首', summary: '透過字根字首快速擴充詞彙量的方法', category: '詞彙', icon: '🔤' },
-                { title: '閱讀技巧 - 快速理解', summary: '略讀、掃讀技巧及文章結構分析', category: '閱讀', icon: '👀' }
-            ];*/
-
-            englishGrid.innerHTML = englishNotes.map(note => `
-                <div class="content-card fade-in">
-                    <div class="card-thumbnail">${note.icon}</div>
-                    <div class="card-title">${note.title}</div>
-                    <div class="card-summary">${note.summary}</div>
-                    <div class="card-meta">
-                        <span>${note.category}</span>
-                        <span>2024-01-08</span>
-                    </div>
-                </div>
-            `).join('');
-
-            // 生成心得內容
-           /* const thoughtsGrid = document.querySelector('#thoughts .content-grid');
-            const thoughts = [
-                { title: '程式學習之路的起點', summary: '回顧剛開始學習程式設計時的心路歷程', category: '心得分享', icon: '🚀' },
-                { title: '演算法學習的心得分享', summary: '學習資料結構與演算法的經驗和建議', category: '技術心得', icon: '🧠' },
-                { title: '如何有效率地學習新技術', summary: '分享個人的學習方法和時間管理技巧', category: '學習方法', icon: '⚡' }
-            ];*/
-
-            thoughtsGrid.innerHTML = thoughts.map(thought => `
-                <div class="content-card fade-in">
-                    <div class="card-thumbnail">${thought.icon}</div>
-                    <div class="card-title">${thought.title}</div>
-                    <div class="card-summary">${thought.summary}</div>
-                    <div class="card-meta">
-                        <span>${thought.category}</span>
-                        <span>2024-01-20</span>
-                    </div>
-                </div>
-            `).join('');
+            document.addEventListener('mousemove', (e) => {
+                follower.style.left = e.clientX - 10 + 'px';
+                follower.style.top = e.clientY - 10 + 'px';
+            });
         }
 
-        // 初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 側邊欄切換按鈕事件
-            document.getElementById('sidebar-toggle').addEventListener('click', toggleSidebar);
+            createParticles();
+            observeElements();
+            handleNavbarScroll();
+            createMouseFollower();
 
-            // 初始隱藏側邊欄按鈕
-            document.getElementById('sidebar-toggle').style.display = 'none';
-
-            // 生成示例內容
-            generateSampleContent();
-
-            // 初始顯示首頁動畫
             setTimeout(() => {
-                document.querySelectorAll('#home .fade-in').forEach(element => {
-                    element.classList.add('visible');
+                document.querySelectorAll('#home .fade-in').forEach((element, index) => {
+                    setTimeout(() => {
+                        element.classList.add('visible');
+                    }, index * 200);
                 });
             }, 300);
+        });
 
-            observeElements();
-            addCardClickEffect();
-            handleNavbarScroll();
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '1' && e.key <= '4') {
+                const navItems = document.querySelectorAll('.nav-item');
+                const index = parseInt(e.key) - 1;
+                if (navItems[index]) {
+                    navItems[index].click();
+                }
+            }
         });
     </script>
 </body>

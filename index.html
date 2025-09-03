@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yimin 個人網站</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cactus+Classical+Serif&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +15,9 @@
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: "Cactus Classical Serif", serif;
+            font-weight: 400;
+            font-style: normal;
             line-height: 1.6;
             background: 
                 radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
@@ -136,6 +141,136 @@
             opacity: 0;
         }
 
+        /* 側邊目錄 */
+        .sidebar {
+            position: fixed;
+            left: -300px;
+            top: 80px;
+            width: 300px;
+            height: calc(100vh - 80px);
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(25px) saturate(180%);
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+            transition: left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 999;
+            overflow-y: auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            left: 20px;
+            bottom: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar-toggle::before {
+            content: '▶';
+            font-size: 16px;
+            color: #059669;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-toggle.active::before {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-content {
+            padding: 2rem 1rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .category-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-header {
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-header:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateX(5px);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .category-arrow {
+            transition: transform 0.3s ease;
+            color: #059669;
+        }
+
+        .category-expanded .category-arrow {
+            transform: rotate(90deg);
+        }
+
+        .category-items {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .category-expanded .category-items {
+            max-height: 500px;
+        }
+
+        .category-item {
+            padding: 0.6rem 1.5rem;
+            color: #64748b;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 0.2rem 0;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .category-item:hover {
+            color: #059669;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateX(10px);
+        }
+
         /* 主要內容區 */
         .main-content {
             margin-top: 80px;
@@ -143,6 +278,11 @@
             max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.sidebar-active {
+            margin-left: 320px;
         }
 
         /* 首頁樣式 */
@@ -210,7 +350,7 @@
             font-size: 2.8rem;
             margin-bottom: 1rem;
             color: #1e293b;
-            font-weight: 300;
+            font-weight: 400;
             background: linear-gradient(135deg, #1e293b, #475569);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -222,6 +362,39 @@
             color: #64748b;
             line-height: 1.8;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        /* 分區標籤樣式 */
+        .category-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #475569;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-tab:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-tab.active {
+            background: rgba(255, 255, 255, 0.5);
+            color: #059669;
+            border-color: rgba(255, 255, 255, 0.6);
         }
 
         /* 卡片網格樣式 */
@@ -353,7 +526,7 @@
         .page-title h2 {
             font-size: 2.5rem;
             color: #1e293b;
-            font-weight: 300;
+            font-weight: 400;
             margin-bottom: 0.5rem;
             background: linear-gradient(135deg, #1e293b, #059669);
             -webkit-background-clip: text;
@@ -373,6 +546,24 @@
 
         .section.active {
             display: block;
+        }
+
+        .circle-img {
+            width: 20vw;
+            height: 20vw;
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-image: url("me_pic.jpg");
+            background-size: cover;
+            background-position: center;
         }
 
         /* 響應式設計 */
@@ -396,6 +587,15 @@
                 padding: 1rem;
             }
 
+            .main-content.sidebar-active {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                left: -100%;
+            }
+
             .content-grid {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
@@ -407,6 +607,16 @@
 
             .page-title h2 {
                 font-size: 2rem;
+            }
+
+            .category-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .category-tab {
+                width: 200px;
+                text-align: center;
             }
         }
 
@@ -486,26 +696,6 @@
             animation-delay: 10s;
         }
 
-        .circle-img {
-            width: 20vw;         /* 依照螢幕大小縮放 */
-            height: 20vw;        /* 必須和 width 一樣 */
-            max-width: 200px;    /* 最多 200px */
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-        .circle {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background-image: url("me_pic.jpg");
-            background-size: cover;     /* 填滿 */
-            background-position: center;/* 置中 */
-        }
-
-
-
-
         @keyframes floatShapes {
             0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
             33% { transform: translateY(-20px) translateX(10px) rotate(120deg); }
@@ -521,13 +711,26 @@
         <div class="shape"></div>
     </div>
 
+    <!-- 側邊目錄 -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="sidebar-title" id="sidebar-title">目錄</div>
+            <div id="sidebar-categories">
+                <!-- 動態生成目錄內容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 側邊目錄切換按鈕 -->
+    <div class="sidebar-toggle" id="sidebar-toggle">
+    </div>
+
     <!-- 導航欄 -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo">Yimin</a>
             <ul class="nav-menu">
                 <li class="nav-item active" onclick="showSection('home')">首頁</li>
-                <li class="nav-item" onclick="showSection('projects')">專案</li>
                 <li class="nav-item" onclick="showSection('uva')">UVA題庫</li>
                 <li class="nav-item" onclick="showSection('notes')">筆記</li>
                 <li class="nav-item" onclick="showSection('thoughts')">心得</li>
@@ -536,33 +739,22 @@
     </nav>
 
     <!-- 主要內容 -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <!-- 首頁 -->
         <section id="home" class="section active">
             <div class="home-section fade-in">
                 <div class="profile-image">
                     <div class="circle">
-                    <img src="me_pic.jpg" class="circle-img" alt="我的照片">
-                </div>
+                        <img src="me_pic.jpg" class="circle-img" alt="我的照片">
+                    </div>
                 </div>
                 
                 <div class="intro-text">
-                    <h1>Hello, I'm Yimin</h1>
+                    <h1>Hello, I'm 誼旻</h1>
                     <p>歡迎來到我的個人網站！我是一名熱愛程式設計和學習的開發者。
                     在這裡你可以找到我的專案作品、程式練習記錄、學習筆記以及個人心得分享。
                     希望我的經驗和想法能夠對你有所幫助，也歡迎與我交流討論！</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- 專案頁面 -->
-        <section id="projects" class="section">
-            <div class="page-title fade-in">
-                <h2>我的專案</h2>
-                <p>展示我的程式設計作品和實作專案</p>
-            </div>
-            <div class="content-grid">
-                <!-- 內容將由 JavaScript 動態生成 -->
             </div>
         </section>
 
@@ -572,8 +764,18 @@
                 <h2>UVA 題庫練習</h2>
                 <p>演算法問題解析和程式碼實現記錄</p>
             </div>
-            <div class="content-grid">
-                <!-- 內容將由 JavaScript 動態生成 -->
+            
+            <div class="category-tabs">
+                <div class="category-tab active" onclick="showUVACategory('cpe')">CPE必考49題</div>
+                <div class="category-tab" onclick="showUVACategory('others')">其他題目</div>
+            </div>
+
+            <div id="uva-cpe" class="content-grid">
+                <!-- CPE題目內容 -->
+            </div>
+            
+            <div id="uva-others" class="content-grid" style="display: none;">
+                <!-- 其他題目內容 -->
             </div>
         </section>
 
@@ -583,8 +785,23 @@
                 <h2>學習筆記</h2>
                 <p>程式設計學習心得和技術筆記整理</p>
             </div>
-            <div class="content-grid">
-                <!-- 內容將由 JavaScript 動態生成 -->
+            
+            <div class="category-tabs">
+                <div class="category-tab active" onclick="showNotesCategory('computer')">計算機概論</div>
+                <div class="category-tab" onclick="showNotesCategory('calculus')">微積分</div>
+                <div class="category-tab" onclick="showNotesCategory('english')">英文</div>
+            </div>
+
+            <div id="notes-computer" class="content-grid">
+                <!-- 計算機概論筆記 -->
+            </div>
+            
+            <div id="notes-calculus" class="content-grid" style="display: none;">
+                <!-- 微積分筆記 -->
+            </div>
+            
+            <div id="notes-english" class="content-grid" style="display: none;">
+                <!-- 英文筆記 -->
             </div>
         </section>
 
@@ -601,6 +818,106 @@
     </main>
 
     <script>
+        // 側邊欄數據
+        const sidebarData = {
+            /*uva: {
+                title: 'UVA 題庫',
+                categories: {
+                    cpe: {
+                        name: 'CPE必考49題',
+                        items: [
+                            'UVA 100 - The 3n + 1 problem',
+                            'UVA 272 - TEX Quotes',
+                            'UVA 10055 - Hashmat the Brave Warrior',
+                            'UVA 10071 - Back to High School Physics',
+                            'UVA 10550 - Combination Lock',
+                            'UVA 11044 - Searching for Nessy',
+                            'UVA 11172 - Relational Operator',
+                            'UVA 11498 - Division of Nlogonia',
+                            'UVA 11727 - Cost Cutting'
+                        ]
+                    },
+                    others: {
+                        name: '其他題目',
+                        items: [
+                            'UVA 101 - The Blocks Problem',
+                            'UVA 102 - Ecological Bin Packing',
+                            'UVA 103 - Stacking Boxes',
+                            'UVA 104 - Arbitrage',
+                            'UVA 105 - The Skyline Problem',
+                            'UVA 106 - Fermat vs. Pythagoras',
+                            'UVA 107 - The Cat in the Hat'
+                        ]
+                    }
+                }
+            },
+            notes: {
+                title: '學習筆記',
+                categories: {
+                    computer: {
+                        name: '計算機概論',
+                        items: [
+                            '第一章 - 電腦系統概述',
+                            '第二章 - 數位系統與資料表示法',
+                            '第三章 - 電腦硬體架構',
+                            '第四章 - 作業系統基礎',
+                            '第五章 - 程式語言概論',
+                            '第六章 - 資料結構與演算法',
+                            '第七章 - 資料庫系統',
+                            '第八章 - 網路與通訊'
+                        ]
+                    },
+                    calculus: {
+                        name: '微積分',
+                        items: [
+                            '第一章 - 極限與連續',
+                            '第二章 - 導數與微分',
+                            '第三章 - 微分的應用',
+                            '第四章 - 積分概念',
+                            '第五章 - 積分技巧',
+                            '第六章 - 積分的應用',
+                            '第七章 - 無窮級數',
+                            '第八章 - 多變數函數'
+                        ]
+                    },
+                    english: {
+                        name: '英文',
+                        items: [
+                            '文法基礎 - 時態與語態',
+                            '文法進階 - 子句與句型',
+                            '詞彙建構 - 字根字首',
+                            '閱讀技巧 - 快速理解',
+                            '寫作技巧 - 段落組織',
+                            '聽力訓練 - 日常對話',
+                            '口說練習 - 發音與語調',
+                            '考試準備 - TOEIC/TOEFL'
+                        ]
+                    }
+                }
+            },
+            thoughts: {
+                title: '個人心得',
+                categories: {
+                    general: {
+                        name: '學習心得',
+                        items: [
+                            '程式學習之路的起點',
+                            '第一次寫程式的挫折與收穫',
+                            '演算法學習的心得分享',
+                            '資料結構的重要性',
+                            '如何有效率地學習新技術',
+                            '程式除錯的技巧與心態',
+                            '團隊合作的經驗談',
+                            '持續學習的動力來源'
+                        ]
+                    }
+                }
+            }*/
+        };
+
+        let currentSection = 'home';
+        let currentCategory = '';
+
         // 導航功能
         function showSection(sectionId) {
             // 隱藏所有section
@@ -619,6 +936,19 @@
             });
             event.target.classList.add('active');
 
+            // 更新當前section
+            currentSection = sectionId;
+
+            // 根據section顯示或隱藏側邊欄按鈕和更新側邊欄內容
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            if (sectionId === 'home') {
+                sidebarToggle.style.display = 'none';
+                hideSidebar();
+            } else {
+                sidebarToggle.style.display = 'flex';
+                updateSidebarContent(sectionId);
+            }
+
             // 重新觸發動畫
             setTimeout(() => {
                 const fadeElements = document.querySelectorAll(`#${sectionId} .fade-in`);
@@ -626,6 +956,120 @@
                     element.classList.add('visible');
                 });
             }, 100);
+        }
+
+        // UVA分類切換
+        function showUVACategory(category) {
+            const tabs = document.querySelectorAll('#uva .category-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('uva-cpe').style.display = category === 'cpe' ? 'grid' : 'none';
+            document.getElementById('uva-others').style.display = category === 'others' ? 'grid' : 'none';
+            
+            currentCategory = category;
+            updateSidebarContent('uva');
+        }
+
+        // 筆記分類切換
+        function showNotesCategory(category) {
+            const tabs = document.querySelectorAll('#notes .category-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('notes-computer').style.display = category === 'computer' ? 'grid' : 'none';
+            document.getElementById('notes-calculus').style.display = category === 'calculus' ? 'grid' : 'none';
+            document.getElementById('notes-english').style.display = category === 'english' ? 'grid' : 'none';
+            
+            currentCategory = category;
+            updateSidebarContent('notes');
+        }
+
+        // 側邊欄切換
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const toggle = document.getElementById('sidebar-toggle');
+
+            sidebar.classList.toggle('active');
+            mainContent.classList.toggle('sidebar-active');
+            toggle.classList.toggle('active');
+        }
+
+        // 隱藏側邊欄
+        function hideSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const toggle = document.getElementById('sidebar-toggle');
+
+            sidebar.classList.remove('active');
+            mainContent.classList.remove('sidebar-active');
+            toggle.classList.remove('active');
+        }
+
+        // 更新側邊欄內容
+        function updateSidebarContent(section) {
+            const sidebarTitle = document.getElementById('sidebar-title');
+            const sidebarCategories = document.getElementById('sidebar-categories');
+            
+            if (!sidebarData[section]) return;
+
+            const data = sidebarData[section];
+            sidebarTitle.textContent = data.title;
+
+            let categoriesHTML = '';
+            
+            if (section === 'uva' || section === 'notes') {
+                // 對於有子分類的section，只顯示當前活躍的分類
+                const activeCategory = currentCategory || Object.keys(data.categories)[0];
+                const categoryData = data.categories[activeCategory];
+                
+                if (categoryData) {
+                    categoriesHTML = `
+                        <div class="category-group">
+                            <div class="category-header category-expanded" onclick="toggleCategory(this)">
+                                <span class="category-title">${categoryData.name}</span>
+                                <span class="category-arrow">▶</span>
+                            </div>
+                            <div class="category-items">
+                                ${categoryData.items.map(item => 
+                                    `<div class="category-item" onclick="selectItem('${item}')">${item}</div>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                // 對於thoughts等section，顯示所有分類
+                categoriesHTML = Object.entries(data.categories).map(([key, category]) => `
+                    <div class="category-group">
+                        <div class="category-header" onclick="toggleCategory(this)">
+                            <span class="category-title">${category.name}</span>
+                            <span class="category-arrow">▶</span>
+                        </div>
+                        <div class="category-items">
+                            ${category.items.map(item => 
+                                `<div class="category-item" onclick="selectItem('${item}')">${item}</div>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            sidebarCategories.innerHTML = categoriesHTML;
+        }
+
+        // 切換分類展開/收合
+        function toggleCategory(element) {
+            const categoryGroup = element.parentElement;
+            categoryGroup.classList.toggle('category-expanded');
+        }
+
+        // 選擇項目
+        function selectItem(itemName) {
+            console.log('選擇項目:', itemName);
+            // 這裡可以添加選擇項目後的行為，例如顯示對應內容
+            alert(`你選擇了: ${itemName}`);
         }
 
         // 滾動動畫
@@ -650,8 +1094,7 @@
         function addCardClickEffect() {
             document.querySelectorAll('.content-card').forEach(card => {
                 card.addEventListener('click', function() {
-                    // 這裡可以添加點擊卡片後的行為
-                    console.log('Card clicked:', this.querySelector('.card-title').textContent);
+                    console.log('Card clicked:', this.querySelector('.card-title')?.textContent);
                 });
             });
         }
@@ -674,8 +1117,138 @@
             });
         }
 
+        // 生成示例內容
+        function generateSampleContent() {
+            // 生成CPE題目卡片
+           /* const cpeGrid = document.getElementById('uva-cpe');
+            const cpeProblems = [
+                { title: 'UVA 100 - The 3n + 1 problem', summary: '著名的3n+1猜想問題，需要計算循環長度', difficulty: '簡單', icon: '🔢' },
+                { title: 'UVA 272 - TEX Quotes', summary: '字符串處理問題，將引號轉換為TeX格式', difficulty: '簡單', icon: '📝' },
+                { title: 'UVA 10055 - Hashmat the Brave Warrior', summary: '計算兩個數字之間的絕對差值', difficulty: '簡單', icon: '⚔️' }
+            ];*/
+
+            cpeGrid.innerHTML = cpeProblems.map(problem => `
+                <div class="content-card fade-in">
+                    <div class="card-thumbnail">${problem.icon}</div>
+                    <div class="card-title">${problem.title}</div>
+                    <div class="card-summary">${problem.summary}</div>
+                    <div class="card-meta">
+                        <span>難度: ${problem.difficulty}</span>
+                        <span>2024-01-15</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // 生成其他題目卡片
+          /*  const othersGrid = document.getElementById('uva-others');
+            const otherProblems = [
+                { title: 'UVA 101 - The Blocks Problem', summary: '模擬積木移動的問題，需要實現堆疊操作', difficulty: '中等', icon: '🧱' },
+                { title: 'UVA 102 - Ecological Bin Packing', summary: '環保垃圾分類問題，尋找最少移動次數', difficulty: '中等', icon: '♻️' },
+                { title: 'UVA 103 - Stacking Boxes', summary: '動態規劃問題，計算最長的箱子堆疊序列', difficulty: '困難', icon: '📦' }
+            ];*/
+
+            othersGrid.innerHTML = otherProblems.map(problem => `
+                <div class="content-card fade-in">
+                    <div class="card-thumbnail">${problem.icon}</div>
+                    <div class="card-title">${problem.title}</div>
+                    <div class="card-summary">${problem.summary}</div>
+                    <div class="card-meta">
+                        <span>難度: ${problem.difficulty}</span>
+                        <span>2024-01-15</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // 生成筆記內容
+            const computerGrid = document.getElementById('notes-computer');
+           /* const computerNotes = [
+                { title: '第一章 - 電腦系統概述', summary: '介紹電腦系統的基本組成和運作原理', category: '基礎概念', icon: '💻' },
+                { title: '第二章 - 數位系統與資料表示法', summary: '二進制、八進制、十六進制的轉換與運算', category: '數位系統', icon: '🔢' },
+                { title: '第三章 - 電腦硬體架構', summary: 'CPU、記憶體、I/O裝置的架構與功能', category: '硬體架構', icon: '🔧' }
+            ];*/
+
+            computerGrid.innerHTML = computerNotes.map(note => `
+                <div class="content-card fade-in">
+                    <div class="card-thumbnail">${note.icon}</div>
+                    <div class="card-title">${note.title}</div>
+                    <div class="card-summary">${note.summary}</div>
+                    <div class="card-meta">
+                        <span>${note.category}</span>
+                        <span>2024-01-10</span>
+                    </div>
+                </div>
+            `).join('');
+
+            const calculusGrid = document.getElementById('notes-calculus');
+           /* const calculusNotes = [
+                { title: '第一章 - 極限與連續', summary: '極限的定義、性質及連續函數的概念', category: '極限理論', icon: '∞' },
+                { title: '第二章 - 導數與微分', summary: '導數的定義、微分法則及其幾何意義', category: '微分學', icon: '📈' },
+                { title: '第三章 - 微分的應用', summary: '函數的單調性、極值及曲線描繪', category: '應用', icon: '📊' }
+            ];*/
+
+            calculusGrid.innerHTML = calculusNotes.map(note => `
+                <div class="content-card fade-in">
+                    <div class="card-thumbnail">${note.icon}</div>
+                    <div class="card-title">${note.title}</div>
+                    <div class="card-summary">${note.summary}</div>
+                    <div class="card-meta">
+                        <span>${note.category}</span>
+                        <span>2024-01-12</span>
+                    </div>
+                </div>
+            `).join('');
+
+            const englishGrid = document.getElementById('notes-english');
+           /* const englishNotes = [
+                { title: '文法基礎 - 時態與語態', summary: '過去式、現在式、未來式的用法及主被動語態', category: '文法', icon: '📚' },
+                { title: '詞彙建構 - 字根字首', summary: '透過字根字首快速擴充詞彙量的方法', category: '詞彙', icon: '🔤' },
+                { title: '閱讀技巧 - 快速理解', summary: '略讀、掃讀技巧及文章結構分析', category: '閱讀', icon: '👀' }
+            ];*/
+
+            englishGrid.innerHTML = englishNotes.map(note => `
+                <div class="content-card fade-in">
+                    <div class="card-thumbnail">${note.icon}</div>
+                    <div class="card-title">${note.title}</div>
+                    <div class="card-summary">${note.summary}</div>
+                    <div class="card-meta">
+                        <span>${note.category}</span>
+                        <span>2024-01-08</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // 生成心得內容
+           /* const thoughtsGrid = document.querySelector('#thoughts .content-grid');
+            const thoughts = [
+                { title: '程式學習之路的起點', summary: '回顧剛開始學習程式設計時的心路歷程', category: '心得分享', icon: '🚀' },
+                { title: '演算法學習的心得分享', summary: '學習資料結構與演算法的經驗和建議', category: '技術心得', icon: '🧠' },
+                { title: '如何有效率地學習新技術', summary: '分享個人的學習方法和時間管理技巧', category: '學習方法', icon: '⚡' }
+            ];*/
+
+            thoughtsGrid.innerHTML = thoughts.map(thought => `
+                <div class="content-card fade-in">
+                    <div class="card-thumbnail">${thought.icon}</div>
+                    <div class="card-title">${thought.title}</div>
+                    <div class="card-summary">${thought.summary}</div>
+                    <div class="card-meta">
+                        <span>${thought.category}</span>
+                        <span>2024-01-20</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
+            // 側邊欄切換按鈕事件
+            document.getElementById('sidebar-toggle').addEventListener('click', toggleSidebar);
+
+            // 初始隱藏側邊欄按鈕
+            document.getElementById('sidebar-toggle').style.display = 'none';
+
+            // 生成示例內容
+            generateSampleContent();
+
             // 初始顯示首頁動畫
             setTimeout(() => {
                 document.querySelectorAll('#home .fade-in').forEach(element => {

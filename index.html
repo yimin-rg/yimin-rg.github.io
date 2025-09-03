@@ -486,6 +486,26 @@
             animation-delay: 10s;
         }
 
+        .circle-img {
+            width: 20vw;         /* 依照螢幕大小縮放 */
+            height: 20vw;        /* 必須和 width 一樣 */
+            max-width: 200px;    /* 最多 200px */
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-image: url("\source\me_pic.jpg");
+            background-size: cover;     /* 填滿 */
+            background-position: center;/* 置中 */
+        }
+
+
+
+
         @keyframes floatShapes {
             0%, 100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
             33% { transform: translateY(-20px) translateX(10px) rotate(120deg); }
@@ -520,7 +540,12 @@
         <!-- 首頁 -->
         <section id="home" class="section active">
             <div class="home-section fade-in">
-                <div class="profile-image">Y</div>
+                <div class="profile-image">
+                    <div class="circle">
+                    <img src="\source\me_pic.jpg" class="circle-img" alt="我的照片">
+                </div>
+                </div>
+                
                 <div class="intro-text">
                     <h1>Hello, I'm Yimin</h1>
                     <p>歡迎來到我的個人網站！我是一名熱愛程式設計和學習的開發者。

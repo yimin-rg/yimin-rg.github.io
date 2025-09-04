@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UVA 10107 - What is the Median? 詳細解析</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #06b6d4;
+      --accent: #f59e0b;
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1a2e;
+      --bg-card: rgba(255, 255, 255, 0.05);
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 2rem;
+      padding: 0.8rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .back-btn:hover {
+      background: var(--primary);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    h2 {
+      margin: 2rem 0 1rem;
+      font-size: 1.6rem;
+      color: var(--accent);
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+
+    ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    .code-block {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: "Courier New", monospace;
+      line-height: 1.5;
+      color: #e5e7eb;
+    }
+
+    .highlight {
+      background: rgba(99, 102, 241, 0.15);
+      padding: 0.3rem 0.5rem;
+      border-radius: 5px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tip-box {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--accent);
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+    }
+
+    .formula-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      text-align: center;
+      font-family: "Courier New", monospace;
+      font-size: 1.1rem;
+      color: var(--secondary);
+    }
+
+    .math-concept {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .comment {
+      color: #10b981;
+    }
+
+    .keyword {
+      color: #f59e0b;
+    }
+
+    .string {
+      color: #06b6d4;
+    }
+
+    .warning-box {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="CPE_history.html" class="back-btn">← 返回列表</a>
+
+    <h1>UVA 10107 - What is the Median? 詳細解析</h1>
+
+    <h2>📌 題目描述</h2>
+    <p>這是一道經典的 <span class="highlight">動態中位數</span> 問題。程序會持續讀入整數，每讀入一個數字後，就要輸出當前所有數字的中位數。中位數的定義如下：</p>
+    <ul>
+      <li>如果數字個數為奇數，中位數是排序後中間的數字</li>
+      <li>如果數字個數為偶數，中位數是排序後中間兩個數字的平均值</li>
+    </ul>
+
+    <div class="math-concept">
+      <h3>🔸 中位數概念</h3>
+      <p>中位數（Median）是統計學中的重要概念，表示一組數據排序後的中間值：</p>
+      <div class="formula-box">
+        奇數個數：median = arr[n/2]<br>
+        偶數個數：median = (arr[n/2-1] + arr[n/2]) / 2
+      </div>
+    </div>
+
+    <h2>💡 解題思路</h2>
+    <p>核心概念是 <span class="highlight">動態維護有序序列</span>：</p>
+    <ul>
+      <li>每次讀入新數字後加入 vector</li>
+      <li>立即對整個 vector 進行排序</li>
+      <li>根據當前數字個數計算中位數</li>
+      <li>使用 EOF 方式持續讀取直到輸入結束</li>
+    </ul>
+
+    <h2>📝 程式碼解析</h2>
+    <div class="code-block">
+<pre><code><span class="comment">// UVA 歷屆經典題 - 動態中位數</span>
+<span class="keyword">#include</span>&lt;bits/stdc++.h&gt;   <span class="comment">// 引入所有標準 C++ 函式庫</span>
+<span class="keyword">using namespace</span> std;       <span class="comment">// 使用標準命名空間</span>
+
+<span class="keyword">int</span> main() {
+    ios::sync_with_stdio(false); <span class="comment">// 加速 cin/cout</span>
+    cin.tie(nullptr);            <span class="comment">// 取消綁定</span>
+    cout.tie(nullptr);
+    
+    <span class="keyword">long long int</span> n;             <span class="comment">// 輸入的數字（使用 long long 避免溢出）</span>
+    vector&lt;<span class="keyword">long long int</span>&gt; v;      <span class="comment">// 儲存所有數字的動態陣列</span>
+    <span class="keyword">int</span> i = 0;                    <span class="comment">// 計數器，表示當前數字個數</span>
+    
+    <span class="comment">// 持續讀取直到 EOF（End of File）</span>
+    <span class="keyword">while</span>(cin &gt;&gt; n) {
+        v.push_back(n);           <span class="comment">// 將新數字加入 vector</span>
+        sort(v.begin(), v.end()); <span class="comment">// 每次都重新排序（保持有序）</span>
+        
+        <span class="comment">// 判斷當前數字個數的奇偶性</span>
+        <span class="keyword">if</span>(i % 2 == 1) {
+            <span class="comment">// 偶數個數字（i+1 個，因為 i 從 0 開始）</span>
+            <span class="comment">// 中位數 = 中間兩個數的平均值</span>
+            cout &lt;&lt; (v[i/2] + v[i/2 + 1]) / 2 &lt;&lt; endl;
+        } <span class="keyword">else</span> {
+            <span class="comment">// 奇數個數字</span>
+            <span class="comment">// 中位數 = 中間的數字</span>
+            cout &lt;&lt; v[i/2] &lt;&lt; endl;
+        }
+        
+        i += 1;                   <span class="comment">// 計數器加 1</span>
+    }
+}</code></pre>
+    </div>
+
+    <h2>🔧 關鍵技巧</h2>
+    <div class="tip-box">
+      <ul>
+        <li><strong>動態排序：</strong>每次新增數字後立即排序維持有序狀態</li>
+        <li><strong>索引計算：</strong>正確計算奇偶數情況下的中位數索引</li>
+        <li><strong>EOF 處理：</strong>使用 <code>while(cin >> n)</code> 持續讀取</li>
+        <li><strong>數據類型：</strong>使用 <code>long long</code> 避免數字溢出</li>
+        <li><strong>整數除法：</strong>利用整數除法特性計算平均值</li>
+      </ul>
+    </div>
+
+    <h2>📊 測試範例</h2>
+    <div class="code-block">
+<pre><code><span class="comment">// 輸入：1 2 3 4 5</span>
+
+<span class="comment">// 處理過程：</span>
+<span class="comment">// 步驟1：讀入 1</span>
+<span class="comment">//   v = [1], i = 0（奇數個）</span>
+<span class="comment">//   中位數 = v[0] = 1</span>
+
+<span class="comment">// 步驟2：讀入 2</span>
+<span class="comment">//   v = [1, 2], i = 1（偶數個）</span>
+<span class="comment">//   中位數 = (v[0] + v[1]) / 2 = (1 + 2) / 2 = 1</span>
+
+<span class="comment">// 步驟3：讀入 3</span>
+<span class="comment">//   v = [1, 2, 3], i = 2（奇數個）</span>
+<span class="comment">//   中位數 = v[1] = 2</span>
+
+<span class="comment">// 步驟4：讀入 4</span>
+<span class="comment">//   v = [1, 2, 3, 4], i = 3（偶數個）</span>
+<span class="comment">//   中位數 = (v[1] + v[2]) / 2 = (2 + 3) / 2 = 2</span>
+
+<span class="comment">// 步驟5：讀入 5</span>
+<span class="comment">//   v = [1, 2, 3, 4, 5], i = 4（奇數個）</span>
+<span class="comment">//   中位數 = v[2] = 3</span>
+
+<span class="comment">// 輸出：</span>
+1
+1
+2
+2
+3</code></pre>
+    </div>
+
+    <h2>🧮 算法分析</h2>
+    <div class="math-concept">
+      <p><strong>時間複雜度：</strong></p>
+      <ul>
+        <li>每次插入：O(n log n)（排序）</li>
+        <li>總計 n 次插入：O(n² log n)</li>
+      </ul>
+      <p><strong>空間複雜度：</strong>O(n)，用於儲存所有數字</p>
+      <p><strong>優化方案：</strong>可使用兩個 priority_queue 實現 O(log n) 插入</p>
+    </div>
+
+    <div class="warning-box">
+      <h3>⚠️ 性能警告</h3>
+      <p>此解法雖然直觀易懂，但在大數據量下效率較低。每次都重新排序整個陣列會導致 O(n² log n) 的時間複雜度。在競賽中，更高效的做法是使用雙堆（兩個 priority_queue）來維護中位數。</p>
+    </div>
+
+    <h2>🎯 學習重點</h2>
+    <ul>
+      <li><strong>統計概念：</strong>理解中位數的數學定義</li>
+      <li><strong>動態維護：</strong>在數據流中實時計算統計值</li>
+      <li><strong>索引處理：</strong>正確處理奇偶數情況的索引計算</li>
+      <li><strong>EOF 輸入：</strong>處理不定長度的輸入流</li>
+      <li><strong>整數運算：</strong>整數除法在平均值計算中的應用</li>
+    </ul>
+
+    <h2>💡 優化思路</h2>
+    <div class="tip-box">
+      <p><strong>進階解法：雙堆法</strong></p>
+      <ul>
+        <li>使用 max_heap 維護較小的一半數字</li>
+        <li>使用 min_heap 維護較大的一半數字</li>
+        <li>保持兩個堆的大小平衡</li>
+        <li>中位數就是堆頂元素或兩個堆頂的平均值</li>
+        <li>時間複雜度優化為 O(n log n)</li>
+      </ul>
+    </div>
+
+    <h2>⚠️ 注意事項</h2>
+    <ul>
+      <li>使用 <code>long long</code> 防止數字溢出</li>
+      <li>正確理解計數器 i 和實際數字個數的關係</li>
+      <li>整數除法會自動截去小數部分</li>
+      <li>索引計算要考慮從 0 開始的特性</li>
+      <li>EOF 輸入處理需要熟練掌握</li>
+    </ul>
+
+    <h2>🔗 相關概念</h2>
+    <ul>
+      <li><strong>統計學：</strong>中位數、平均數、眾數</li>
+      <li><strong>數據結構：</strong>堆（Heap）、優先隊列</li>
+      <li><strong>算法：</strong>排序算法、選擇算法</li>
+      <li><strong>動態統計：</strong>數據流處理、在線算法</li>
+    </ul>
+
+    <p>
+      這題是 UVA 的經典歷屆題目，考驗對 <span class="highlight">動態統計</span> 的理解。
+      雖然暴力解法簡單直觀，但了解更高效的雙堆解法對提升算法功力很有幫助。
+      是學習統計概念和數據流處理的絕佳題目！
+    </p>
+  </div>
+</body>
+</html>

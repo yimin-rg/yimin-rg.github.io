@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UVA 10008 - What's Cryptanalysis? 詳細解析</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #06b6d4;
+      --accent: #f59e0b;
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1a2e;
+      --bg-card: rgba(255, 255, 255, 0.05);
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --border: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 2rem;
+      padding: 0.8rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .back-btn:hover {
+      background: var(--primary);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    h2 {
+      margin: 2rem 0 1rem;
+      font-size: 1.6rem;
+      color: var(--accent);
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+
+    ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    .code-block {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: "Courier New", monospace;
+      line-height: 1.5;
+      color: #e5e7eb;
+    }
+
+    .highlight {
+      background: rgba(99, 102, 241, 0.15);
+      padding: 0.3rem 0.5rem;
+      border-radius: 5px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tip-box {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--accent);
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+    }
+
+    .formula-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      text-align: center;
+      font-family: "Courier New", monospace;
+      font-size: 1.1rem;
+      color: var(--secondary);
+    }
+
+    .algorithm-concept {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .comment {
+      color: #10b981;
+    }
+
+    .keyword {
+      color: #f59e0b;
+    }
+
+    .string {
+      color: #06b6d4;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="CPE_easy.html" class="back-btn">← 返回列表</a>
+
+    <h1>UVA 10008 - What's Cryptanalysis? 詳細解析</h1>
+
+    <h2>📌 題目描述</h2>
+    <p>在密碼分析中，字母頻率分析是一個重要工具。給定多行文字，統計每個字母（A-Z）出現的次數，並按照以下規則輸出：</p>
+    <ul>
+      <li>優先按出現次數由大到小排序</li>
+      <li>如果出現次數相同，則按字母順序排序</li>
+      <li>只統計英文字母，忽略其他字符</li>
+      <li>大小寫視為相同字母</li>
+    </ul>
+
+    <div class="algorithm-concept">
+      <h3>🔸 密碼學基礎</h3>
+      <p>字母頻率分析是破解替換密碼的經典方法。在英文中，字母 E 出現頻率最高（約12.7%），其次是 T、A、O 等。</p>
+      <div class="formula-box">排序規則：頻率高者優先，頻率相同則字母順序優先</div>
+    </div>
+
+    <h2>💡 解題思路</h2>
+    <p>核心概念是 <span class="highlight">計數與排序</span>：</p>
+    <ul>
+      <li>使用 map 統計每個字母的出現次數</li>
+      <li>讀取多行輸入，逐字符處理</li>
+      <li>自定義比較函數實現雙重排序規則</li>
+      <li>將統計結果轉為 vector 進行排序</li>
+    </ul>
+
+    <h2>📝 程式碼解析</h2>
+    <div class="code-block">
+<pre><code><span class="comment">// CPE 必考題目 - 字母頻率統計</span>
+<span class="keyword">#include</span>&lt;bits/stdc++.h&gt;   <span class="comment">// 引入所有標準 C++ 函式庫</span>
+<span class="keyword">using namespace</span> std;       <span class="comment">// 使用標準命名空間</span>
+
+<span class="comment">// 自定義比較函數：用於排序 pair&lt;char, int&gt;</span>
+<span class="keyword">bool</span> cmp(pair&lt;char,int&gt; a, pair&lt;char,int&gt; b) {
+    <span class="comment">// 如果出現次數相同，按字母順序排序（A < B < C...）</span>
+    <span class="keyword">if</span>(a.second == b.second) {
+        <span class="keyword">return</span> a.first &lt; b.first;  <span class="comment">// 字母小的排前面</span>
+    }
+    <span class="comment">// 否則按出現次數由大到小排序</span>
+    <span class="keyword">return</span> a.second &gt; b.second;     <span class="comment">// 次數多的排前面</span>
+}
+
+<span class="keyword">int</span> main() {
+    ios::sync_with_stdio(false); <span class="comment">// 加速 cin/cout</span>
+    cin.tie(nullptr);            <span class="comment">// 取消綁定</span>
+    cout.tie(nullptr);
+    
+    <span class="keyword">int</span> t;                          <span class="comment">// 輸入行數</span>
+    cin &gt;&gt; t;
+    cin.ignore();                    <span class="comment">// 忽略換行符，準備讀取整行</span>
+    
+    map&lt;char, int&gt; mp;               <span class="comment">// 用 map 統計字母出現次數</span>
+    
+    <span class="comment">// 處理 t 行輸入</span>
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = 0; i &lt; t; i++) {
+        string line;                 <span class="comment">// 讀取一整行</span>
+        getline(cin, line);
+        
+        stringstream ss(line);       <span class="comment">// 用 stringstream 逐字符處理</span>
+        <span class="keyword">char</span> c;
+        
+        <span class="comment">// 逐字符讀取並統計</span>
+        <span class="keyword">while</span>(ss &gt;&gt; c) {
+            <span class="comment">// 如果是字母，轉為大寫並統計</span>
+            <span class="keyword">if</span>(isalpha(c)) {
+                mp[toupper(c)] += 1; <span class="comment">// 轉大寫後計數 +1</span>
+            }
+        }
+    }
+    
+    <span class="comment">// 將 map 轉為 vector 以便排序</span>
+    vector&lt;pair&lt;char, int&gt;&gt; v;
+    <span class="keyword">for</span>(<span class="keyword">auto</span> p : mp) {
+        v.push_back({p.first, p.second}); <span class="comment">// 加入 (字母, 次數) pair</span>
+    }
+    
+    <span class="comment">// 使用自定義比較函數排序</span>
+    sort(v.begin(), v.end(), cmp);
+    
+    <span class="comment">// 輸出結果：字母 + 空格 + 出現次數</span>
+    <span class="keyword">for</span>(<span class="keyword">auto</span> p : v) {
+        cout &lt;&lt; p.first &lt;&lt; <span class="string">" "</span> &lt;&lt; p.second &lt;&lt; endl;
+    }
+}</code></pre>
+    </div>
+
+    <h2>🔧 關鍵技巧</h2>
+    <div class="tip-box">
+      <ul>
+        <li><strong>Map 統計：</strong>使用 <code>map&lt;char, int&gt;</code> 自動統計字母頻率</li>
+        <li><strong>字符處理：</strong>使用 <code>isalpha()</code> 判斷字母，<code>toupper()</code> 轉大寫</li>
+        <li><strong>自定義排序：</strong>實現雙重排序規則的比較函數</li>
+        <li><strong>StringStream：</strong>使用 <code>stringstream</code> 逐字符解析</li>
+        <li><strong>Getline：</strong>處理包含空格的整行輸入</li>
+      </ul>
+    </div>
+
+    <h2>📊 測試範例</h2>
+    <div class="code-block">
+<pre><code><span class="comment">// 輸入：</span>
+3
+This is a test.
+Count me 1 2 3 ABC!
+Wow!!
+
+<span class="comment">// 處理過程：</span>
+<span class="comment">// 行1: "This is a test." → T:2, H:1, I:2, S:3, A:1, E:1</span>
+<span class="comment">// 行2: "Count me 1 2 3 ABC!" → C:2, O:1, U:1, N:1, T:1, M:1, E:1, A:1, B:1</span>
+<span class="comment">// 行3: "Wow!!" → W:2, O:1</span>
+
+<span class="comment">// 統計結果：S:3, T:3, I:2, W:2, C:2, A:2, E:2, ...</span>
+<span class="comment">// 排序後：</span>
+S 3
+T 3
+C 2
+I 2
+W 2
+A 1
+B 1
+E 1
+H 1
+M 1
+N 1
+O 1
+U 1</code></pre>
+    </div>
+
+    <h2>🧮 算法分析</h2>
+    <div class="algorithm-concept">
+      <p><strong>時間複雜度：</strong></p>
+      <ul>
+        <li>統計階段：O(N)，N 為總字符數</li>
+        <li>排序階段：O(K log K)，K 為不同字母數量（最多26）</li>
+        <li>總複雜度：O(N + K log K)</li>
+      </ul>
+      <p><strong>空間複雜度：</strong>O(K)，用於儲存字母計數</p>
+    </div>
+
+    <h2>⚠️ 注意事項</h2>
+    <ul>
+      <li>使用 <code>cin.ignore()</code> 忽略第一行後的換行符</li>
+      <li>只統計字母，忽略數字、標點符號和空格</li>
+      <li>大小寫統一轉為大寫處理</li>
+      <li>自定義比較函數的邏輯要正確（頻率優先，字母次優先）</li>
+      <li>注意 <code>stringstream</code> 會自動跳過空格</li>
+    </ul>
+
+    <h2>🎯 學習重點</h2>
+    <p>
+      這題是經典的 <span class="highlight">統計與排序</span> 問題。
+      重點學習自定義比較函數、字符處理函數的使用，
+      以及處理多行字符串輸入的技巧。
+      對於理解 STL 容器和算法很有幫助，
+      也是密碼學入門的好例子。
+    </p>
+
+    <h2>🔗 相關概念</h2>
+    <ul>
+      <li><strong>Map 容器：</strong>自動排序的鍵值對容器</li>
+      <li><strong>字符函數：</strong>isalpha(), toupper(), tolower()</li>
+      <li><strong>自定義排序：</strong>比較函數的設計原則</li>
+      <li><strong>字符串處理：</strong>getline 與 stringstream 的配合使用</li>
+    </ul>
+  </div>
+</body>
+</html>

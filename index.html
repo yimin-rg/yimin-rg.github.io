@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yimin 個人網站</title>
+    <title>Yimin's Website</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+   <!-- <img src="logo.png" alt="Yimin Logo" width="200" height="80">-->
+    <link rel="icon" type="image/png" href="logo.png">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -597,6 +599,18 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-dark);
         }
+        .logo {
+            /* 原有樣式保持不變 */
+            display: flex;
+            align-items: center;
+            gap: 0.5rem; /* logo 圖片和文字之間的間距 */
+        }
+
+        .logo-img {
+            width: 80px;
+            height: 60px;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -610,7 +624,10 @@
 
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">Yimin</a>
+            <a href="#" class="logo">
+                <img src="logo.png" alt="Yimin Logo" class="logo-img">
+                Yimin
+            </a>
             <ul class="nav-menu">
                 <li class="nav-item active" onclick="showSection(this, 'home')">首頁</li>
                 <li class="nav-item" onclick="showSection(this, 'uva')">UVA題庫</li>

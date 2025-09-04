@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>怎麼成績突然變這麼好？ - 學習心路歷程</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #06b6d4;
+      --accent: #f59e0b;
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1a2e;
+      --bg-card: rgba(255, 255, 255, 0.05);
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --border: rgba(255, 255, 255, 0.1);
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 2rem;
+      padding: 0.8rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .back-btn:hover {
+      background: var(--primary);
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .article-meta {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .category-badge {
+      background: rgba(34, 197, 94, 0.2);
+      color: #22c55e;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .intro-text {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border-radius: 10px;
+      border-left: 4px solid var(--accent);
+    }
+
+    h2 {
+      margin: 3rem 0 1.5rem;
+      font-size: 1.8rem;
+      color: var(--accent);
+      position: relative;
+    }
+
+    h2::before {
+      content: '';
+      position: absolute;
+      left: -1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 1.5rem;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    h3 {
+      margin: 2rem 0 1rem;
+      font-size: 1.3rem;
+      color: var(--secondary);
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    ul, ol {
+      margin: 1.5rem 0;
+      padding-left: 2rem;
+      color: var(--text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+    }
+
+    .highlight {
+      background: rgba(99, 102, 241, 0.15);
+      padding: 0.3rem 0.5rem;
+      border-radius: 5px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tip-box {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--secondary);
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .tip-box::before {
+      content: "💡";
+      position: absolute;
+      top: 1rem;
+      left: -0.5rem;
+      background: var(--bg-secondary);
+      padding: 0.3rem;
+      border-radius: 50%;
+    }
+
+    .quote-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      margin: 2rem 0;
+      font-style: italic;
+      position: relative;
+    }
+
+    .quote-box::before {
+      content: '"';
+      position: absolute;
+      top: -0.3rem;
+      left: 1rem;
+      font-size: 2.5rem;
+      color: var(--accent);
+      background: var(--bg-primary);
+      padding: 0 0.3rem;
+      z-index: 1;
+    }
+
+    .personal-section {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 3rem 0;
+    }
+
+    .method-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      transition: transform 0.3s ease;
+    }
+
+    .method-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .method-card h4 {
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+    }
+
+    .conclusion {
+      background: var(--bg-secondary);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 3rem 0;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .warning-box {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 8px;
+    }
+
+    strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .container {
+        padding: 1rem;
+      }
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="studymind.html" class="back-btn" onclick="history.back()">← 返回列表</a>
+
+    <div class="article-header">
+      <div class="article-meta">
+        <span class="category-badge">心態轉變</span>
+        <span>閱讀時間：12 分鐘</span>
+        <span>發表日期：2024年3月</span>
+      </div>
+      <h1>怎麼成績突然變這麼好？</h1>
+    </div>
+
+    <div class="intro-text">
+      這一年來，很多人都問過我這個問題。既然我現在有了個人網站，就請容我慢慢道來，也希望你能耐心看下去。
+      <br><br>
+      先說在前頭：這個大幅度的轉變，絕不是一兩句話或單一原因能解釋的。我會先列出幾個讓我短時間內成績提升的關鍵，最後再分享一些個人心得。
+      <br><br>
+      另外，我還沒「成功」，所以談不上什麼資格。不過，既然你都看到這裡，就陪我一起走下去吧！等我真正成功了，我會再寫一篇心得分享。
+    </div>
+
+    <h2>1. 動機與動力</h2>
+    <p>這是最重要的一點。</p>
+    
+    <div class="method-card">
+      <h4>動機 vs 動力</h4>
+      <ul>
+        <li><strong>動機</strong> 是讓你開始的契機</li>
+        <li><strong>動力</strong> 是讓你能夠持續下去的燃料</li>
+      </ul>
+    </div>
+
+    <p>保持動力很困難，大部分人會被怠惰淹沒或半途而廢，我過去也是如此。你需要知道兩件事：</p>
+
+    <div class="method-card">
+      <h4>1. 天分很稀少</h4>
+      <p>真正成功的人，往往不是最聰明的，而是能夠花時間並用對方法努力的人。過去我失敗的原因，就是既不肯花時間，也沒有用對方法。</p>
+    </div>
+
+    <div class="method-card">
+      <h4>2. 不要只想失敗</h4>
+      <p>很多人總是糾結「如果我失敗怎麼辦？」不妨換個角度：「如果我成功會怎麼樣？」樂觀思考能幫助你維持動力。這當然不是一時半刻能改變的，但你可以強迫自己去練習。</p>
+    </div>
+
+    <div class="warning-box">
+      <strong>重要提醒：</strong>請 <span class="highlight">遠離讓你感到被耗盡的人</span>。如果你身邊都是愛抱怨、自我否定的人，你很難保持正向。相信我，沒有朋友也比被錯的人拖累好。
+    </div>
+
+    <h3>找到動機的方法</h3>
+    <div class="tip-box">
+      <p>想想你夢想中的生活。為了更接近它，你需要達成什麼？把這些列出來，拆分成 <strong>年目標 → 月目標 → 週目標</strong>。</p>
+      
+      <p>每天睡前，可以先想像明天要完成哪些事，再在日記中寫下：</p>
+      <ul>
+        <li>今日達成了什麼</li>
+        <li>哪些地方可以更好</li>
+        <li>今天的心得與明天的目標</li>
+      </ul>
+      
+      <p>我實行這個方法後，每天都更有方向，而不是隨波逐流。</p>
+    </div>
+
+    <h2>2. 規律作息與均衡飲食</h2>
+    <p>以前我也覺得「日夜顛倒 + 熬夜」沒差，但實際證明效率遠遠不及 <span class="highlight">早睡早起</span>。</p>
+    
+    <p>飲食方面，以我個人經驗，只要吃不健康，我就會便祕 → 效率下降 → 情緒不穩定。雖然這是個人情況，但健康飲食對誰來說都絕對是加分的。</p>
+
+    <h2>3. 音樂的選擇</h2>
+    <p>如果有歌詞的音樂，很難專注。身為 Spotify 前 0.3% 的重度音樂愛好者，我可以保證這一點😂。</p>
+    
+    <p>即便是聽不懂語言的歌，也比不上純音樂。我個人最推薦的是：</p>
+    <ul>
+      <li>輕音樂</li>
+      <li>鋼琴曲</li>
+      <li>輕柔的交響樂</li>
+    </ul>
+    <p>這些能營造專注氛圍，而不至於干擾思緒。</p>
+
+    <div class="personal-section">
+      <h2>我的個人原因</h2>
+      <p>除了以上的「通用方法」，我之所以進步，還有幾個比較私人的原因：</p>
+
+      <div class="method-card">
+        <h4>1. 我對自己承諾</h4>
+        <p>從專四開始就要認真讀書。</p>
+      </div>
+
+      <div class="method-card">
+        <h4>2. 吸收知識</h4>
+        <p>我看了很多關於學習與成功的 YouTube 影片，並且實際去實踐。其中，我最推薦的創作者是 <strong>thewizardliz</strong>，她在某些方面真的改變了我的人生。</p>
+      </div>
+
+      <div class="method-card">
+        <h4>3. 做專案的過程</h4>
+        <p>讓我更清楚未來方向與志向。</p>
+      </div>
+
+      <div class="method-card">
+        <h4>4. 遇到貴人</h4>
+        <p>我認識了一個很厲害的人，從他身上我明白「差距沒有那麼大，只要用對方法，很多事都有可能」。因此我決定向他看齊。</p>
+      </div>
+
+      <div class="method-card">
+        <h4>5. 目標明確</h4>
+        <p>我想上我的夢想學校！這也是我最大的驅動力。</p>
+      </div>
+
+      <div class="method-card">
+        <h4>6. 開始接觸哲學</h4>
+        <p>學會怎麼好好做一個人類也是很重要的一點。</p>
+      </div>
+    </div>
+
+    <div class="conclusion">
+      <h2>結語</h2>
+      <p>所以，成績怎麼會「突然」變好？其實一點都不突然。這些小小的習慣與改變，日積月累，才成為了現在的成果。</p>
+      
+      <div class="quote-box">
+        我還在路上，也還沒成功。但如果你也在努力，請相信——我們都在往更好的自己前進。
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

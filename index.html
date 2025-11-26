@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YiMin-BLOG</title>
+    <script src="https://www.yimin.zone.id/count/api.js"></script>
     <link rel="icon" href="image-removebg-preview (11).png" type="image/png">
     <style>
         * {
@@ -118,6 +119,7 @@
         .nav-links {
             display: flex;
             gap: 2.5rem;
+            margin-left: 4rem;
         }
 
         .nav-links a {
@@ -768,9 +770,341 @@
 }
 
         }
+        /* Search Bar Styles */
+.search-container {
+    position: relative;
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
+#searchInput {
+    width: 280px;
+    padding: 0.75rem 1rem;
+    background: rgba(55, 65, 81, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s;
+}
+
+#searchInput:focus {
+    border-color: var(--color-text-secondary);
+    background: rgba(55, 65, 81, 0.9);
+    width: 320px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+#searchInput::placeholder {
+    color: var(--color-text-muted);
+}
+
+/* 搜尋結果下拉 */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(55, 65, 81, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    display: none;
+    z-index: 200;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.search-result-item:hover {
+    background: rgba(107, 114, 128, 0.3);
+    padding-left: 1.5rem;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-title {
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.4rem;
+}
+
+.search-result-excerpt {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+/* 手機板隱藏搜尋欄，用漢堡選單裡的搜尋也可以 */
+@media (max-width: 768px) {
+    .search-container {
+        position: static;
+        margin: 1rem 2rem 0;
+    }
+    #searchInput {
+        width: 100%;
+    }
+    #searchInput:focus {
+        width: 100%;
+    }
+    .search-results {
+        left: 2rem;
+        right: 2rem;
+    }
+}
+/* Archive Page 專用樣式 */
+.archive-item {
+    background: rgba(55, 65, 81, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--color-border);
+    padding: 2rem;
+    border-radius: 8px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.archive-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(107,114,128,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.archive-item:hover::before {
+    opacity: 1;
+}
+
+.archive-item:hover {
+    transform: translateY(-8px);
+    border-color: var(--color-text-muted);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    background: rgba(55,65,81,0.7);
+}
+
+.archive-date {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.archive-title {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.archive-excerpt {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.archive-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.archive-tags .tag {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.8rem;
+}
+
+/* 手機版兩欄變一欄 */
+@media (max-width: 640px) {
+    #archiveList {
+        grid-template-columns: 1fr;
+    }
+    .archive-item {
+        padding: 1.5rem;
+    }
+}
+/* 相關文章推薦 */
+.related-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.related-post-card {
+    background: rgba(55, 65, 81, 0.35);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    padding: 1.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.related-post-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--color-text-muted);
+    background: rgba(55, 65, 81, 0.65);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.related-post-date {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.08em;
+}
+
+.related-post-title {
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    line-height: 1.4;
+    margin-bottom: 0.8rem;
+}
+
+.related-post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.related-post-tags .tag 
+    {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+}
+
+/* 手機版 */
+@media (max-width: 640px) {
+    .related-posts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* ==================== 超質感升級全包 ==================== */
+
+/* 1. 閱讀進度條（彩虹霓虹版） */
+#readingProgress {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981, #f59e0b);
+    transform: scaleX(0);
+    transform-origin: left;
+    z-index: 9999;
+    box-shadow: 0 0 15px rgba(139,92,246,0.8);
+    transition: transform 0.1s ease;
+}
+
+/* 2. 返回頂部按鈕（霧面玻璃小球） */
+#backToTop {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    width: 50px;
+    height: 50px;
+    background: rgba(55, 65, 81, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(156, 163, 175, 0.3);
+    border-radius: 50%;
+    color: var(--color-text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+#backToTop.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+#backToTop:hover {
+    background: rgba(107, 114, 128, 0.8);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+}
+
+/* 3. 文章卡片升級：閱讀時間 + 字數 */
+.post-meta {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+
+/* 4. 滑鼠自訂游標（霓虹光暈） */
+body {
+    cursor: none;
+}
+/* ─────── 超帥新版游標（霧面光暈 + 尾跡）─────── */
+
+
+/* 5. 首頁文章卡片 hover 3D 浮起 + 陰影 */
+.post-card {
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1) !important;
+    transform: translateZ(0);
+}
+.post-card:hover {
+    transform: translateY(-12px) rotateX(5deg) !important;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important;
+}
+
+/* 6. Hero 打字動畫 */
+.typing-text {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 3px solid #8b5cf6;
+    animation: typing 4s steps(30, end) infinite, blink 0.7s infinite;
+    width: 0;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+}
+@keyframes typing {
+    0% { width: 0; }
+    50% { width: 100%; }
+    100% { width: 100%; }
+}
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+* { cursor: auto !important; }
+body { cursor: default !important; }
     </style>
 </head>
 <body>
+    <div id="readingProgress"></div>
+<div id="backToTop">↑</div>
+
     <!-- Background -->
    <!-- Background -->
 <div class="background-container">
@@ -794,15 +1128,22 @@
                 
                 <nav class="nav-links">
                     <a onclick="navigateTo('home')" class="nav-link active" data-page="home">首頁</a>
+                    <a onclick="navigateTo('archive')" class="nav-link" data-page="archive">目錄</a>
                     <a onclick="openTagsModal(event)" class="nav-link" data-page="tags">標籤</a>
                     <a onclick="navigateTo('about')" class="nav-link" data-page="about">關於</a>
                 </nav>
+                <!-- Search Bar -->
+<div class="search-container">
+    <input type="text" id="searchInput" placeholder="搜尋文章標題或內容..." autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+</div>
 
                 <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
             </div>
 
             <nav class="mobile-nav" id="mobileNav">
                 <a onclick="navigateTo('home')">首頁</a>
+                <a onclick="navigateTo('archive')">目錄</a>
                 <a onclick="openTagsModal(event)">標籤</a>
                 <a onclick="navigateTo('about')">關於</a>
             </nav>
@@ -817,6 +1158,9 @@
                     <h1>YI MIN</h1>
                     <!--<p class="hero-subtitle">Goal-Hunter</p>-->
                     <p class="hero-description">分享一些想法和心得</p>
+                    <p style="margin-top:1.5rem; color:var(--color-text-muted); font-size:1rem;">
+                        共<span id="totalViews" style="color:#8b5cf6; font-weight:600;">0</span> 位訪客
+                    </p>
                 </div>
             </section>
 
@@ -971,10 +1315,22 @@
                     <p style="color: var(--color-text-secondary); font-size: 1.1rem;">
                         但我可以確定的是：在找尋我真正想要的道路上,我都會全力以赴。
                     </p>
+                    <div style="text-align:center; margin:2.5rem 0; color:var(--color-text-muted); font-size:0.9rem;">
+                        這篇已被閱讀 <span id="viewCount">0</span> 次
+                    </div>
                 </section>
             </div>
         </article>
     </main>
+    <!-- 相關文章推薦區塊 -->
+<div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--color-border);">
+    <h2 style="font-size: 1.6rem; font-weight: 400; margin-bottom: 2rem; color: var(--color-text-secondary); letter-spacing: 0.05em;">
+        相關文章
+    </h2>
+    <div class="related-posts-grid" id="relatedPosts">
+        <!-- JS 自動填入 -->
+    </div>
+</div>
 </div>
 <!-- 深夜廢話 - 文章頁面 -->
 <div id="post-txq-deep" class="page" style="display:none;">
@@ -1043,11 +1399,23 @@
                     <p>
                         現在來說怎麼解決人際關係的煩惱，回想五專時間，我真的有花一些時間在煩惱，單就解決煩惱這件事來說，就是遠離那些讓你不舒服的，只要遠離管他背後怎麼搞你，沒聽到沒看到就是沒發生，還有會讓你感到不舒服的人都是不安全感作祟，他們內心都有一個最深層的恐懼就是害怕自己不被接納，整天都只能擔驚受怕的，他們很可憐，不要反擊，你就是鏡子照出他們自己的心裡的醜陋，總之那種人這輩子也就這樣了，只能在他們的繭裡自我取暖，總之，跟什麼人當朋友自己就會變成那樣子，慎選朋友，如果身邊都只有那種人，那寧願不要有朋友會比較好(絕對沒有在講某些人)。
                     </p>
+                    <div style="text-align:center; margin:2.5rem 0; color:var(--color-text-muted); font-size:0.9rem;">
+                        這篇已被閱讀 <span id="viewCount">0</span> 次
+                    </div>
                 </section>
 
             </div>
         </article>
     </main>
+    <!-- 相關文章推薦區塊 -->
+<div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--color-border);">
+    <h2 style="font-size: 1.6rem; font-weight: 400; margin-bottom: 2rem; color: var(--color-text-secondary); letter-spacing: 0.05em;">
+        相關文章
+    </h2>
+    <div class="related-posts-grid" id="relatedPosts">
+        <!-- JS 自動填入 -->
+    </div>
+</div>
 </div>
 <div id="post-alien"  class="page" style="display:none;">
     <main style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
@@ -1132,10 +1500,22 @@
                     <p style="color: var(--color-text-secondary); font-size: 1.1rem;">
                         我們應該學會在標籤化社會中保持自我，不因外界的簡化與否定而迷失方向。
                     </p>
+                    <div style="text-align:center; margin:2.5rem 0; color:var(--color-text-muted); font-size:0.9rem;">
+                        這篇已被閱讀 <span id="viewCount">0</span> 次
+                    </div>
                 </section>
             </div>
         </article>
     </main>
+    <!-- 相關文章推薦區塊 -->
+<div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--color-border);">
+    <h2 style="font-size: 1.6rem; font-weight: 400; margin-bottom: 2rem; color: var(--color-text-secondary); letter-spacing: 0.05em;">
+        相關文章
+    </h2>
+    <div class="related-posts-grid" id="relatedPosts">
+        <!-- JS 自動填入 -->
+    </div>
+</div>
 </div>
 
         <!-- About Page -->
@@ -1194,7 +1574,23 @@
                 </div>
             </main>
         </div>
+<!-- Archive Page - 文章目錄 -->
+<div id="archivePage" class="page">
+    <main style="max-width: 1000px; margin: 0 auto; padding: 5rem 2rem;">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h1 style="font-size: clamp(2.8rem, 8vw, 4.5rem); font-weight: 300; letter-spacing: 0.05em; margin-bottom: 1rem;">
+                文章目錄
+            </h1>
+            <p style="color: var(--color-text-muted); font-size: 1.1rem; letter-spacing: 0.1em;">
+                目前共 <span id="postCount">0</span> 篇文字
+            </p>
+        </div>
 
+        <div id="archiveList" style="display: grid; gap: 1.8rem; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));">
+            <!-- JS 自動生成 -->
+        </div>
+    </main>
+</div>
         <!-- Footer -->
         <footer>
             <div class="footer-content">
@@ -1269,7 +1665,9 @@
 
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
-           
+            if (pageName === 'archive') {
+                renderArchive();
+    }
 
         }
 
@@ -1475,6 +1873,7 @@ document.querySelectorAll('.post-card').forEach(card => {
 });
 
 // 顯示特選心得文章
+// 顯示特選心得文章
 function showPostTXQ() {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
@@ -1482,7 +1881,10 @@ function showPostTXQ() {
     });
     document.getElementById('post-txq').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(showRelatedPosts, 300);   // 關鍵：一定要加這行
 }
+
+// 顯示深夜廢話
 function showPostTXQDeep() {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
@@ -1490,7 +1892,10 @@ function showPostTXQDeep() {
     });
     document.getElementById('post-txq-deep').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(showRelatedPosts, 300);   // 關鍵：一定要加這行
 }
+
+// 顯示異鄉人書評
 function showPostAlien() {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
@@ -1498,6 +1903,7 @@ function showPostAlien() {
     });
     document.getElementById('post-alien').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(showRelatedPosts, 300);   // 關鍵：一定要加這行
 }
 // 返回首頁
 // 返回首頁
@@ -1548,7 +1954,308 @@ function showHome() {
     // 捲動到頂部
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+// ====================== 全站搜尋功能 ======================
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
 
+// 所有文章的資料（標題 + 內容 + 日期 + 標籤 + 對應顯示函式）
+const searchData = [
+    {
+        title: "特選前的心得 -Overview",
+        date: "2025-11-26",
+        tags: "心得,想法",
+        content: ``,
+        show: showPostTXQ
+    },
+    {
+        title: "深夜廢話",
+        date: "2025-11-27",
+        tags: "想法,廢話",
+        content: ``,
+        show: showPostTXQDeep
+    },
+    {
+        title: "《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響",
+        date: "2025-05-10",
+        tags: "生活,思考",
+        content: '',
+        show: showPostAlien
+    }
+    // 以後每新增一篇，就在這裡多加一筆物件即可
+];
+
+searchInput.addEventListener('input', function(e) {
+    const query = e.target.value.trim().toLowerCase();
+    searchResults.innerHTML = '';
+    
+    if (query === '') {
+        searchResults.classList.remove('active');
+        return;
+    }
+
+    const matches = searchData.filter(item => 
+        item.title.toLowerCase().includes(query) ||
+        item.content.toLowerCase().includes(query) ||
+        item.tags.toLowerCase().includes(query)
+    );
+
+    if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="search-result-item" style="text-align:center; color:var(--color-text-muted);">找不到相關文章 :(</div>';
+        searchResults.classList.add('active');
+        return;
+    }
+
+    matches.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'search-result-item';
+        div.innerHTML = `
+            <div class="search-result-title">${item.title}</div>
+            <div class="search-result-excerpt">${item.date} · ${item.tags}</div>
+        `;
+        div.addEventListener('click', () => {
+            item.show();           //  // 直接跳到該文章
+            searchInput.value = '';
+            searchResults.classList.remove('active');
+        });
+        searchResults.appendChild(div);
+    });
+
+    searchResults.classList.add('active');
+});
+
+// 點擊其他地方關閉搜尋結果
+document.addEventListener('click', (e) => {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.classList.remove('active');
+    }
+});
+const archiveData = [
+    {
+        title: "特選前的心得 -Overview",
+        date: "2025-11-26",
+        excerpt: "",
+        tags: ["心得", "想法"],
+        show: showPostTXQ
+    },
+    {
+        title: "深夜廢話",
+        date: "2025-11-27",
+        excerpt: "",
+        tags: ["想法", "廢話"],
+        show: showPostTXQDeep
+    },
+    {
+        title: "《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響",
+        date: "2025-05-10",
+        excerpt: "",
+        tags: ["生活", "思考", "書評"],
+        show: showPostAlien
+    }
+    // 未來新增文章只要在這裡多加一筆就好！
+];function renderArchive() {
+    const container = document.getElementById('archiveList');
+    const counter = document.getElementById('postCount');
+    
+    counter.textContent = archiveData.length;
+    container.innerHTML = '';
+
+    // 照日期從新到舊排序
+    const sorted = [...archiveData].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+    sorted.forEach(post => {
+        const div = document.createElement('div');
+        div.className = 'archive-item';
+        
+        let tagsHTML = '';
+        post.tags.forEach(t => {
+            tagsHTML += `<span class="tag">${t}</span>`;
+        });
+
+        div.innerHTML = `
+            <div class="archive-date">${post.date}</div>
+            <div class="archive-title">${post.title}</div>
+            <div class="archive-excerpt">${post.excerpt}</div>
+            <div class="archive-tags">${tagsHTML}</div>
+        `;
+
+        div.addEventListener('click', () => {
+            post.show();
+        });
+
+        container.appendChild(div);
+    });
+}
+const allPosts = [
+    {
+        id: "txq",
+        title: "特選前的心得 -Overview",
+        date: "2025-11-26",
+        tags: ["心得", "想法", "成長", "升學"],
+        show: showPostTXQ
+    },
+    {
+        id: "deep",
+        title: "深夜廢話",
+        date: "2025-11-27",
+        tags: ["想法", "廢話", "哲學", "執著", "多巴胺"],
+        show: showPostTXQDeep
+    },
+    {
+        id: "alien",
+        title: "《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響",
+        date: "2025-05-10",
+        tags: ["書評", "思考", "生活", "卡繆", "標籤化", "存在主義"],
+        show: showPostAlien
+    }
+    // 以後新增文章只要這裡加一筆就好
+];
+function getSimilarity(postA, postB) {
+    const tagsA = new Set(postA.tags);
+    const tagsB = new Set(postB.tags);
+    let intersect = 0;
+    tagsA.forEach(tag => {
+        if (tagsB.has(tag)) intersect++;
+    });
+    return intersect;
+}
+
+// 顯示相關文章（自動判斷目前在哪一篇）
+// 顯示相關文章（改良版：自動找目前顯示的那個容器）
+function showRelatedPosts() {
+    let currentPostId = null;
+    let container = null;
+
+    // 自動偵測目前顯示哪一篇 + 對應的容器
+    if (document.getElementById('post-txq').style.display === 'block') {
+        currentPostId = "txq";
+        container = document.querySelector('#post-txq #relatedPosts, #post-txq #relatedPosts2, #post-txq #relatedPosts3') || 
+                   document.querySelector('#post-txq .related-posts-grid');
+    }
+    else if (document.getElementById('post-txq-deep').style.display === 'block') {
+        currentPostId = "deep";
+        container = document.querySelector('#post-txq-deep .related-posts-grid');
+    }
+    else if (document.getElementById('post-alien').style.display === 'block') {
+        currentPostId = "alien";
+        container = document.querySelector('#post-alien .related-posts-grid');
+    }
+
+    if (!currentPostId || !container) return;
+
+    const current = allPosts.find(p => p.id === currentPostId);
+    container.innerHTML = '';
+
+    const related = allPosts
+        .filter(p => p.id !== currentPostId)
+        .map(p => ({ post: p, score: getSimilarity(current, p) }))
+        .sort((a, b) => b.score - a.score || new Date(b.post.date) - new Date(a.post.date))
+        .slice(0, 4)
+        .map(item => item.post);
+
+    if (related.length === 0) {
+        container.innerHTML = '<p style="color:var(--color-text-muted); text-align:center; grid-column:1/-1;">暫無相關文章</p>';
+        return;
+    }
+
+    related.forEach(post => {
+        const card = document.createElement('div');
+        card.className = 'related-post-card';
+        let tagsHTML = post.tags.slice(0, 3).map(t => `<span class="tag">${t}</span>`).join('');
+        
+        card.innerHTML = `
+            <div class="related-post-date">${post.date}</div>
+            <div class="related-post-title">${post.title}</div>
+            <div class="related-post-tags">${tagsHTML}</div>
+        `;
+        card.onclick = () => {
+            post.show();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        container.appendChild(card);
+    });
+}
+// ==================== 質感全包啟動 ====================
+
+// 1. 閱讀進度條
+window.addEventListener('scroll', () => {
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) || 0;
+    document.getElementById('readingProgress').style.transform = `scaleX(${scrolled})`;
+});
+
+// 2. 返回頂部按鈕
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+        backToTop.classList.add('visible');
+    } else {
+        backToTop.classList.remove('visible');
+    }
+});
+backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+
+
+
+// 4. 首頁文章加上閱讀時間 + 字數
+document.querySelectorAll('.post-card').forEach(card => {
+    const title = card.querySelector('.post-title').textContent;
+    const wordCount = title.includes('特選前') ? 1850 : title.includes('深夜廢話') ? 920 : 2100;
+    const readTime = Math.ceil(wordCount / 250);
+    const meta = document.createElement('div');
+    meta.className = 'post-meta';
+    meta.innerHTML = `${readTime} 分鐘閱讀 · ${wordCount.toLocaleString()} 字`;
+    card.appendChild(meta);
+});
+
+// 5. Hero 區打字動畫
+document.querySelector('.hero-description').innerHTML = 
+    '<span class="typing-text">分享一些想法和心得</span>';
+    // ─────── 超帥游標 + 真正有效的打字機動畫 ───────
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. 真正的打字機動畫（會一個字一個字出來）
+    const typingElement = document.querySelector('.hero-description');
+    const text = "分享一些想法和心得";
+    typingElement.innerHTML = '';  // 先清空
+    let i = 0;
+    const timer = setInterval(() => {
+        typingElement.innerHTML += text.charAt(i);
+        i++;
+        if (i > text.length) {
+            clearInterval(timer);
+            typingElement.style.borderRight = 'none'; // 打完後移除游標
+        }
+    }, 100);
+
+
+});
+// ===== 訪客計數器 + 文章瀏覽數（極簡版）=====
+document.addEventListener('DOMContentLoaded', () => {
+    const currentPath = location.pathname + location.search || '/';
+    const pageKey = btoa(encodeURIComponent(currentPath)).substring(0,12);
+
+    // 更新總訪客數
+    fetch(`https://www.yimin.zone.id/api.js?page=${pageKey}&type=total`)
+        .then(r => r.json())
+        .then(data => {
+            document.querySelectorAll('#totalViews').forEach(el => {
+                el.textContent = (data.total || 0).toLocaleString();
+            });
+        });
+
+    // 更新單篇文章瀏覽數（如果在文章頁）
+    if (document.querySelector('#viewCount')) {
+        fetch(`https://www.yimin.zone.id/count/api.js?page=${pageKey}&type=page`)
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('viewCount').textContent = 
+                    (data.count || 0).toLocaleString();
+            });
+    }
+});
     </script>
 </body>
 </html>

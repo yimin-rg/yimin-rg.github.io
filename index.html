@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YiMin-BLOG</title>
+    <link rel="icon" href="image-removebg-preview (11).png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg-primary: #1f2937;
+            --color-bg-secondary: #374151;
+            --color-text-primary: #f9fafb;
+            --color-text-secondary: #d1d5db;
+            --color-text-muted: #9ca3af;
+            --color-border: rgba(156, 163, 175, 0.2);
+            --color-accent: rgba(107, 114, 128, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* 背景圖片容器 */
+        .background-container {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .background-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+            filter: none;
+        }
+
+        .background-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, 
+                rgba(31, 41, 55, 0.4) 0%, 
+                rgba(55, 65, 81, 0.5) 50%, 
+                rgba(31, 41, 55, 0.4) 100%);
+        }
+
+        /* 主要內容容器 */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: rgba(55, 65, 81, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--color-text-primary);
+            cursor: pointer;
+        }
+
+        .vinyl-icon {
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .vinyl-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .vinyl-icon.spinning {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--color-text-primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-nav {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .mobile-nav.active {
+            max-height: 300px;
+        }
+
+        .mobile-nav a {
+            display: block;
+            padding: 1rem 2rem;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+        }
+
+        .mobile-nav a:hover {
+            background-color: rgba(75, 85, 99, 0.3);
+            color: var(--color-text-primary);
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-divider {
+            width: 1px;
+            height: 3rem;
+            background: linear-gradient(to bottom, 
+                transparent, 
+                var(--color-text-muted), 
+                transparent);
+            margin: 0 auto 2rem;
+            opacity: 0.5;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            margin-bottom: 2rem;
+            letter-spacing: 0.2em;
+        }
+
+        .hero-description {
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            width: 100%;
+        }
+
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .category-btn {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            border: 1px solid var(--color-border);
+            background: transparent;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover {
+            border-color: var(--color-text-secondary);
+            color: var(--color-text-primary);
+            background: var(--color-accent);
+        }
+
+        .category-btn.active {
+            background: var(--color-accent);
+            color: var(--color-text-primary);
+            border-color: var(--color-text-secondary);
+        }
+
+        /* Posts Grid */
+        .posts-grid {
+            display: grid;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .post-card {
+            background: rgba(55, 65, 81, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--color-border);
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .post-card:hover {
+            border-color: var(--color-text-muted);
+            background: rgba(55, 65, 81, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .post-date {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            padding-left: 22px;
+        }
+
+        .post-date::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 3px;
+            border: 1.5px solid currentColor;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .post-date::after {
+    content: "";
+    width: 16px;
+    height: 5px;
+    background: var(--color-accent); /* 低調色替代紅色 */
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(calc(-50% - 5px));
+    border: 1.5px solid currentColor;
+    border-bottom: none;
+}
+
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--color-text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .post-card:hover .post-title {
+            color: #ffffff;
+        }
+
+        .post-excerpt {
+            color: var(--color-text-muted);
+            margin-bottom: 1.25rem;
+            line-height: 1.8;
+            font-size: 0.9rem;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            background: var(--color-accent);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            letter-spacing: 0.05em;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            transition: gap 0.3s;
+        }
+
+        .post-card:hover .read-more {
+            gap: 1rem;
+            color: var(--color-text-primary);
+        }
+
+        .read-more::after {
+            content: '→';
+        }
+
+        /* About Page Styles */
+        .about-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .about-header h1 {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .about-subtitle {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.1em;
+        }
+
+        .about-section {
+            background: rgba(55, 65, 81, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--color-border);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+
+        .about-section:hover {
+            background: rgba(55, 65, 81, 0.6);
+            border-color: var(--color-text-muted);
+        }
+
+        .about-section h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--color-text-secondary);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .about-section h2::before {
+            content: '';
+            width: 4px;
+            height: 1.5rem;
+            background: var(--color-text-muted);
+            border-radius: 2px;
+        }
+
+        .about-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            color: var(--color-text-muted);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .about-info-item {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .about-info-item::before {
+            content: '•';
+            color: var(--color-text-secondary);
+            font-size: 1.2rem;
+            margin-top: -0.1rem;
+        }
+
+        .achievements-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .achievement-item {
+            background: rgba(107, 114, 128, 0.2);
+            border: 1px solid var(--color-border);
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            transition: all 0.3s;
+        }
+
+        .achievement-item:hover {
+            background: rgba(107, 114, 128, 0.3);
+            border-color: var(--color-text-muted);
+            transform: translateX(8px);
+        }
+
+        .achievement-rank {
+            color: var(--color-text-primary);
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .achievement-rank.first {
+            color: #fbbf24;
+        }
+
+        .achievement-rank.second {
+            color: #d1d5db;
+        }
+
+        .achievement-rank.third {
+            color: #f59e0b;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(55, 65, 81, 0.6);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid var(--color-border);
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.125rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: var(--color-text-primary);
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            line-height: 1.8;
+        }
+
+        .footer-section a {
+            display: block;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: var(--color-text-secondary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--color-border);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Spotify Modal */
+        .spotify-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .spotify-modal.active {
+            display: flex;
+        }
+
+        .spotify-container {
+            background: rgba(55, 65, 81, 0.95);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* Tags Modal */
+        .tags-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .tags-modal.active {
+            display: flex;
+        }
+
+        .tags-container {
+            background: rgba(55, 65, 81, 0.95);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .tags-container h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-primary);
+            padding-right: 2rem;
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .tag-item {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            background: var(--color-accent);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tag-item:hover {
+            background: rgba(107, 114, 128, 0.5);
+            color: var(--color-text-primary);
+            border-color: var(--color-text-muted);
+        }
+
+        .tag-count {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        /* Ripple Effects */
+        .click-ripple {
+            position: fixed;
+            pointer-events: none;
+            z-index: 150;
+        }
+
+        .ripple-circle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            border: 1px solid rgba(209, 213, 219, 0.4);
+            animation: rippleExpand 1s ease-out forwards;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes rippleExpand {
+            to {
+                width: 100px;
+                height: 100px;
+                opacity: 0;
+            }
+        }
+
+        .ambient-ripple {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 0;
+            border: 2px solid;
+            animation: ambientRipple 4s ease-out forwards;
+        }
+
+        @keyframes ambientRipple {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 4rem 1.5rem;
+            }
+
+            main {
+                padding: 3rem 1.5rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .about-section {
+                padding: 2rem 1.5rem;
+            }
+            #logo {
+    width: 100px;       /* 調整寬度 */
+    height: auto;       /* 高度自動維持比例 */
+    display: block;     /* 避免 inline 多餘空白 */
+}
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+   <!-- Background -->
+<div class="background-container">
+    <img src="ultraviolence _ lana del rey aesthetic.jpg" alt="" class="background-image">
+    <div class="background-overlay"></div>
+</div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Header -->
+        <header>
+           
+            <div class="nav-container">
+                <div class="logo" onclick="navigateTo('home')">
+                    <svg class="vinyl-icon" id="vinylIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    YIMIN
+                </div>
+                
+                <nav class="nav-links">
+                    <a onclick="navigateTo('home')" class="nav-link active" data-page="home">首頁</a>
+                    <a onclick="openTagsModal(event)" class="nav-link" data-page="tags">標籤</a>
+                    <a onclick="navigateTo('about')" class="nav-link" data-page="about">關於</a>
+                </nav>
+
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            </div>
+
+            <nav class="mobile-nav" id="mobileNav">
+                <a onclick="navigateTo('home')">首頁</a>
+                <a onclick="openTagsModal(event)">標籤</a>
+                <a onclick="navigateTo('about')">關於</a>
+            </nav>
+        </header>
+
+        <!-- Home Page -->
+        <div id="homePage" class="page active">
+            <!-- Hero -->
+            <section class="hero">
+                <div class="hero-content">
+                    <div class="hero-divider"></div>
+                    <h1>YI MIN</h1>
+                    <!--<p class="hero-subtitle">Goal-Hunter</p>-->
+                    <p class="hero-description">分享一些想法和心得</p>
+                </div>
+            </section>
+
+            <!-- Main -->
+            <main>
+                <div class="category-filter">
+                    <button class="category-btn active" data-category="all">全部</button>
+                    <button class="category-btn" data-category="生活">生活</button>
+                    <button class="category-btn" data-category="技術">技術</button>
+                    <button class="category-btn" data-category="想法">想法</button>
+                </div>
+
+                <div class="posts-grid" id="postsGrid">
+                    <article class="post-card" data-category="想法" data-tags="心得,想法">
+                        <div class="post-date">2025-11-26</div>
+                        <h2 class="post-title">特選前的心得 -Overview</h2>
+                        <p class="post-excerpt"></p>
+                        <div class="post-tags">
+                            <span class="tag">心得</span>
+                            <span class="tag">想法</span>
+                        </div>
+                        <span class="read-more">閱讀更多</span>
+                    </article>
+
+                    <article class="post-card" data-category="想法" data-tags="想法,廢話">
+                        <div class="post-date">2025-11-27</div>
+                        <h2 class="post-title">深夜廢話</h2>
+                        <p class="post-excerpt"></p>
+                        <div class="post-tags">
+                            <span class="tag">想法</span>
+                            <span class="tag">廢話</span>
+                        </div>
+                        <span class="read-more">閱讀更多</span>
+                    </article>
+
+                    <article class="post-card" data-category="想法" data-tags="生活,思考">
+                        <div class="post-date">2025-05-10</div>
+                        <h2 class="post-title">《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響</h2>
+                        <p class="post-excerpt"></p>
+                        <div class="post-tags">
+                            <span class="tag">生活</span>
+                            <span class="tag">思考</span>
+                        </div>
+                        <span class="read-more">閱讀更多</span>
+                    </article>
+                </div>
+            </main>
+        </div>
+<!-- 特選心得 - 文章頁面 -->
+<div id="post-txq" class="page" style="display:none;">
+    <main style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
+        <button onclick="showHome()" style="
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--color-border);
+            background: rgba(55, 65, 81, 0.6);
+            backdrop-filter: blur(8px);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;">
+            ← 返回首頁
+        </button>
+
+        <article style="
+            background: rgba(55, 65, 81, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--color-border);
+            padding: 3rem;
+            border-radius: 4px;">
+            
+            <div style="margin-bottom: 3rem;">
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 1rem; letter-spacing: 0.1em;">
+                    2025-11-26
+                </div>
+                <h1 style="font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.3; letter-spacing: 0.02em;">
+                    特選前的心得 -Overview
+                </h1>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="tag">心得</span>
+                    <span class="tag">想法</span>
+                </div>
+            </div>
+
+            <div style="line-height: 1.9; color: var(--color-text-muted); font-size: 1.05rem;">
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        我在國中時就被告知就業前的終極目標一直都是讀好的研究所，否則這輩子完蛋。不過仔細想想，也沒有什麼好完蛋不完蛋的。畢業後不過是成為維持社會運轉的螺絲釘，賺得多、賺得少都是一種活法而已。但賺錢真的是人生的第一要義嗎？我們一輩子追求的真的是「錢、權力、榮耀」嗎？
+                    </p>
+                    <p style="margin-bottom: 1.5rem; font-style: italic; color: var(--color-text-secondary); padding-left: 1.5rem; border-left: 2px solid var(--color-border);">
+                        #引用 MONEY POWER GLORY – LANA DEL REY, Ultraviolence
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        還是說,只有在擁有這些之後,人才能真正快樂？在我內心世界極度扭曲、價值觀混亂的時期,我一度認為「平靜」才是一輩子最值得追求的事情。結果後來我才發現,當我真正做到 <strong style="color: var(--color-text-secondary);">When I don't give a shit</strong> 的時候,反而迎來了我曾經以為需要用力追一輩子的狀態。
+                    </p>
+                    <p style="margin-bottom: 1.5rem;">
+                        也難怪東西方古人一直強調德行的重要——當自己行得端、坐得正、對得起自己的時候,該來的自然會來。(容我講一下玄學,但我真的相信這點。)某一年我看了毛姆的《人性枷鎖》,那本書讓我明白：對別人好,是德行；但對自己好,是成熟。德行、謙遜、正直、真誠,是做人真正需要的特質,也是在混亂的價值中我重新抓住的方向。
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        在專三的暑假時我正著手於做專題並思考未來的規劃,畢竟距離畢業只剩兩年了。我之前原本打算聽從指導老師的想法：畢業後讀二技再升研究所(老師是說我們實驗室出來的保底中字輩)。但當時其實很迷惘。我知道我想讀大學、想升研究所,但家裡希望我選二技,因為那是比較保守的路。
+                    </p>
+                    <p style="margin-bottom: 1.5rem;">
+                        不過,由於二技升研究所的前人經歷實在太少,所以我只能自己推論：走二技可能不容易推甄。我於是打算插大(當時還有研究特殊選才這個管道,但被勸退)。
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem; padding: 1.5rem; background: rgba(107, 114, 128, 0.15); border-left: 3px solid var(--color-text-muted); border-radius: 4px;">
+                    <p style="margin-bottom: 1rem; color: var(--color-text-secondary);">
+                        我面臨兩個選擇：
+                    </p>
+                    <p style="margin-bottom: 0.75rem; padding-left: 1rem;">
+                        <strong style="color: var(--color-text-secondary);">第一</strong>是全心準備插大、荒廢所有課業；
+                    </p>
+                    <p style="margin-bottom: 1rem; padding-left: 1rem;">
+                        <strong style="color: var(--color-text-secondary);">第二</strong>是認真讀書、讓成績漂亮,做出有利於插大的書審資料。
+                    </p>
+                    <p style="padding-left: 1rem;">
+                        我原本堅持第一個,但被逼迫走第二個(老實說我有一點後悔,成績半路變好根本沒什麼用。但如果當初沒選第二個,也不會有後來的故事。)
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        後來的故事就不細講了——因為我自傳裡已經寫過。簡單來說,就是我的成績變好、比了很多比賽、拿到不錯的成績。而這段時間讓我得到一個信念：
+                    </p>
+                    <p style="
+                        margin: 2rem 0;
+                        padding: 1.5rem;
+                        text-align: center;
+                        font-size: 1.25rem;
+                        font-weight: 500;
+                        color: var(--color-text-primary);
+                        background: rgba(107, 114, 128, 0.2);
+                        border: 1px solid var(--color-border);
+                        border-radius: 4px;
+                        letter-spacing: 0.05em;">
+                        「只要下定決心去做,沒有什麼是不可能的。」
+                    </p>
+                </section>
+
+                <section style="padding-top: 2rem; border-top: 1px solid var(--color-border);">
+                    <p style="margin-bottom: 1.5rem;">
+                        未來的路會怎麼走我還不知道,也許我會在學術界、也許會進產業、也許會創業——who knows?
+                    </p>
+                    <p style="color: var(--color-text-secondary); font-size: 1.1rem;">
+                        但我可以確定的是：在找尋我真正想要的道路上,我都會全力以赴。
+                    </p>
+                </section>
+            </div>
+        </article>
+    </main>
+</div>
+<!-- 深夜廢話 - 文章頁面 -->
+<div id="post-txq-deep" class="page" style="display:none;">
+    <main style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
+        <button onclick="showHome()" style="
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--color-border);
+            background: rgba(55, 65, 81, 0.6);
+            backdrop-filter: blur(8px);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;">
+            ← 返回首頁
+        </button>
+
+        <article style="
+            background: rgba(55, 65, 81, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--color-border);
+            padding: 3rem;
+            border-radius: 4px;">
+            
+            <div style="margin-bottom: 3rem;">
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 1rem; letter-spacing: 0.1em;">
+                    2025-11-27
+                </div>
+                <h1 style="font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.3; letter-spacing: 0.02em;">
+                    深夜廢話
+                </h1>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="tag">想法</span>
+                    <span class="tag">廢話</span>
+                </div>
+            </div>
+
+            <div style="line-height: 1.9; color: var(--color-text-muted); font-size: 1.05rem;">
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p>
+                        我在特選前想說的話有提到I don’t give a shit的時候迎來了內心的平靜，我想要深入講一下這一點，因為我想大部分的人都做不到，佛祖說痛苦不在外界，而是執著，當你失去執著也就沒有痛苦了；這個執著可能是外界的看法、可能是同儕關係、又或者是某些目標
+                    </p>
+                    <p style="font-style: italic; color: var(--color-text-secondary); padding-left: 1.5rem; border-left: 2px solid var(--color-border);">
+                        #阿德勒說人一生大部分的煩惱都來自於人際關係，此話不假
+                    </p>
+                    <p>
+                        但身而為人我們很難不去執著些什麼，除了執著好像沒有什麼是可以live on的，不去執著反而有些犬儒主義，畢竟釋迦摩尼身來就是王子榮華富貴想滿足的慾望早都體驗過了，才可以那麼輕易的放下一切反璞歸真，就連我現在也無法完全不去執著，還是會執著說一定要做到什麼才能怎麼樣，我就單純從如何不痛苦切入好了，至於為甚麼不痛苦就可以獲得內心的平靜，我後面會說明。
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p>
+                        張宇說過快樂之後是寂寞，而Andrew Huberman提出多巴胺基線水平的概念，多巴胺基線是大腦的快樂基準線；每次多巴胺衝高後都會隨即下降，如果刺激過度，大腦會把基線調低，結果讓你越來越難感到快樂。
+                    </p>
+                    <p style="margin-bottom: 1.5rem; font-style: italic; color: var(--color-text-secondary); padding-left: 1.5rem; border-left: 2px solid var(--color-border);">
+                        <s>簡單來說就是保持平靜才不會痛苦，既然快樂後會帶來相應的難過，那就乾脆不要快樂就好了啊!這也許就是為什麼佛祖要我們不要談戀愛、不要追求，就是不想要我們痛苦。</s>
+                    </p>
+                    <p style="font-style: italic; color: var(--color-text-secondary); padding-left: 1.5rem; border-left: 2px solid var(--color-border);">
+                        #真心推薦去看流浪者之歌
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p>
+                        現在來說怎麼解決人際關係的煩惱，回想五專時間，我真的有花一些時間在煩惱，單就解決煩惱這件事來說，就是遠離那些讓你不舒服的，只要遠離管他背後怎麼搞你，沒聽到沒看到就是沒發生，還有會讓你感到不舒服的人都是不安全感作祟，他們內心都有一個最深層的恐懼就是害怕自己不被接納，整天都只能擔驚受怕的，他們很可憐，不要反擊，你就是鏡子照出他們自己的心裡的醜陋，總之那種人這輩子也就這樣了，只能在他們的繭裡自我取暖，總之，跟什麼人當朋友自己就會變成那樣子，慎選朋友，如果身邊都只有那種人，那寧願不要有朋友會比較好(絕對沒有在講某些人)。
+                    </p>
+                </section>
+
+            </div>
+        </article>
+    </main>
+</div>
+<div id="post-alien"  class="page" style="display:none;">
+    <main style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
+        <button onclick="showHome()" style="
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--color-border);
+            background: rgba(55, 65, 81, 0.6);
+            backdrop-filter: blur(8px);
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            font-size: 0.875rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s;">
+            ← 返回首頁
+        </button>
+
+        <article style="
+            background: rgba(55, 65, 81, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--color-border);
+            padding: 3rem;
+            border-radius: 4px;">
+            
+            <div style="margin-bottom: 3rem;">
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 1rem; letter-spacing: 0.1em;">
+                    2025-11-27
+                </div>
+                <h1 style="font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.3; letter-spacing: 0.02em;">
+                    《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響
+                </h1>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="tag">生活</span>
+                    <span class="tag">思考</span>
+                </div>
+            </div>
+
+            <div style="line-height: 1.9; color: var(--color-text-muted); font-size: 1.05rem;">
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        在過年期間，我花了三天讀完《異鄉人》。儘管篇幅不長，卡繆卻在有限的文字中傳遞出深刻的哲理與情感張力。這是一部值得反覆閱讀與咀嚼的作品。
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        小說主角莫梭，是卡繆荒謬主義思想的具象代表。他並非全然冷漠無情，而是選擇以一種極其誠實且直觀的方式面對生命。他對生活中的事件無過度反應，對母親的死亡、戀愛、甚至殺人事件的處理，都顯示出他對「事實」的接受勝於對「意義」的追求。
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        然而，也正是這種與主流價值觀不一致的存在方式，使他遭遇社會的誤解與標籤化。當一個人不符合大眾對「應有反應」的期待時，社會便迅速將其分類、簡化，甚至否定其存在價值。《異鄉人》呈現的，正是這種以標籤定義他人的機制如何壓迫個體的真實。
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        這種標籤化，往往來自於人們對自身的不安與恐懼。憎恨者習慣將複雜的個體簡化為單一面向，用少數幾個詞彙便輕率地定義他人。諷刺的是，這些人往往也最依賴標籤來定位自我。如薩特所言：<em style="color: var(--color-text-secondary);">「他人即地獄」</em>——那些活在他人評價中的人，既評價他人，也受制於評價。
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem;">
+                    <p style="margin-bottom: 1.5rem;">
+                        而莫梭的態度，雖看似冷淡，實則是一種對世界的超脫。他拒絕扮演社會規範賦予的角色，不為外界期待所動。這份淡然所帶來的平靜，或許正是現代人渴望卻難以企及的自由。
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 2.5rem; padding: 1.5rem; background: rgba(107, 114, 128, 0.15); border-left: 3px solid var(--color-text-muted); border-radius: 4px;">
+                    <p style="margin-bottom: 1rem; color: var(--color-text-secondary);">
+                        《異鄉人》不僅是對存在主義與荒謬主義的文學展現，更是對我們當今社會標籤文化的深刻批判。它提醒我們：
+                    </p>
+                    <p style="margin: 2rem 0; padding: 1.5rem; text-align: center; font-size: 1.25rem; font-weight: 500; color: var(--color-text-primary); background: rgba(107, 114, 128, 0.2); border: 1px solid var(--color-border); border-radius: 4px; letter-spacing: 0.05em;">
+                        當我們用標籤看人時，也正在窒息自己的理解力與同理心。
+                    </p>
+                </section>
+
+                <section style="padding-top: 2rem; border-top: 1px solid var(--color-border);">
+                    <p style="margin-bottom: 1.5rem;">
+                        如何在社會規範與個人真實之間找到平衡，正是我們每個人都要面對的命題。
+                    </p>
+                    <p style="color: var(--color-text-secondary); font-size: 1.1rem;">
+                        我們應該學會在標籤化社會中保持自我，不因外界的簡化與否定而迷失方向。
+                    </p>
+                </section>
+            </div>
+        </article>
+    </main>
+</div>
+
+        <!-- About Page -->
+        <div id="aboutPage" class="page">
+            <main>
+                <div class="about-header">
+                    <h1>林誼旻</h1>
+                     <!--<p class="about-subtitle">Goal-Hunter</p>-->
+                </div>
+
+                <div class="about-section">
+                    <h2>基本資料</h2>
+                    <div class="about-info">
+                        <div class="about-info-item">虎尾科技大學資工科五專部</div>
+                        <div class="about-info-item">CPE 4題 (5.8%)</div>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h2>競賽成果</h2>
+                    <div class="achievements-list">
+                        <div class="achievement-item">
+                            大手攜小手智慧創新應用競賽 第一名
+                        </div>
+                        <div class="achievement-item">
+                            IEYI青少年發明展台灣選拔 第一名
+                        </div>
+                        <div class="achievement-item">
+                            Green Idea 國際發明競賽 第一名
+                        </div>
+                        <div class="achievement-item">
+                            校內專題競賽  第一名
+                        </div>
+                        <div class="achievement-item">
+                            資訊服務競賽 第二名
+                        </div>
+                        <div class="achievement-item">
+                            盛群盃 智慧化自行車暨健康科技應用獎 第三名
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <h2>專利與研討會</h2>
+                    <div class="achievements-list">
+                        <div class="achievement-item">
+                            運動敏捷度分析系統及運動協調度與敏捷度分析系統 — 專利
+                        </div>
+                        <div class="achievement-item">
+                            棒球量測分析系統 — 專利
+                        </div>
+                        <div class="achievement-item">
+                            參與 2025 台灣身體活動健康永續國際研討會
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <h3>誼旻</h3>
+                        
+                    </div>
+                    <div class="footer-section">
+                        <h3>導航</h3>
+                        <ul>
+                            <li><a onclick="navigateTo('home')">首頁</a></li>
+                            <li><a onclick="openTagsModal(event)">標籤</a></li>
+                            <li><a onclick="navigateTo('about')">關於</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>聯繫</h3>
+                        <p>yimin@example.com</p>
+                    </div>
+                </div>
+                <div class="footer-bottom">© 2024 誼旻</div>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- Spotify Modal -->
+    <div class="spotify-modal" id="spotifyModal">
+        <div class="spotify-container">
+            <button class="close-modal" id="closeModal">×</button>
+            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/7pHGivlV5NL5cEmrVjw9jS?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+    </div>
+
+    <!-- Tags Modal -->
+    <div class="tags-modal" id="tagsModal">
+        <div class="tags-container">
+            <button class="close-modal" id="closeTagsModal">×</button>
+            <h2>所有標籤</h2>
+            <div class="tags-list" id="tagsList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Page Navigation
+        let currentPage = 'home';
+
+        function navigateTo(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show target page
+            const targetPage = document.getElementById(pageName + 'Page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+                currentPage = pageName;
+            }
+
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageName) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Close mobile menu
+            document.getElementById('mobileNav').classList.remove('active');
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNav.classList.toggle('active');
+        });
+
+        // Spotify modal
+        const vinylIcon = document.getElementById('vinylIcon');
+        const spotifyModal = document.getElementById('spotifyModal');
+        const closeModal = document.getElementById('closeModal');
+        
+        vinylIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            spotifyModal.classList.add('active');
+            vinylIcon.classList.add('spinning');
+        });
+        
+        closeModal.addEventListener('click', () => {
+            spotifyModal.classList.remove('active');
+            vinylIcon.classList.remove('spinning');
+        });
+        
+        spotifyModal.addEventListener('click', (e) => {
+            if (e.target === spotifyModal) {
+                spotifyModal.classList.remove('active');
+                vinylIcon.classList.remove('spinning');
+            }
+        });
+
+        // Category filter
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const posts = document.querySelectorAll('.post-card');
+        
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const category = btn.dataset.category;
+                
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                posts.forEach(post => {
+                    if (category === 'all' || post.dataset.category === category) {
+                        post.style.display = 'block';
+                    } else {
+                        post.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Click ripple
+        document.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.className = 'click-ripple';
+            ripple.style.left = e.clientX + 'px';
+            ripple.style.top = e.clientY + 'px';
+            
+            const circle = document.createElement('div');
+            circle.className = 'ripple-circle';
+            ripple.appendChild(circle);
+            
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 1000);
+        });
+
+        // Ambient ripples
+        function createAmbientRipple() {
+            const ripple = document.createElement('div');
+            ripple.className = 'ambient-ripple';
+            
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            const size = 300 + Math.random() * 400;
+            const duration = 3 + Math.random() * 3;
+            const isWhite = Math.random() > 0.5;
+            
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.width = size + 'px';
+            ripple.style.height = size + 'px';
+            ripple.style.borderColor = isWhite 
+                ? `rgba(255, 255, 255, ${0.1 + Math.random() * 0.2})` 
+                : `rgba(0, 0, 0, ${0.1 + Math.random() * 0.2})`;
+            ripple.style.animationDuration = duration + 's';
+            
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), duration * 1000);
+        }
+
+        function startAmbientRipples() {
+            createAmbientRipple();
+            setTimeout(startAmbientRipples, 1500 + Math.random() * 2000);
+        }
+
+        startAmbientRipples();
+
+        // Tags functionality
+        const tagsModal = document.getElementById('tagsModal');
+        const closeTagsModal = document.getElementById('closeTagsModal');
+        const tagsList = document.getElementById('tagsList');
+
+        // Collect all tags from posts
+        function collectTags() {
+            const tagCounts = {};
+            posts.forEach(post => {
+                const tags = post.dataset.tags.split(',');
+                tags.forEach(tag => {
+                    tag = tag.trim();
+                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                });
+            });
+            return tagCounts;
+        }
+
+        // Display tags in modal
+        function displayTags() {
+            const tagCounts = collectTags();
+            tagsList.innerHTML = '';
+            
+            Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).forEach(([tag, count]) => {
+                const tagItem = document.createElement('div');
+                tagItem.className = 'tag-item';
+                tagItem.innerHTML = `
+                    ${tag}
+                    <span class="tag-count">(${count})</span>
+                `;
+                tagItem.addEventListener('click', () => {
+                    filterByTag(tag);
+                    tagsModal.classList.remove('active');
+                });
+                tagsList.appendChild(tagItem);
+            });
+        }
+
+        // Filter posts by tag
+        function filterByTag(selectedTag) {
+            // Navigate to home page first
+            navigateTo('home');
+
+            // Reset category filter
+            categoryBtns.forEach(btn => btn.classList.remove('active'));
+            categoryBtns[0].classList.add('active');
+
+            posts.forEach(post => {
+                const tags = post.dataset.tags.split(',').map(t => t.trim());
+                if (tags.includes(selectedTag)) {
+                    post.style.display = 'block';
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+
+            // Scroll to posts
+            setTimeout(() => {
+                document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        // Open tags modal
+        function openTagsModal(e) {
+            e.preventDefault();
+            displayTags();
+            tagsModal.classList.add('active');
+        }
+
+        closeTagsModal.addEventListener('click', () => {
+            tagsModal.classList.remove('active');
+        });
+
+        tagsModal.addEventListener('click', (e) => {
+            if (e.target === tagsModal) {
+                tagsModal.classList.remove('active');
+            }
+        });
+    
+// 文章卡片點擊事件
+document.querySelectorAll('.post-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const title = this.querySelector('.post-title').textContent;
+        
+        // 根據標題判斷要顯示哪篇文章
+        if (title.includes('特選前的心得')) {
+            showPostTXQ();
+        }
+        else if (title.includes('深夜廢話')) {
+            showPostTXQDeep();
+        }
+        else if (title.includes('《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響')) {
+            showPostAlien();
+        }
+        // 未來可以加更多文章判斷
+        // else if (title.includes('其他文章標題')) {
+        //     showOtherPost();
+        // }
+    });
+});
+
+// 顯示特選心得文章
+function showPostTXQ() {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+        page.style.display = 'none';
+    });
+    document.getElementById('post-txq').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function showPostTXQDeep() {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+        page.style.display = 'none';
+    });
+    document.getElementById('post-txq-deep').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function showPostAlien() {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+        page.style.display = 'none';
+    });
+    document.getElementById('post-alien').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+// 返回首頁
+// 返回首頁
+// 返回首頁
+// 返回首頁
+function showHome() {
+    // 隱藏所有文章頁面
+    document.querySelectorAll('[id^="post-"]').forEach(post => {
+        post.style.display = 'none';
+    });
+    
+    // 重置所有 page 的狀態
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+        page.style.display = 'none';
+    });
+    
+    // 顯示首頁
+    const homePage = document.getElementById('homePage');
+    if (homePage) {
+        homePage.style.display = 'block';
+        homePage.classList.add('active');
+    }
+    
+    // 更新當前頁面變數
+    currentPage = 'home';
+    
+    // 更新導航連結狀態
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.dataset.page === 'home') {
+            link.classList.add('active');
+        }
+    });
+    
+    // 關閉手機選單
+    document.getElementById('mobileNav').classList.remove('active');
+    
+    // 重置分類篩選器
+    categoryBtns.forEach(btn => btn.classList.remove('active'));
+    categoryBtns[0].classList.add('active');
+    
+    // 顯示所有文章
+    posts.forEach(post => {
+        post.style.display = 'block';
+    });
+    
+    // 捲動到頂部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+    </script>
+</body>
+</html>

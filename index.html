@@ -534,29 +534,68 @@
     </div>
 
    <script src="https://cdn.jsdelivr.net/npm/countapi-js@1.0.1/dist/countapi.min.js"></script>
-<script>
-const posts = ['txq','deep','alien','murmur','murmur2'];
-posts.forEach(id=>{
-  countapi.get('midnightmurmur2025',id).then(r=>document.getElementById('views-'+id).innerText=r.value.toLocaleString());
-});
-
-function showPost(id){
-  document.getElementById('home').style.display='none';
-  document.querySelectorAll('.article-page').forEach(p=>p.style.display='none');
-  document.getElementById('post-'+id).style.display='block';
-  window.scrollTo(0,0);
-
-  // 計數 +1 並即時更新
-  countapi.hit('murmur2025',id).then(result=>{
-    document.getElementById('article-views-'+id).innerText=result.value.toLocaleString();
-    document.getElementById('views-'+id).innerText=result.value.toLocaleString();
-  });
-}
-function showHome(){
-  document.getElementById('home').style.display='block';
-  document.querySelectorAll('.article-page').forEach(p=>p.style.display='none');
-}
-showHome();
-</script>
+   <script>
+    // 使用內建的瀏覽次數追蹤（改用 window.storage）
+    const NAMESPACE = 'midnightmurmur2025';
+    const posts = ['txq','deep','alien','murmur','murmur2'];
+    
+    // 初始化：載入所有文章的瀏覽次數
+    async function loadViewCounts() {
+      for (const id of posts) {
+        try {
+          const result = await window.storage.get(`views:${id}`, true);
+          const count = result ? parseInt(result.value) : 0;
+          const viewEl = document.getElementById('views-'+id);
+          if (viewEl) viewEl.innerText = count.toLocaleString();
+        } catch (e) {
+          const viewEl = document.getElementById('views-'+id);
+          if (viewEl) viewEl.innerText = '0';
+        }
+      }
+    }
+    
+    // 增加瀏覽次數
+    async function incrementView(id) {
+      try {
+        let count = 0;
+        try {
+          const result = await window.storage.get(`views:${id}`, true);
+          count = result ? parseInt(result.value) : 0;
+        } catch (e) {
+          count = 0;
+        }
+        
+        count++;
+        await window.storage.set(`views:${id}`, count.toString(), true);
+        
+        // 更新顯示
+        const articleViewEl = document.getElementById('article-views-'+id);
+        const cardViewEl = document.getElementById('views-'+id);
+        if (articleViewEl) articleViewEl.innerText = count.toLocaleString();
+        if (cardViewEl) cardViewEl.innerText = count.toLocaleString();
+      } catch (e) {
+        console.error('無法更新瀏覽次數:', e);
+      }
+    }
+    
+    function showPost(id){
+      document.getElementById('home').style.display='none';
+      document.querySelectorAll('.article-page').forEach(p=>p.style.display='none');
+      document.getElementById('post-'+id).style.display='block';
+      window.scrollTo(0,0);
+    
+      // 增加瀏覽次數
+      incrementView(id);
+    }
+    
+    function showHome(){
+      document.getElementById('home').style.display='block';
+      document.querySelectorAll('.article-page').forEach(p=>p.style.display='none');
+    }
+    
+    // 頁面載入時初始化
+    loadViewCounts();
+    showHome();
+    </script>
 </body>
 </html>

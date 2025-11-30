@@ -3,2262 +3,531 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YiMin-BLOG</title>
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <link rel="icon" href="image-removebg-preview (11).png" type="image/png">
+    <title>深夜自言自語</title>
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         :root {
-            --color-bg-primary: #1f2937;
-            --color-bg-secondary: #374151;
-            --color-text-primary: #f9fafb;
-            --color-text-secondary: #d1d5db;
-            --color-text-muted: #9ca3af;
-            --color-border: rgba(156, 163, 175, 0.2);
-            --color-accent: rgba(107, 114, 128, 0.3);
+            --bg: #0f172a;
+            --paper: #1e293b;
+            --text: #e2e8f0;
+            --accent: #c084fc;
+            --neon: #ec4899;
+            --glow: 0 0 15px rgba(236, 72, 153, 0.5);
         }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background-color: var(--color-bg-primary);
-            color: var(--color-text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        /* 背景圖片容器 */
-        .background-container {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .background-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 1;
-            filter: none;
-        }
-
-        .background-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, 
-                rgba(31, 41, 55, 0.4) 0%, 
-                rgba(55, 65, 81, 0.5) 50%, 
-                rgba(31, 41, 55, 0.4) 100%);
-        }
-
-        /* 主要內容容器 */
-        .main-container {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        header {
-            background: rgba(55, 65, 81, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--color-border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 4rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 300;
-            letter-spacing: 0.15em;
-            color: var(--color-text-primary);
-            cursor: pointer;
-        }
-
-        .vinyl-icon {
-            width: 28px;
-            height: 28px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .vinyl-icon:hover {
-            transform: scale(1.1);
-        }
-
-        .vinyl-icon.spinning {
-            animation: spin 2s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            margin-left: 4rem;
-        }
-
-        .nav-links a {
-            color: var(--color-text-secondary);
-            text-decoration: none;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--color-text-primary);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--color-text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .mobile-nav {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            border-top: 1px solid var(--color-border);
-        }
-
-        .mobile-nav.active {
-            max-height: 300px;
-        }
-
-        .mobile-nav a {
-            display: block;
-            padding: 1rem 2rem;
-            color: var(--color-text-secondary);
-            text-decoration: none;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            transition: background-color 0.3s, color 0.3s;
-            cursor: pointer;
-        }
-
-        .mobile-nav a:hover {
-            background-color: rgba(75, 85, 99, 0.3);
-            color: var(--color-text-primary);
-        }
-
-        /* Page Container */
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 6rem 2rem;
-            text-align: center;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero-divider {
-            width: 1px;
-            height: 3rem;
-            background: linear-gradient(to bottom, 
-                transparent, 
-                var(--color-text-muted), 
-                transparent);
-            margin: 0 auto 2rem;
-            opacity: 0.5;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            font-weight: 300;
-            margin-bottom: 1rem;
-            letter-spacing: 0.05em;
-        }
-
-        .hero-subtitle {
-            font-size: 1.125rem;
-            color: var(--color-text-secondary);
-            margin-bottom: 2rem;
-            letter-spacing: 0.2em;
-        }
-
-        .hero-description {
-            color: var(--color-text-muted);
-            max-width: 600px;
-            margin: 0 auto;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Space Mono', monospace;
             line-height: 1.8;
+            background-image: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-4.0.3&auto=format&fit=crop&q=80');
+            background-attachment: fixed;
+            background-size: cover;
         }
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
 
-        /* Main Content */
-        main {
-            flex: 1;
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            width: 100%;
+        /* 首頁 */
+        header {
+            text-align: center;
+            padding: 4rem 0;
         }
-
-        /* Category Filter */
-        .category-filter {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            justify-content: center;
-            margin-bottom: 3rem;
+        header h1 {
+            font-family: 'Homemade Apple', cursive;
+            font-size: 3.5rem;
+            color: var(--accent);
+            text-shadow: var(--glow);
         }
-
-        .category-btn {
-            padding: 0.5rem 1.5rem;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            border: 1px solid var(--color-border);
-            background: transparent;
-            color: var(--color-text-secondary);
-            cursor: pointer;
-            transition: all 0.3s;
+        header p {
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            opacity: 0.8;
         }
-
-        .category-btn:hover {
-            border-color: var(--color-text-secondary);
-            color: var(--color-text-primary);
-            background: var(--color-accent);
-        }
-
-        .category-btn.active {
-            background: var(--color-accent);
-            color: var(--color-text-primary);
-            border-color: var(--color-text-secondary);
-        }
-
-        /* Posts Grid */
         .posts-grid {
             display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 2rem;
-            max-width: 900px;
-            margin: 0 auto;
+            margin-top: 3rem;
         }
-
         .post-card {
-            background: rgba(55, 65, 81, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--color-border);
+            background: var(--paper);
             padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--glow);
+            transition: all 0.4s;
             cursor: pointer;
-            transition: all 0.3s;
         }
-
         .post-card:hover {
-            border-color: var(--color-text-muted);
-            background: rgba(55, 65, 81, 0.6);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(236, 72, 153, 0.3);
         }
-
-        .post-date {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.75rem;
-            color: var(--color-text-muted);
-            padding-left: 22px;
+        .post-card h2 {
+            font-size: 1.4rem;
+            margin: 1rem 0;
+            color: var(--accent);
         }
-
-        .post-date::before {
-            content: "";
-            width: 16px;
-            height: 16px;
-            background: #fff;
-            border-radius: 3px;
-            border: 1.5px solid currentColor;
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .post-date::after {
-    content: "";
-    width: 16px;
-    height: 5px;
-    background: var(--color-accent); /* 低調色替代紅色 */
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(calc(-50% - 5px));
-    border: 1.5px solid currentColor;
-    border-bottom: none;
-}
-
-        .post-title {
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: var(--color-text-primary);
-            margin-bottom: 1rem;
-            line-height: 1.4;
-        }
-
-        .post-card:hover .post-title {
-            color: #ffffff;
-        }
-
-        .post-excerpt {
-            color: var(--color-text-muted);
-            margin-bottom: 1.25rem;
-            line-height: 1.8;
-            font-size: 0.9rem;
-        }
-
-        .post-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .tag {
-            padding: 0.25rem 0.75rem;
-            font-size: 0.75rem;
-            background: var(--color-accent);
-            color: var(--color-text-secondary);
-            border: 1px solid var(--color-border);
-            letter-spacing: 0.05em;
-        }
-
-        .read-more {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--color-text-secondary);
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            transition: gap 0.3s;
-        }
-
-        .post-card:hover .read-more {
-            gap: 1rem;
-            color: var(--color-text-primary);
-        }
-
-        .read-more::after {
-            content: '→';
-        }
-
-        /* About Page Styles */
-        .about-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .about-header h1 {
-            font-size: clamp(2.5rem, 6vw, 3.5rem);
-            font-weight: 300;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
-        }
-
-        .about-subtitle {
-            font-size: 1rem;
-            color: var(--color-text-muted);
-            letter-spacing: 0.1em;
-        }
-
-        .about-section {
-            background: rgba(55, 65, 81, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--color-border);
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            transition: all 0.3s;
-        }
-
-        .about-section:hover {
-            background: rgba(55, 65, 81, 0.6);
-            border-color: var(--color-text-muted);
-        }
-
-        .about-section h2 {
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: var(--color-text-secondary);
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.05em;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .about-section h2::before {
-            content: '';
-            width: 4px;
-            height: 1.5rem;
-            background: var(--color-text-muted);
-            border-radius: 2px;
-        }
-
-        .about-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            color: var(--color-text-muted);
-            font-size: 1rem;
-            line-height: 1.8;
-        }
-
-        .about-info-item {
-            display: flex;
-            gap: 0.75rem;
-            align-items: flex-start;
-        }
-
-        .about-info-item::before {
-            content: '•';
-            color: var(--color-text-secondary);
-            font-size: 1.2rem;
-            margin-top: -0.1rem;
-        }
-
-        .achievements-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .achievement-item {
-            background: rgba(107, 114, 128, 0.2);
-            border: 1px solid var(--color-border);
-            padding: 1rem 1.5rem;
-            border-radius: 4px;
-            color: var(--color-text-secondary);
-            font-size: 1rem;
-            line-height: 1.6;
-            transition: all 0.3s;
-        }
-
-        .achievement-item:hover {
-            background: rgba(107, 114, 128, 0.3);
-            border-color: var(--color-text-muted);
-            transform: translateX(8px);
-        }
-
-        .achievement-rank {
-            color: var(--color-text-primary);
-            font-weight: 500;
-            margin-left: 0.5rem;
-        }
-
-        .achievement-rank.first {
-            color: #fbbf24;
-        }
-
-        .achievement-rank.second {
-            color: #d1d5db;
-        }
-
-        .achievement-rank.third {
-            color: #f59e0b;
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(55, 65, 81, 0.6);
-            backdrop-filter: blur(8px);
-            border-top: 1px solid var(--color-border);
-            margin-top: auto;
-        }
-
-        .footer-content {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-section h3 {
-            font-size: 1.125rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            color: var(--color-text-primary);
-        }
-
-        .footer-section p,
-        .footer-section a {
-            color: var(--color-text-muted);
-            font-size: 0.875rem;
-            line-height: 1.8;
-        }
-
-        .footer-section a {
-            display: block;
-            text-decoration: none;
-            margin-bottom: 0.5rem;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-
-        .footer-section a:hover {
-            color: var(--color-text-secondary);
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid var(--color-border);
-            padding-top: 2rem;
-            text-align: center;
-            color: var(--color-text-muted);
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-        }
-
-        /* Spotify Modal */
-        .spotify-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .spotify-modal.active {
-            display: flex;
-        }
-
-        .spotify-container {
-            background: rgba(55, 65, 81, 0.95);
-            border: 1px solid var(--color-border);
-            border-radius: 12px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 100%;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: var(--color-text-secondary);
-            font-size: 2rem;
-            line-height: 1;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.3s;
-        }
-
-        .close-modal:hover {
-            color: var(--color-text-primary);
-        }
-
-        /* Tags Modal */
-        .tags-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .tags-modal.active {
-            display: flex;
-        }
-
-        .tags-container {
-            background: rgba(55, 65, 81, 0.95);
-            border: 1px solid var(--color-border);
-            border-radius: 12px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .tags-container h2 {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 1.5rem;
-            color: var(--color-text-primary);
-            padding-right: 2rem;
-        }
-
-        .tags-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .tag-item {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            background: var(--color-accent);
-            color: var(--color-text-secondary);
-            border: 1px solid var(--color-border);
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .tag-item:hover {
-            background: rgba(107, 114, 128, 0.5);
-            color: var(--color-text-primary);
-            border-color: var(--color-text-muted);
-        }
-
-        .tag-count {
-            font-size: 0.75rem;
+        .post-card .date {
+            font-size: 0.8rem;
             opacity: 0.7;
         }
-
-        /* Ripple Effects */
-        .click-ripple {
-            position: fixed;
-            pointer-events: none;
-            z-index: 150;
+        .post-card .excerpt {
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+        .tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .tag {
+            background: var(--ne neuen);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            box-shadow: var(--glow);
         }
 
-        .ripple-circle {
+        /* 文章頁 */
+        .article-page {
+            display: none;
+            background: var(--paper);
+            margin: 2rem auto;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .back-btn {
             position: absolute;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            border: 1px solid rgba(209, 213, 219, 0.4);
-            animation: rippleExpand 1s ease-out forwards;
-            transform: translate(-50%, -50%);
+            top: 2rem;
+            left: 2rem;
+            background: var(--neon);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: var(--glow);
         }
-
-        @keyframes rippleExpand {
-            to {
-                width: 100px;
-                height: 100px;
-                opacity: 0;
-            }
+        .article-header {
+            text-align: center;
+            margin-bottom: 3rem;
         }
-
-        .ambient-ripple {
-            position: fixed;
-            pointer-events: none;
-            border-radius: 50%;
-            z-index: 0;
-            border: 2px solid;
-            animation: ambientRipple 4s ease-out forwards;
+        .article-header .date {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
         }
-
-        @keyframes ambientRipple {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0;
-            }
+        .article-header h1 {
+            font-family: 'Homemade Apple', cursive;
+            font-size: 3rem;
+            color: var(--accent);
+            margin: 1rem 0;
+            line-height: 1.3;
         }
-
-        /* Responsive */
+        .highlight {
+            background: rgba(236, 72, 153, 0.2);
+            padding: 1.5rem;
+            border-left: 4px solid var(--neon);
+            margin: 2rem 0;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            text-align: center;
+            box-shadow: var(--glow);
+            animation: pulse 4s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(236, 72, 153, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(236, 72, 153, 0.8); }
+        }
+        .note {
+            font-style: italic;
+            color: var(--accent);
+            border-left: 2px solid var(--accent);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+        }
+        .sidebar {
+            background: rgba(30, 41, 59, 0.8);
+            padding: 2rem;
+            border-radius: 12px;
+            position: sticky;
+            top: 2rem;
+        }
+        .sidebar h3 {
+            font-family: 'Homemade Apple', cursive;
+            color: var(--neon);
+            margin-bottom: 1rem;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar li {
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed rgba(236, 72, 153, 0.3);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .sidebar li:hover {
+            color: var(--neon);
+            padding-left: 0.5rem;
+        }
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+        .article-content strong {
+            color: var(--accent);
+        }
+        .article-content em {
+            color: var(--accent);
+        }
+        .article-content s {
+            color: #94a3b8;
+        }
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .article-content {
+                grid-template-columns: 1fr !important;
             }
-
-            .mobile-menu-btn {
-                display: block;
+            .sidebar {
+                position: static;
+                margin-top: 3rem;
             }
-
-            .hero {
-                padding: 4rem 1.5rem;
-            }
-
-            main {
-                padding: 3rem 1.5rem;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .about-section {
-                padding: 2rem 1.5rem;
-            }
-            #logo {
-    width: 100px;       /* 調整寬度 */
-    height: auto;       /* 高度自動維持比例 */
-    display: block;     /* 避免 inline 多餘空白 */
-}
-
         }
-        /* Search Bar Styles */
-.search-container {
-    position: relative;
-    margin-left: auto;
-    margin-right: 1rem;
-}
-
-#searchInput {
-    width: 280px;
-    padding: 0.75rem 1rem;
-    background: rgba(55, 65, 81, 0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--color-border);
-    color: var(--color-text-primary);
-    font-size: 0.875rem;
-    letter-spacing: 0.05em;
-    border-radius: 8px;
-    outline: none;
-    transition: all 0.3s;
-}
-
-#searchInput:focus {
-    border-color: var(--color-text-secondary);
-    background: rgba(55, 65, 81, 0.9);
-    width: 320px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-#searchInput::placeholder {
-    color: var(--color-text-muted);
-}
-
-/* 搜尋結果下拉 */
-.search-results {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: rgba(55, 65, 81, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    margin-top: 0.5rem;
-    max-height: 70vh;
-    overflow-y: auto;
-    display: none;
-    z-index: 200;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
-
-.search-results.active {
-    display: block;
-}
-
-.search-result-item {
-    padding: 1rem 1.2rem;
-    border-bottom: 1px solid var(--color-border);
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.search-result-item:hover {
-    background: rgba(107, 114, 128, 0.3);
-    padding-left: 1.5rem;
-}
-
-.search-result-item:last-child {
-    border-bottom: none;
-}
-
-.search-result-title {
-    font-size: 1rem;
-    color: var(--color-text-primary);
-    margin-bottom: 0.4rem;
-}
-
-.search-result-excerpt {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    line-height: 1.5;
-}
-
-/* 手機板隱藏搜尋欄，用漢堡選單裡的搜尋也可以 */
-@media (max-width: 768px) {
-    .search-container {
-        position: static;
-        margin: 1rem 2rem 0;
-    }
-    #searchInput {
-        width: 100%;
-    }
-    #searchInput:focus {
-        width: 100%;
-    }
-    .search-results {
-        left: 2rem;
-        right: 2rem;
-    }
-}
-/* Archive Page 專用樣式 */
-.archive-item {
-    background: rgba(55, 65, 81, 0.4);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--color-border);
-    padding: 2rem;
-    border-radius: 8px;
-    transition: all 0.4s ease;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.archive-item::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(107,114,128,0.15), transparent);
-    opacity: 0;
-    transition: opacity 0.4s;
-}
-
-.archive-item:hover::before {
-    opacity: 1;
-}
-
-.archive-item:hover {
-    transform: translateY(-8px);
-    border-color: var(--color-text-muted);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    background: rgba(55,65,81,0.7);
-}
-
-.archive-date {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    margin-bottom: 0.8rem;
-    letter-spacing: 0.1em;
-}
-
-.archive-title {
-    font-size: 1.4rem;
-    font-weight: 400;
-    color: var(--color-text-primary);
-    margin-bottom: 1rem;
-    line-height: 1.4;
-}
-
-.archive-excerpt {
-    color: var(--color-text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.archive-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.archive-tags .tag {
-    font-size: 0.75rem;
-    padding: 0.35rem 0.8rem;
-}
-
-/* 手機版兩欄變一欄 */
-@media (max-width: 640px) {
-    #archiveList {
-        grid-template-columns: 1fr;
-    }
-    .archive-item {
-        padding: 1.5rem;
-    }
-}
-/* 相關文章推薦 */
-.related-posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-}
-
-.related-post-card {
-    background: rgba(55, 65, 81, 0.35);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--color-border);
-    padding: 1.6rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.4s ease;
-}
-
-.related-post-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--color-text-muted);
-    background: rgba(55, 65, 81, 0.65);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-}
-
-.related-post-date {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    margin-bottom: 0.6rem;
-    letter-spacing: 0.08em;
-}
-
-.related-post-title {
-    font-size: 1.1rem;
-    color: var(--color-text-primary);
-    line-height: 1.4;
-    margin-bottom: 0.8rem;
-}
-
-.related-post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.related-post-tags .tag 
-    {
-    font-size: 0.7rem;
-    padding: 0.25rem 0.6rem;
-}
-
-/* 手機版 */
-@media (max-width: 640px) {
-    .related-posts-grid {
-        grid-template-columns: 1fr;
-    }
-}
-/* ==================== 超質感升級全包 ==================== */
-
-/* 1. 閱讀進度條（彩虹霓虹版） */
-#readingProgress {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #8b5cf6, #3b82f6, #10b981, #f59e0b);
-    transform: scaleX(0);
-    transform-origin: left;
-    z-index: 9999;
-    box-shadow: 0 0 15px rgba(139,92,246,0.8);
-    transition: transform 0.1s ease;
-}
-
-/* 2. 返回頂部按鈕（霧面玻璃小球） */
-#backToTop {
-    position: fixed;
-    right: 2rem;
-    bottom: 2rem;
-    width: 50px;
-    height: 50px;
-    background: rgba(55, 65, 81, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(156, 163, 175, 0.3);
-    border-radius: 50%;
-    color: var(--color-text-primary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s ease;
-    z-index: 998;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-}
-#backToTop.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-#backToTop:hover {
-    background: rgba(107, 114, 128, 0.8);
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-}
-
-/* 3. 文章卡片升級：閱讀時間 + 字數 */
-.post-meta {
-    margin-top: 1rem;
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    letter-spacing: 0.05em;
-    opacity: 0.9;
-}
-
-/* 4. 滑鼠自訂游標（霓虹光暈） */
-body {
-    cursor: none;
-}
-/* ─────── 超帥新版游標（霧面光暈 + 尾跡）─────── */
-
-
-/* 5. 首頁文章卡片 hover 3D 浮起 + 陰影 */
-.post-card {
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1) !important;
-    transform: translateZ(0);
-}
-.post-card:hover {
-    transform: translateY(-12px) rotateX(5deg) !important;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important;
-}
-
-/* 6. Hero 打字動畫 */
-.typing-text {
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 3px solid #8b5cf6;
-    animation: typing 4s steps(30, end) infinite, blink 0.7s infinite;
-    width: 0;
-    animation-delay: 1s;
-    animation-fill-mode: forwards;
-}
-@keyframes typing {
-    0% { width: 0; }
-    50% { width: 100%; }
-    100% { width: 100%; }
-}
-@keyframes blink {
-    50% { border-color: transparent; }
-}
-* { cursor: auto !important; }
-body { cursor: default !important; }
     </style>
 </head>
 <body>
-    <div id="readingProgress"></div>
-<div id="backToTop">↑</div>
+    <div class="container">
+        <!-- 首頁 -->
+        <div id="home">
+            <header>
+                <h1>深夜自言自語</h1>
+                <p>寫給未來的自己，也寫給深夜還醒著的你</p>
+            </header>
 
-    <!-- Background -->
-   <!-- Background -->
-<div class="background-container">
-    <img src="ultraviolence _ lana del rey aesthetic.jpg" alt="" class="background-image">
-    <div class="background-overlay"></div>
-</div>
-
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Header -->
-        <header>
-           
-            <div class="nav-container">
-                <div class="logo" onclick="navigateTo('home')">
-                    <svg class="vinyl-icon" id="vinylIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    YIMIN
+            <div class="posts-grid">
+                <div class="post-card" onclick="showPost('txq')">
+                    <div class="date">2025-11-26</div>
+                    <h2>特選前的心得 - Overview</h2>
+                    <div class="excerpt">我曾經以為要用力追錢、權力、榮耀才會快樂，後來才發現...</div>
+                    <div class="tags"><span class="tag">心得</span><span class="tag">想法</span></div>
+                    <div class="view-count">瀏覽次數：<span id="views-txq">loading...</span></div>
                 </div>
-                
-                <nav class="nav-links">
-                    <a onclick="navigateTo('home')" class="nav-link active" data-page="home">首頁</a>
-                    <a onclick="navigateTo('archive')" class="nav-link" data-page="archive">目錄</a>
-                    <a onclick="openTagsModal(event)" class="nav-link" data-page="tags">標籤</a>
-                    <a onclick="navigateTo('about')" class="nav-link" data-page="about">關於</a>
-                </nav>
-                <!-- Search Bar -->
-<div class="search-container">
-    <input type="text" id="searchInput" placeholder="搜尋文章標題或內容..." autocomplete="off">
-    <div class="search-results" id="searchResults"></div>
-</div>
 
-                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+                <div class="post-card" onclick="showPost('deep')">
+                    <div class="date">2025-11-27</div>
+                    <h2>深夜廢話</h2>
+                    <div class="excerpt">佛祖說痛苦不在外界，而是執著。當你失去執著也就沒有痛苦了...</div>
+                    <div class="tags"><span class="tag">想法</span><span class="tag">廢話</span></div>
+                    <div class="view-count">瀏覽次數：<span id="views-deep">loading...</span></div>
+                </div>
+
+                <div class="post-card" onclick="showPost('alien')">
+                    <div class="date">2025-11-27</div>
+                    <h2>《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響</h2>
+                    <div class="excerpt">當我們用標籤看人時，也正在窒息自己的理解力與同理心。</div>
+                    <div class="tags"><span class="tag">生活</span><span class="tag">思考</span></div>
+                    <div class="view-count">瀏覽次數：<span id="views-alien">loading...</span></div>
+                </div>
+
+                <div class="post-card" onclick="showPost('murmur')">
+                    <div class="date">2025-11-28</div>
+                    <h2>11-28 MUR MUR</h2>
+                    <div class="excerpt">今天得知中興資工沒進面試對我來說無疑是一個相當大的打擊...</div>
+                    <div class="tags"><span class="tag">MUR MUR</span><span class="tag">日記</span></div>
+                    <div class="view-count">瀏覽次數：<span id="views-murmur">loading...</span></div>
+                </div>
+
+                <div class="post-card" onclick="showPost('murmur2')">
+                    <div class="date">2025-11-29</div>
+                    <h2>11-29 MUR MUR 2 – 關於愛/女權/自信/期許/未來書單</h2>
+                    <div class="excerpt">雖然沒有體驗過正式的情感關係，不過我所親身感受過的種種相信也足夠在此長篇大論一番...</div>
+                    <div class="tags"><span class="tag">MUR MUR</span><span class="tag">愛</span><span class="tag">女權</span><span class="tag">自信</span><span class="tag">書單</span></div>
+                    <div class="view-count">瀏覽次數：<span id="views-murmur2">loading...</span></div>
+                </div>
             </div>
-
-            <nav class="mobile-nav" id="mobileNav">
-                <a onclick="navigateTo('home')">首頁</a>
-                <a onclick="navigateTo('archive')">目錄</a>
-                <a onclick="openTagsModal(event)">標籤</a>
-                <a onclick="navigateTo('about')">關於</a>
-            </nav>
-        </header>
-
-        <!-- Home Page -->
-        <div id="homePage" class="page active">
-            <!-- Hero -->
-            <section class="hero">
-                <div class="hero-content">
-                    <div class="hero-divider"></div>
-                    <h1>YI MIN</h1>
-                    <!--<p class="hero-subtitle">Goal-Hunter</p>-->
-                    <p class="hero-description">分享一些想法和心得</p>
-                    <p style="margin-top:1.5rem; color:var(--color-text-muted); font-size:1rem;">
-                        共 <span id="busuanzi_value_site_pv" style="color:#8b5cf6; font-weight:600;">0</span> 位訪客
-                    </p>
-                </div>
-            </section>
-
-            <!-- Main -->
-            <main>
-                <div class="category-filter">
-                    <button class="category-btn active" data-category="all">全部</button>
-                    <button class="category-btn" data-category="生活">生活</button>
-                    <button class="category-btn" data-category="技術">技術</button>
-                    <button class="category-btn" data-category="想法">想法</button>
-                </div>
-
-                <div class="posts-grid" id="postsGrid">
-                    <article class="post-card" data-category="想法" data-tags="心得,想法">
-                        <div class="post-date">2025-11-26</div>
-                        <h2 class="post-title">特選前的心得 -Overview</h2>
-                        <p class="post-excerpt"></p>
-                        <div class="post-tags">
-                            <span class="tag">心得</span>
-                            <span class="tag">想法</span>
-                        </div>
-                        <span class="read-more">閱讀更多</span>
-                    </article>
-
-                    <article class="post-card" data-category="想法" data-tags="想法,廢話">
-                        <div class="post-date">2025-11-27</div>
-                        <h2 class="post-title">深夜廢話</h2>
-                        <p class="post-excerpt"></p>
-                        <div class="post-tags">
-                            <span class="tag">想法</span>
-                            <span class="tag">廢話</span>
-                        </div>
-                        <span class="read-more">閱讀更多</span>
-                    </article>
-
-                    <article class="post-card" data-category="想法" data-tags="生活,思考">
-                        <div class="post-date">2025-05-10</div>
-                        <h2 class="post-title">《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響</h2>
-                        <p class="post-excerpt"></p>
-                        <div class="post-tags">
-                            <span class="tag">生活</span>
-                            <span class="tag">思考</span>
-                        </div>
-                        <span class="read-more">閱讀更多</span>
-                    </article>
-                </div>
-            </main>
         </div>
-<!-- 特選心得 - 文章頁面 -->
-<div id="post-txq" class="page" style="display:none;">
-    <main style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
-        <button onclick="showHome()" style="
-            margin-bottom: 2rem;
-            padding: 0.75rem 1.5rem;
-            border: 1px solid var(--color-border);
-            background: rgba(55, 65, 81, 0.6);
-            backdrop-filter: blur(8px);
-            color: var(--color-text-secondary);
-            cursor: pointer;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;">
-            ← 返回首頁
-        </button>
+   
 
-        <article style="
-            background: rgba(55, 65, 81, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--color-border);
-            padding: 3rem;
-            border-radius: 4px;">
-            
-            <div style="margin-bottom: 3rem;">
-                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 1rem; letter-spacing: 0.1em;">
-                    2025-11-26
-                </div>
-                <h1 style="font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.3; letter-spacing: 0.02em;">
-                    特選前的心得 -Overview
-                </h1>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="tag">心得</span>
-                    <span class="tag">想法</span>
-                </div>
+        <!-- 文章 1: 特選前的心得 -->
+        <div id="post-txq" class="article-page">
+            <button class="back-btn" onclick="showHome()">← 返回首頁</button>
+            <div style="text-align:center; margin: -1rem 0 2rem; color:var(--accent); font-size:0.95rem;">
+                這篇文章被看了 <strong id="article-views-txq">0</strong> 次
             </div>
-
-            <div style="line-height: 1.9; color: var(--color-text-muted); font-size: 1.05rem;">
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        我在國中時就被告知就業前的終極目標一直都是讀好的研究所，否則這輩子完蛋。不過仔細想想，也沒有什麼好完蛋不完蛋的。畢業後不過是成為維持社會運轉的螺絲釘，賺得多、賺得少都是一種活法而已。但賺錢真的是人生的第一要義嗎？我們一輩子追求的真的是「錢、權力、榮耀」嗎？
-                    </p>
-                    <p style="margin-bottom: 1.5rem; font-style: italic; color: var(--color-text-secondary); padding-left: 1.5rem; border-left: 2px solid var(--color-border);">
-                        #引用 MONEY POWER GLORY – LANA DEL REY, Ultraviolence
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        還是說,只有在擁有這些之後,人才能真正快樂？在我內心世界極度扭曲、價值觀混亂的時期,我一度認為「平靜」才是一輩子最值得追求的事情。結果後來我才發現,當我真正做到 <strong style="color: var(--color-text-secondary);">When I don't give a shit</strong> 的時候,反而迎來了我曾經以為需要用力追一輩子的狀態。
-                    </p>
-                    <p style="margin-bottom: 1.5rem;">
-                        也難怪東西方古人一直強調德行的重要——當自己行得端、坐得正、對得起自己的時候,該來的自然會來。(容我講一下玄學,但我真的相信這點。)某一年我看了毛姆的《人性枷鎖》,那本書讓我明白：對別人好,是德行；但對自己好,是成熟。德行、謙遜、正直、真誠,是做人真正需要的特質,也是在混亂的價值中我重新抓住的方向。
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        在專三的暑假時我正著手於做專題並思考未來的規劃,畢竟距離畢業只剩兩年了。我之前原本打算聽從指導老師的想法：畢業後讀二技再升研究所(老師是說我們實驗室出來的保底中字輩)。但當時其實很迷惘。我知道我想讀大學、想升研究所,但家裡希望我選二技,因為那是比較保守的路。
-                    </p>
-                    <p style="margin-bottom: 1.5rem;">
-                        不過,由於二技升研究所的前人經歷實在太少,所以我只能自己推論：走二技可能不容易推甄。我於是打算插大(當時還有研究特殊選才這個管道,但被勸退)。
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem; padding: 1.5rem; background: rgba(107, 114, 128, 0.15); border-left: 3px solid var(--color-text-muted); border-radius: 4px;">
-                    <p style="margin-bottom: 1rem; color: var(--color-text-secondary);">
-                        我面臨兩個選擇：
-                    </p>
-                    <p style="margin-bottom: 0.75rem; padding-left: 1rem;">
-                        <strong style="color: var(--color-text-secondary);">第一</strong>是全心準備插大、荒廢所有課業；
-                    </p>
-                    <p style="margin-bottom: 1rem; padding-left: 1rem;">
-                        <strong style="color: var(--color-text-secondary);">第二</strong>是認真讀書、讓成績漂亮,做出有利於插大的書審資料。
-                    </p>
-                    <p style="padding-left: 1rem;">
-                        我原本堅持第一個,但被逼迫走第二個(老實說我有一點後悔,成績半路變好根本沒什麼用。但如果當初沒選第二個,也不會有後來的故事。)
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        後來的故事就不細講了——因為我自傳裡已經寫過。簡單來說,就是我的成績變好、比了很多比賽、拿到不錯的成績。而這段時間讓我得到一個信念：
-                    </p>
-                    <p style="
-                        margin: 2rem 0;
-                        padding: 1.5rem;
-                        text-align: center;
-                        font-size: 1.25rem;
-                        font-weight: 500;
-                        color: var(--color-text-primary);
-                        background: rgba(107, 114, 128, 0.2);
-                        border: 1px solid var(--color-border);
-                        border-radius: 4px;
-                        letter-spacing: 0.05em;">
-                        「只要下定決心去做,沒有什麼是不可能的。」
-                    </p>
-                </section>
-
-                <section style="padding-top: 2rem; border-top: 1px solid var(--color-border);">
-                    <p style="margin-bottom: 1.5rem;">
-                        未來的路會怎麼走我還不知道,也許我會在學術界、也許會進產業、也許會創業——who knows?
-                    </p>
-                    <p style="color: var(--color-text-secondary); font-size: 1.1rem;">
-                        但我可以確定的是：在找尋我真正想要的道路上,我都會全力以赴。
-                    </p>
-                    
-                </section>
+            <div class="article-header">
+                <div class="date">2025-11-26</div>
+                <h1>特選前的心得 - Overview</h1>
+                <div class="tags"><span class="tag">心得</span><span class="tag">想法</span></div>
             </div>
-        </article>
-    </main>
-    <!-- 相關文章推薦區塊 -->
-<div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--color-border);">
-    <h2 style="font-size: 1.6rem; font-weight: 400; margin-bottom: 2rem; color: var(--color-text-secondary); letter-spacing: 0.05em;">
-        相關文章
-    </h2>
-    <div class="related-posts-grid" id="relatedPosts">
-        <!-- JS 自動填入 -->
-    </div>
-</div>
-</div>
-<!-- 深夜廢話 - 文章頁面 -->
-<div id="post-txq-deep" class="page" style="display:none;">
-    <main style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
-        <button onclick="showHome()" style="
-            margin-bottom: 2rem;
-            padding: 0.75rem 1.5rem;
-            border: 1px solid var(--color-border);
-            background: rgba(55, 65, 81, 0.6);
-            backdrop-filter: blur(8px);
-            color: var(--color-text-secondary);
-            cursor: pointer;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;">
-            ← 返回首頁
-        </button>
+            <div class="article-content" style="display: grid; grid-template-columns: 1fr 300px; gap: 3rem;">
+                <div>
+                    <p>我在國中時就被告知就業前的終極目標一直都是讀好的研究所，否則這輩子完蛋。不過仔細想想，也沒有什麼好完蛋不完蛋的。畢業後不過是成為維持社會運轉的螺絲釘，賺得多、賺得少都是一種活法而已。但賺錢真的是人生的第一要義嗎？我們一輩子追求的真的是「錢、權力、榮耀」嗎？</p>
+                    <p class="note">#引用 MONEY POWER GLORY – LANA DEL REY, Ultraviolence</p>
 
-        <article style="
-            background: rgba(55, 65, 81, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--color-border);
-            padding: 3rem;
-            border-radius: 4px;">
-            
-            <div style="margin-bottom: 3rem;">
-                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 1rem; letter-spacing: 0.1em;">
-                    2025-11-27
-                </div>
-                <h1 style="font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.3; letter-spacing: 0.02em;">
-                    深夜廢話
-                </h1>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="tag">想法</span>
-                    <span class="tag">廢話</span>
-                </div>
-            </div>
+                    <p>還是說,只有在擁有這些之後,人才能真正快樂？在我內心世界極度扭曲、價值觀混亂的時期,我一度認為「平靜」才是一輩子最值得追求的事情。結果後來我才發現,當我真正做到 <strong>When I don't give a shit</strong> 的時候,反而迎來了我曾經以為需要用力追一輩子的狀態。</p>
+                    <p>也難怪東西方古人一直強調德行的重要——當自己行得端、坐得正、對得起自己的時候,該來的自然會來。(容我講一下玄學,但我真的相信這點。)某一年我看了毛姆的《人性枷鎖》,那本書讓我明白：對別人好,是德行；但對自己好,是成熟。德行、謙遜、正直、真誠,是做人真正需要的特質,也是在混亂的價值中我重新抓住的方向。</p>
 
-            <div style="line-height: 1.9; color: var(--color-text-muted); font-size: 1.05rem;">
+                    <p>在專三的暑假時我正著手於做專題並思考未來的規劃,畢竟距離畢業只剩兩年了。我之前原本打算聽從指導老師的想法：畢業後讀二技再升研究所(老師是說我們實驗室出來的保底中字輩)。但當時其實很迷惘。我知道我想讀大學、想升研究所,但家裡希望我選二技,因為那是比較保守的路。</p>
+                    <p>不過,由於二技升研究所的前人經歷實在太少,所以我只能自己推論：走二技可能不容易推甄。我於是打算插大(當時還有研究特殊選才這個管道,但被勸退)。</p>
 
-                <section style="margin-bottom: 2.5rem;">
-                    <p>
-                        我在特選前想說的話有提到I don’t give a shit的時候迎來了內心的平靜，我想要深入講一下這一點，因為我想大部分的人都做不到，佛祖說痛苦不在外界，而是執著，當你失去執著也就沒有痛苦了；這個執著可能是外界的看法、可能是同儕關係、又或者是某些目標
-                    </p>
-                    <p style="font-style: italic; color: var(--color-text-secondary); padding-left: 1.5rem; border-left: 2px solid var(--color-border);">
-                        #阿德勒說人一生大部分的煩惱都來自於人際關係，此話不假
-                    </p>
-                    <p>
-                        但身而為人我們很難不去執著些什麼，除了執著好像沒有什麼是可以live on的，不去執著反而有些犬儒主義，畢竟釋迦摩尼身來就是王子榮華富貴想滿足的慾望早都體驗過了，才可以那麼輕易的放下一切反璞歸真，就連我現在也無法完全不去執著，還是會執著說一定要做到什麼才能怎麼樣，我就單純從如何不痛苦切入好了，至於為甚麼不痛苦就可以獲得內心的平靜，我後面會說明。
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p>
-                        張宇說過快樂之後是寂寞，而Andrew Huberman提出多巴胺基線水平的概念，多巴胺基線是大腦的快樂基準線；每次多巴胺衝高後都會隨即下降，如果刺激過度，大腦會把基線調低，結果讓你越來越難感到快樂。
-                    </p>
-                    <p style="margin-bottom: 1.5rem; font-style: italic; color: var(--color-text-secondary); padding-left: 1.5rem; border-left: 2px solid var(--color-border);">
-                        <s>簡單來說就是保持平靜才不會痛苦，既然快樂後會帶來相應的難過，那就乾脆不要快樂就好了啊!這也許就是為什麼佛祖要我們不要談戀愛、不要追求，就是不想要我們痛苦。</s>
-                    </p>
-                    <p style="font-style: italic; color: var(--color-text-secondary); padding-left: 1.5rem; border-left: 2px solid var(--color-border);">
-                        #真心推薦去看流浪者之歌
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p>
-                        現在來說怎麼解決人際關係的煩惱，回想五專時間，我真的有花一些時間在煩惱，單就解決煩惱這件事來說，就是遠離那些讓你不舒服的，只要遠離管他背後怎麼搞你，沒聽到沒看到就是沒發生，還有會讓你感到不舒服的人都是不安全感作祟，他們內心都有一個最深層的恐懼就是害怕自己不被接納，整天都只能擔驚受怕的，他們很可憐，不要反擊，你就是鏡子照出他們自己的心裡的醜陋，總之那種人這輩子也就這樣了，只能在他們的繭裡自我取暖，總之，跟什麼人當朋友自己就會變成那樣子，慎選朋友，如果身邊都只有那種人，那寧願不要有朋友會比較好(絕對沒有在講某些人)。
-                    </p>
-                  
-                </section>
-
-            </div>
-        </article>
-    </main>
-    <!-- 相關文章推薦區塊 -->
-<div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--color-border);">
-    <h2 style="font-size: 1.6rem; font-weight: 400; margin-bottom: 2rem; color: var(--color-text-secondary); letter-spacing: 0.05em;">
-        相關文章
-    </h2>
-    <div class="related-posts-grid" id="relatedPosts">
-        <!-- JS 自動填入 -->
-    </div>
-</div>
-</div>
-<div id="post-alien"  class="page" style="display:none;">
-    <main style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
-        <button onclick="showHome()" style="
-            margin-bottom: 2rem;
-            padding: 0.75rem 1.5rem;
-            border: 1px solid var(--color-border);
-            background: rgba(55, 65, 81, 0.6);
-            backdrop-filter: blur(8px);
-            color: var(--color-text-secondary);
-            cursor: pointer;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;">
-            ← 返回首頁
-        </button>
-
-        <article style="
-            background: rgba(55, 65, 81, 0.4);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--color-border);
-            padding: 3rem;
-            border-radius: 4px;">
-            
-            <div style="margin-bottom: 3rem;">
-                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 1rem; letter-spacing: 0.1em;">
-                    2025-11-27
-                </div>
-                <h1 style="font-size: 2.5rem; font-weight: 400; margin-bottom: 1rem; line-height: 1.3; letter-spacing: 0.02em;">
-                    《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響
-                </h1>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="tag">生活</span>
-                    <span class="tag">思考</span>
-                </div>
-            </div>
-
-            <div style="line-height: 1.9; color: var(--color-text-muted); font-size: 1.05rem;">
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        在過年期間，我花了三天讀完《異鄉人》。儘管篇幅不長，卡繆卻在有限的文字中傳遞出深刻的哲理與情感張力。這是一部值得反覆閱讀與咀嚼的作品。
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        小說主角莫梭，是卡繆荒謬主義思想的具象代表。他並非全然冷漠無情，而是選擇以一種極其誠實且直觀的方式面對生命。他對生活中的事件無過度反應，對母親的死亡、戀愛、甚至殺人事件的處理，都顯示出他對「事實」的接受勝於對「意義」的追求。
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        然而，也正是這種與主流價值觀不一致的存在方式，使他遭遇社會的誤解與標籤化。當一個人不符合大眾對「應有反應」的期待時，社會便迅速將其分類、簡化，甚至否定其存在價值。《異鄉人》呈現的，正是這種以標籤定義他人的機制如何壓迫個體的真實。
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        這種標籤化，往往來自於人們對自身的不安與恐懼。憎恨者習慣將複雜的個體簡化為單一面向，用少數幾個詞彙便輕率地定義他人。諷刺的是，這些人往往也最依賴標籤來定位自我。如薩特所言：<em style="color: var(--color-text-secondary);">「他人即地獄」</em>——那些活在他人評價中的人，既評價他人，也受制於評價。
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem;">
-                    <p style="margin-bottom: 1.5rem;">
-                        而莫梭的態度，雖看似冷淡，實則是一種對世界的超脫。他拒絕扮演社會規範賦予的角色，不為外界期待所動。這份淡然所帶來的平靜，或許正是現代人渴望卻難以企及的自由。
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 2.5rem; padding: 1.5rem; background: rgba(107, 114, 128, 0.15); border-left: 3px solid var(--color-text-muted); border-radius: 4px;">
-                    <p style="margin-bottom: 1rem; color: var(--color-text-secondary);">
-                        《異鄉人》不僅是對存在主義與荒謬主義的文學展現，更是對我們當今社會標籤文化的深刻批判。它提醒我們：
-                    </p>
-                    <p style="margin: 2rem 0; padding: 1.5rem; text-align: center; font-size: 1.25rem; font-weight: 500; color: var(--color-text-primary); background: rgba(107, 114, 128, 0.2); border: 1px solid var(--color-border); border-radius: 4px; letter-spacing: 0.05em;">
-                        當我們用標籤看人時，也正在窒息自己的理解力與同理心。
-                    </p>
-                </section>
-
-                <section style="padding-top: 2rem; border-top: 1px solid var(--color-border);">
-                    <p style="margin-bottom: 1.5rem;">
-                        如何在社會規範與個人真實之間找到平衡，正是我們每個人都要面對的命題。
-                    </p>
-                    <p style="color: var(--color-text-secondary); font-size: 1.1rem;">
-                        我們應該學會在標籤化社會中保持自我，不因外界的簡化與否定而迷失方向。
-                    </p>
-                    
-                </section>
-            </div>
-        </article>
-    </main>
-    <!-- 相關文章推薦區塊 -->
-<div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--color-border);">
-    <h2 style="font-size: 1.6rem; font-weight: 400; margin-bottom: 2rem; color: var(--color-text-secondary); letter-spacing: 0.05em;">
-        相關文章
-    </h2>
-    <div class="related-posts-grid" id="relatedPosts">
-        <!-- JS 自動填入 -->
-    </div>
-</div>
-</div>
-
-        <!-- About Page -->
-        <div id="aboutPage" class="page">
-            <main>
-                <div class="about-header">
-                    <h1>林誼旻</h1>
-                     <!--<p class="about-subtitle">Goal-Hunter</p>-->
-                </div>
-
-                <div class="about-section">
-                    <h2>基本資料</h2>
-                    <div class="about-info">
-                        <div class="about-info-item">虎尾科技大學資工科五專部</div>
-                        <div class="about-info-item">CPE 4題 (5.8%)</div>
+                    <div style="padding: 1.5rem; background: rgba(107, 114, 128, 0.15); border-left: 3px solid var(--accent); border-radius: 4px; margin: 2rem 0;">
+                        <p style="color: var(--accent);">我面臨兩個選擇：</p>
+                        <p style="padding-left: 1rem;"><strong>第一</strong>是全心準備插大、荒廢所有課業；</p>
+                        <p style="padding-left: 1rem;"><strong>第二</strong>是認真讀書、讓成績漂亮,做出有利於插大的書審資料。</p>
+                        <p style="padding-left: 1rem;">我原本堅持第一個,但被逼迫走第二個(老實說我有一點後悔,成績半路變好根本沒什麼用。但如果當初沒選第二個,也不會有後來的故事。)</p>
                     </div>
-                </div>
 
-                <div class="about-section">
-                    <h2>競賽成果</h2>
-                    <div class="achievements-list">
-                        <div class="achievement-item">
-                            大手攜小手智慧創新應用競賽 第一名
-                        </div>
-                        <div class="achievement-item">
-                            IEYI青少年發明展台灣選拔 第一名
-                        </div>
-                        <div class="achievement-item">
-                            Green Idea 國際發明競賽 第一名
-                        </div>
-                        <div class="achievement-item">
-                            校內專題競賽  第一名
-                        </div>
-                        <div class="achievement-item">
-                            資訊服務競賽 第二名
-                        </div>
-                        <div class="achievement-item">
-                            盛群盃 智慧化自行車暨健康科技應用獎 第三名
-                        </div>
-                    </div>
-                </div>
+                    <p>後來的故事就不細講了——因為我自傳裡已經寫過。簡單來說,就是我的成績變好、比了很多比賽、拿到不錯的成績。而這段時間讓我得到一個信念：</p>
+                    <div class="highlight">「只要下定決心去做,沒有什麼是不可能的。」</div>
 
-                <div class="about-section">
-                    <h2>專利與研討會</h2>
-                    <div class="achievements-list">
-                        <div class="achievement-item">
-                            運動敏捷度分析系統及運動協調度與敏捷度分析系統 — 專利
-                        </div>
-                        <div class="achievement-item">
-                            棒球量測分析系統 — 專利
-                        </div>
-                        <div class="achievement-item">
-                            參與 2025 台灣身體活動健康永續國際研討會
-                        </div>
-                    </div>
+                    <p>未來的路會怎麼走我還不知道,也許我會在學術界、也許會進產業、也許會創業——who knows?</p>
+                    <p style="color: var(--accent); font-size: 1.1rem;">但我可以確定的是：在找尋我真正想要的道路上,我都會全力以赴。</p>
                 </div>
-            </main>
-        </div>
-<!-- Archive Page - 文章目錄 -->
-<div id="archivePage" class="page">
-    <main style="max-width: 1000px; margin: 0 auto; padding: 5rem 2rem;">
-        <div style="text-align: center; margin-bottom: 4rem;">
-            <h1 style="font-size: clamp(2.8rem, 8vw, 4.5rem); font-weight: 300; letter-spacing: 0.05em; margin-bottom: 1rem;">
-                文章目錄
-            </h1>
-            <p style="color: var(--color-text-muted); font-size: 1.1rem; letter-spacing: 0.1em;">
-                目前共 <span id="postCount">0</span> 篇文字
-            </p>
+                <div class="sidebar">
+                    <h3>便利貼牆</h3>
+                    <ul>
+                        <li onclick="showPost('deep')">深夜廢話</li>
+                        <li onclick="showPost('alien')">《異鄉人》書評</li>
+                        <li onclick="showPost('murmur')">11-28 MUR MUR</li>
+                        <li onclick="showPost('murmur2')">11-29 MUR MUR 2</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div id="archiveList" style="display: grid; gap: 1.8rem; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));">
-            <!-- JS 自動生成 -->
-        </div>
-    </main>
-</div>
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-grid">
-                    <div class="footer-section">
-                        <h3>誼旻</h3>
-                        
-                    </div>
-                    <div class="footer-section">
-                        <h3>導航</h3>
-                        <ul>
-                            <li><a onclick="navigateTo('home')">首頁</a></li>
-                            <li><a onclick="openTagsModal(event)">標籤</a></li>
-                            <li><a onclick="navigateTo('about')">關於</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-section">
-                        
-                    </div>
-                </div>
-                <div class="footer-bottom">© 2025 誼旻</div>
+        <!-- 文章 2: 深夜廢話 -->
+        <div id="post-deep" class="article-page">
+            <button class="back-btn" onclick="showHome()">← 返回首頁</button>
+            <div style="text-align:center; margin: -1rem 0 2rem; color:var(--accent); font-size:0.95rem;">
+                這篇文章被看了 <strong id="article-views-txq">0</strong> 次
             </div>
-        </footer>
-    </div>
+            <div class="article-header">
+                <div class="date">2025-11-27</div>
+                <h1>深夜廢話</h1>
+                <div class="tags"><span class="tag">想法</span><span class="tag">廢話</span></div>
+            </div>
+            <div class="article-content" style="display: grid; grid-template-columns: 1fr 300px; gap: 3rem;">
+                <div>
+                    <p>我在特選前想說的話有提到I don’t give a shit的時候迎來了內心的平靜，我想要深入講一下這一點，因為我想大部分的人都做不到，佛祖說痛苦不在外界，而是執著，當你失去執著也就沒有痛苦了；這個執著可能是外界的看法、可能是同儕關係、又或者是某些目標</p>
+                    <p class="note">#阿德勒說人一生大部分的煩惱都來自於人際關係，此話不假</p>
+                    <p>但身而為人我們很難不去執著些什麼，除了執著好像沒有什麼是可以live on的，不去執著反而有些犬儒主義，畢竟釋迦摩尼身來就是王子榮華富貴想滿足的慾望早都體驗過了，才可以那麼輕易的放下一切反璞歸真，就連我現在也無法完全不去執著，還是會執著說一定要做到什麼才能怎麼樣，我就單純從如何不痛苦切入好了，至於為甚麼不痛苦就可以獲得內心的平靜，我後面會說明。</p>
 
+                    <p>張宇說過快樂之後是寂寞，而Andrew Huberman提出多巴胺基線水平的概念，多巴胺基線是大腦的快樂基準線；每次多巴胺衝高後都會隨即下降，如果刺激過度，大腦會把基線調低，結果讓你越來越難感到快樂。</p>
+                    <p class="note"><s>簡單來說就是保持平靜才不會痛苦，既然快樂後會帶來相應的難過，那就乾脆不要快樂就好了啊!這也許就是為什麼佛祖要我們不要談戀愛、不要追求，就是不想要我們痛苦。</s></p>
+                    <p class="note">#真心推薦去看流浪者之歌</p>
 
-    <!-- Spotify Modal -->
-    <div class="spotify-modal" id="spotifyModal">
-        <div class="spotify-container">
-            <button class="close-modal" id="closeModal">×</button>
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/7pHGivlV5NL5cEmrVjw9jS?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <p>現在來說怎麼解決人際關係的煩惱，回想五專時間，我真的有花一些時間在煩惱，單就解決煩惱這件事來說，就是遠離那些讓你不舒服的，只要遠離管他背後怎麼搞你，沒聽到沒看到就是沒發生，還有會讓你感到不舒服的人都是不安全感作祟，他們內心都有一個最深層的恐懼就是害怕自己不被接納，整天都只能擔驚受怕的，他們很可憐，不要反擊，你就是鏡子照出他們自己的心裡的醜陋，總之那種人這輩子也就這樣了，只能在他們的繭裡自我取暖，總之，跟什麼人當朋友自己就會變成那樣子，慎選朋友，如果身邊都只有那種人，那寧願不要有朋友會比較好(絕對沒有在講某些人)。</p>
+                </div>
+                <div class="sidebar">
+                    <h3>便利貼牆</h3>
+                    <ul>
+                        <li onclick="showPost('txq')">特選前的心得</li>
+                        <li onclick="showPost('alien')">《異鄉人》書評</li>
+                        <li onclick="showPost('murmur')">11-28 MUR MUR</li>
+                        <li onclick="showPost('murmur2')">11-29 MUR MUR 2</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 文章 3: 《異鄉人》書評 -->
+        <div id="post-alien" class="article-page">
+            <button class="back-btn" onclick="showHome()">← 返回首頁</button>
+            <div style="text-align:center; margin: -1rem 0 2rem; color:var(--accent); font-size:0.95rem;">
+                這篇文章被看了 <strong id="article-views-txq">0</strong> 次
+            </div>
+            <div class="article-header">
+                <div class="date">2025-11-27</div>
+                <h1>《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響</h1>
+                <div class="tags"><span class="tag">生活</span><span class="tag">思考</span></div>
+            </div>
+            <div class="article-content" style="display: grid; grid-template-columns: 1fr 300px; gap: 3rem;">
+                <div>
+                    <p>在過年期間，我花了三天讀完《異鄉人》。儘管篇幅不長，卡繆卻在有限的文字中傳遞出深刻的哲理與情感張力。這是一部值得反覆閱讀與咀嚼的作品。</p>
+
+                    <p>小說主角莫梭，是卡繆荒謬主義思想的具象代表。他並非全然冷漠無情，而是選擇以一種極其誠實且直觀的方式面對生命。他對生活中的事件無過度反應，對母親的死亡、戀愛、甚至殺人事件的處理，都顯示出他對「事實」的接受勝於對「意義」的追求。</p>
+
+                    <p>然而，也正是這種與主流價值觀不一致的存在方式，使他遭遇社會的誤解與標籤化。當一個人不符合大眾對「應有反應」的期待時，社會便迅速將其分類、簡化，甚至否定其存在價值。《異鄉人》呈現的，正是這種以標籤定義他人的機制如何壓迫個體的真實。</p>
+
+                    <p>這種標籤化，往往來自於人們對自身的不安與恐懼。憎恨者習慣將複雜的個體簡化為單一面向，用少數幾個詞彙便輕率地定義他人。諷刺的是，這些人往往也最依賴標籤來定位自我。如薩特所言：<em>「他人即地獄」</em>——那些活在他人評價中的人，既評價他人，也受制於評價。</p>
+
+                    <p>而莫梭的態度，雖看似冷淡，實則是一種對世界的超脫。他拒絕扮演社會規範賦予的角色，不為外界期待所動。這份淡然所帶來的平靜，或許正是現代人渴望卻難以企及的自由。</p>
+
+                    <div class="highlight">當我們用標籤看人時，也正在窒息自己的理解力與同理心。</div>
+
+                    <p>如何在社會規範與個人真實之間找到平衡，正是我們每個人都要面對的命題。</p>
+                    <p style="color: var(--accent); font-size: 1.1rem;">我們應該學會在標籤化社會中保持自我，不因外界的簡化與否定而迷失方向。</p>
+                </div>
+                <div class="sidebar">
+                    <h3>便利貼牆</h3>
+                    <ul>
+                        <li onclick="showPost('txq')">特選前的心得</li>
+                        <li onclick="showPost('deep')">深夜廢話</li>
+                        <li onclick="showPost('murmur')">11-28 MUR MUR</li>
+                        <li onclick="showPost('murmur2')">11-29 MUR MUR 2</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 文章 4: 11-28 MUR MUR -->
+        <div id="post-murmur" class="article-page">
+            <button class="back-btn" onclick="showHome()">← 返回首頁</button>
+            <div style="text-align:center; margin: -1rem 0 2rem; color:var(--accent); font-size:0.95rem;">
+                這篇文章被看了 <strong id="article-views-txq">0</strong> 次
+            </div>
+            <div class="article-header">
+                <div class="date">2025-11-28</div>
+                <h1>11-28 MUR MUR</h1>
+                <div class="tags"><span class="tag">MUR MUR</span><span class="tag">日記</span></div>
+            </div>
+            <div class="article-content" style="display: grid; grid-template-columns: 1fr 300px; gap: 3rem;">
+                <div>
+                    <h2 style="color: var(--accent); margin-bottom: 1rem;">今天</h2>
+                    <p>今天得知中興資工沒進面試對我來說無疑是一個相當大的打擊，也讓我對我的程度高低有了認識，也許我一開始就不應該來特選，不過現在也來不及了，今天就來說說我的過去好了。</p>
+
+                    <h2 style="color: var(--accent); margin: 1.5rem 0 1rem;">專三的時候</h2>
+                    <p>在我專三的時候近乎是我在五專時間最荒廢課業的一段時間，我了解到即使不努力也不見得會快樂，也許我當時體驗到許多過去沒試過但實際上就是一些很空洞的事情，現在回頭來看雖然後悔，但至少使我不會再次去浪費時間做沒意義的事情，就包括過去的胡思亂想也是最浪費時間的事情，雖然前幾篇講過不執著才快樂，但人生在世還是得追求點什麼，不管成功失敗都是一段經歷，只要能夠心懷感恩和抱持正向的心態，沒有什麼是過不去的，在虛度一年後，我開始校外租屋，並開始思考未來，經歷了一系列的徬徨後決心要好好的珍惜在世的時間，不管你相不相信命運，我在國中的時候就有看過Thewizardliz的影片，但由於英文太糟，所以沒有看完，在迷茫的那段時間Youtube再次推給我Thewizardliz的影片，讓我重新拾起信心和獲得些許的方向感(至於是哪一部就不方便說了)，總之我相信這是命運的安排，那段時間我還研究了升學的方向，我就有找到特殊選才，但由於成績不好、沒經歷和檢定證明，所以就自然而然刪掉這個選項了，直到我累積到足夠多(?)的經歷的時候，在有一天莫名其妙想到特殊選才，心血來潮一查，居然還有有開的學校！所以就報名了，直到現在我對特殊選才會不會上還是抱直相當大的執念，要是結果不符預期，我可能會哭暈在廁所，然後開始自殺式的備考方式準備轉學考吧。</p>
+
+                    <h2 style="color: var(--accent); margin: 1.5rem 0 1rem;">現在</h2>
+                    <p>現在我能做的就只有把握當下，做我能做的，讓未來的自己感謝現在的時光，即使未來大學真的只有上虎科(對不起，虎科)我還是可以盡最大的努力上研究所。<br>
+                    也許是對成為螺絲釘感到害怕吧，所以才會對這麼多事情這麼在乎(超好笑之前還聽到搞不好都畢不了業的人說我超在乎，IDGAF)，不知未來會怎麼樣，也許我會移民，或是做一些現在想都不敢想的事情，不知道。</p>
+                </div>
+                <div class="sidebar">
+                    <h3>便利貼牆</h3>
+                    <ul>
+                        <li onclick="showPost('txq')">特選前的心得</li>
+                        <li onclick="showPost('deep')">深夜廢話</li>
+                        <li onclick="showPost('alien')">《異鄉人》書評</li>
+                        <li onclick="showPost('murmur2')">11-29 MUR MUR 2</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 文章 5: 11-29 MUR MUR 2 -->
+        <div id="post-murmur2" class="article-page">
+            <button class="back-btn" onclick="showHome()">← 返回首頁</button>
+            <div style="text-align:center; margin: -1rem 0 2rem; color:var(--accent); font-size:0.95rem;">
+                這篇文章被看了 <strong id="article-views-txq">0</strong> 次
+            </div>
+            <div class="article-header">
+                <div class="date">2025-11-29</div>
+                <h1>11-29 MUR MUR 2 – 關於愛/女權/自信/期許/未來書單</h1>
+                <div class="tags" style="margin-bottom: 1rem;"><span class="tag">MUR MUR</span><span class="tag">愛</span><span class="tag">女權</span><span class="tag">自信</span><span class="tag">書單</span></div>
+                <p style="color: #8b5cf6; font-size: 1rem;">本篇每一部分將以非常主觀的視角切入，慎入</p>
+            </div>
+            <div class="article-content" style="display: grid; grid-template-columns: 1fr 300px; gap: 3rem;">
+                <div>
+                    <p>雖然沒有體驗過正式的情感關係，不過我所親身感受過的種種相信也足夠在此長篇大論一番。<br>
+                    本人不會在這篇文章中提到任何人任何事，只會把體悟到的結論打上。</p>
+
+                    <p>在一年前，我提出一個理論：「情感關係只是社會必須遵循的規範，所謂的情感只是集體淺意識（不知這樣講是否合適，我想表達的是在長期的洗腦下你的大腦會遵從特定的模式）」，嗯…直到現在我還是無法完全否認當時的看法，不過在接觸基進女權的理念後才意識到過去我想的與他們不謀而合(只是他們講是”異性戀”，這樣就很怪，難不成異性戀是規範，同性戀就是真愛?)PS:我可沒有說我是女權，請不要斷章取義，我還沒資格可以稱自己是女權(相關的著作半本都沒看過，當然沒資格)。</p>
+
+                    <p>接下來，我就將個人心得列出。</p>
+
+                    <p>即使沒有交往過，但多巴胺和催產素的產生倒是經歷過不少次，相信這種經驗在為交往而交往或是單純想滿足情慾的人是沒有體會過的，當然極端情況下有精神疾病或是悲慘的人很需要一根救命稻草就會一直反覆體驗。</p>
+
+                    <p>會被人吸引大多都是幾種情況：「情感投射」<s>這種情況在年紀輕或是沒愛過幾次的人很常見(在threads觀察到的結論)<s>或是憂鬱症</s></s>，也不全然是這些情況，有得時候太相信別人講的bs也會發生，或是日久生情(也可能是單純曝光效應)都屬於此類型；「異性原型意象」 這是由心理學家/哲學家榮格提出的，男性和女性分別叫做【阿尼瑪】【阿尼瑪斯】，基本上這個原型異象就是你淺意識對異性的形象，不只是外在形象，特質、個性跟氣質都包含，一見鍾情跟快速墜入愛河大概就是這種類型；基本上就是這兩種，但還有另外一種類型比較特殊是屬於心理學界觀察出的現象「trauma bonding」，這個在受過創傷的人戀愛很容易發生，在神經學的研究中陸續證實了truama bonding的存在也就是「在威脅下的催產素」，在恐懼釋放出的催產素會加強依附，有時候你會愛上一個人在潛意識下他可能是是與你的創傷有直接關聯的。</p>
+
+                    <p>但在上方的論述中還是基於愛是一種存在的概念進行探討，愛是否存在？自我辯證時間：<br>
+                    維基百科對愛的定義是「主動心動，以真心對待某個生命體或物體，使其整體得到快樂。簡而言之，愛即主動使整體得到快樂。」，所以愛是一種無私的奉獻，所以可以簡單歸納為情感投射產生一種自願性的行為，這個解釋還不足以解釋愛，問題這個”心動”是怎麼產生的？他是屬於一種強烈的複合情緒，牽扯了獎賞系統、交感興奮系統、壓力條件系統與情緒調結系統，這也難怪很多人（<s>就是我</s>）對此情緒如此著迷，這種複合情緒的產生就如同我前面說的如此還是一個很值得深入研究的題目，基於「看不見的手錯覺」研究可以大膽假設大腦會對以為存在的概念做出相應的反應，這可不可以延伸到在社會及媒體的規訓下才會有這種稱呼為愛情的集體錯覺？</p>
+
+                    <p>網路上有個很紅的詞"limerence"，就是一種強迫性的愛慕，在焦慮型依附的人身上屬於常見的症狀，而焦慮型依附屬於truama bonding 的範圍，so that's it ，而limerence要減輕或消失需要18到36個月，要是我早點知道這個現象也許就不會那麼執著了。</p>
+
+                    <p>講完愛情的種類、愛情的成因，來個離體的現在就來說說我對基進女權的粗淺了解以及我對此的看法吧！<br>
+                    基進女權屬於在第二波女權主義運動中延伸出的一種流派。<br>
+                    ps:部分批評者認為基進女權只有屬於白人中產階級，不過近期在東北亞基進女權盛行。<br>
+                    基進女權主要提倡幾種觀念：「父權體制下所有女性都是受害者」，只要父權體系不消失，女性收到的壓迫就不會減少，其中一個例子就是男女所代表的性符號，像是男性的性符號就是聰明、強壯、有野心，女性就是柔弱、膽小、愚蠢，並且女性在社會的規訓下會對逐漸被性符號所影響，現今對此提出的解決辦法就是「拒絕服美役」、「政治女同性戀」等等；<br>
+                    「女性身體自主性」，實際上因為PIV高潮的女性只有10%～20%，陰蒂身為主要高潮的部位卻被整個社會和健康教育避而不談（北歐已經推行），所以部分基進女權認為在社會的洗腦下造成女性的「愛屌文化」，以及部分人覺得「PIV=強姦」，「反色情」，並推行政治女同性戀，另外他們推行的觀念還有「拆除傳統性別角色」、「批判性工作」、「反跨性別」。</p>
+
+                    <p>我對基進女性主義的想法：<br>
+                    在當今大多先進國家社會女性已經能夠享有跟男性相同的權利，但傳統的社會規訓及刻板印象導致女性還需要承受較多規範或是被因此受到影響做出不同的升學發展、職涯選擇，如今的社會風氣沒有封閉到個人做出不同的選擇而遭受到排斥，更何況基進女權不是受到社會觀念制約的那群人💀卻希望與他們不同的人「解放思想」，他們說「異性戀是受社會影響不是天生」well是有可能，但不行說同性戀就是天生吧，還推行政治女同性戀，請不要把愛扁平化成只剩性，「愛是不分性別的」，如果想要享有跟男性無差異化的人生，fine可以，但我們這一代是不可能的，要從教育、媒體下手和推行去除傳統性別觀念下手，而不是在網路上推行仇恨。</p>
+
+                    <p>講完女權了，距離前往台北還有些許路程，我們來談談自信吧。<br>
+                    自信就是對於自己會成功(不管是什麼事，總之是相信自己的意思)要篤定，卻不自滿。<br>
+                    (附上達克效應的圖)<br>
+                    在過去明明什麼都不懂(現在也是)但對自己能力卻超級自信的時期，我發現很多時候會失去求知慾反而固步自封，很難進步。<br>
+                    但是過度自卑難以相信自己的時候會失去行動力，同樣很難進步。<br>
+                    有時候就是要多方嘗試，認識不同的人體驗不同的事，才會親身體驗到自身的能力並保持謙卑持續精進自己。<br>
+                    我的自信到自卑真像一個旋波，不斷重複，但我現在保持在一個極度自卑的狀態，非常糟糕。<br>
+                    提升自信的方法就是fake it til you make it.<br>
+                    提升自卑的方法就是去一個地方被電爛。</p>
+
+                    <p>對未來的期許<br>
+                    提升程式能力，熟悉應用演算法，去比ICPC。<br>
+                    瘋狂讀書，拿書卷獎。<br>
+                    去新學校遇到好老師。<br>
+                    提升英文</p>
+
+                    <p>未來書單<br>
+                    看完瘟疫<br>
+                    看完查拉圖斯特拉如是說<br>
+                    看完流浪者之歌<br>
+                    看完Eleanor Oliphant Is Completely Fine<br>
+                    看完刀鋒<br>
+                    愛的藝術<br>
+                    論生命之短暫<br>
+                    存在與虛無<br>
+                    底層邏輯<br>
+                    秘密<br>
+                    尤利西斯<br>
+                    白鯨記<br>
+                    追憶似水年華<br>
+                    我，刀槍不入<br>
+                    Protocols: An Operating Manual for the Human Body<br>
+                    希望能在今年看完🙏（如果特選有上）</p>
+
+                    <p>接續上述女權話題<br>
+                    其實很多女權他們不是仇男，他們是反對仇女、反對暴力行為，其實可以理解，目前東北亞的女權大多都是這一派，假設我是女權，給我自己分派別我是屬於反色情、反PIV、教育改革派，算是基進跟自由的混合。<br>
+                    現在網路上一堆在戰女權的，在戰女權前，請先搞清楚女權在推行什麼，一堆搞不清楚就倒頭罵的，我看你們是厭女吧💀<br>
+                    雖然我前面好像全盤否定基進女權，但他們的理論我也不是完全反對，我跟他們最毋庸置疑的共通點就是我們都討厭父權女。而自由派強調身體自主權這個我就沒有很認同了。<br>
+                    很多人說基進女權厭男又愛男，某部分是可以這樣說，他們想要擁有跟男性相同的權利又痛恨父權社會，好像挺合理的，支持平權沒什麼。<br>
+                    越講越感覺自己有種弱智感，不講了，感覺開始戰男女了🤡</p>
+
+                    <p>繼續說我對感情的看法<br>
+                    雖然我認為愛情是虛構的概念，但還是挺樂意體驗的，有時候在情感投射的過程中總會發現自己心裡的缺陷，算是一種幫助自我覺察的工具，若真要說我真的對親密關係沒有什麼追求，之前只是喜歡短暫的情緒風暴，現在倒是對這種感覺已經沒有需求了，畢竟比起大起大落，我還是比較喜歡平靜，但對於這種情況如果我也有意思是願意體驗看看的。<br>
+                    今天也mur mur 完了，我要回家睡覺了，總之這樣偶爾講講話也不錯，以後可能很多這種文章。</p>
+                </div>
+                <div class="sidebar">
+                    <h3>便利貼牆</h3>
+                    <ul>
+                        <li onclick="showPost('txq')">特選前的心得</li>
+                        <li onclick="showPost('deep')">深夜廢話</li>
+                        <li onclick="showPost('alien')">《異鄉人》書評</li>
+                        <li onclick="showPost('murmur')">11-28 MUR MUR</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Tags Modal -->
-    <div class="tags-modal" id="tagsModal">
-        <div class="tags-container">
-            <button class="close-modal" id="closeTagsModal">×</button>
-            <h2>所有標籤</h2>
-            <div class="tags-list" id="tagsList"></div>
-        </div>
-    </div>
-
-    <script>
-        // Page Navigation
-        let currentPage = 'home';
-
-        function navigateTo(pageName) {
-        
-            // Hide all pages
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-
-            // Show target page
-            const targetPage = document.getElementById(pageName + 'Page');
-            if (targetPage) {
-                targetPage.classList.add('active');
-                currentPage = pageName;
-            }
-
-            // Update nav links
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                if (link.dataset.page === pageName) {
-                    link.classList.add('active');
-                }
-            });
-
-            // Close mobile menu
-            document.getElementById('mobileNav').classList.remove('active');
-
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (pageName === 'archive') {
-                renderArchive();
-    }
-
-        }
-
-        // Mobile menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileNav = document.getElementById('mobileNav');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileNav.classList.toggle('active');
-        });
-
-        // Spotify modal
-        const vinylIcon = document.getElementById('vinylIcon');
-        const spotifyModal = document.getElementById('spotifyModal');
-        const closeModal = document.getElementById('closeModal');
-        
-        vinylIcon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            spotifyModal.classList.add('active');
-            vinylIcon.classList.add('spinning');
-        });
-        
-        closeModal.addEventListener('click', () => {
-            spotifyModal.classList.remove('active');
-            vinylIcon.classList.remove('spinning');
-        });
-        
-        spotifyModal.addEventListener('click', (e) => {
-            if (e.target === spotifyModal) {
-                spotifyModal.classList.remove('active');
-                vinylIcon.classList.remove('spinning');
-            }
-        });
-
-        // Category filter
-        const categoryBtns = document.querySelectorAll('.category-btn');
-        const posts = document.querySelectorAll('.post-card');
-        
-        categoryBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const category = btn.dataset.category;
-                
-                categoryBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                posts.forEach(post => {
-                    if (category === 'all' || post.dataset.category === category) {
-                        post.style.display = 'block';
-                    } else {
-                        post.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // Click ripple
-        document.addEventListener('click', (e) => {
-            const ripple = document.createElement('div');
-            ripple.className = 'click-ripple';
-            ripple.style.left = e.clientX + 'px';
-            ripple.style.top = e.clientY + 'px';
-            
-            const circle = document.createElement('div');
-            circle.className = 'ripple-circle';
-            ripple.appendChild(circle);
-            
-            document.body.appendChild(ripple);
-            
-            setTimeout(() => ripple.remove(), 1000);
-        });
-
-        // Ambient ripples
-        function createAmbientRipple() {
-            const ripple = document.createElement('div');
-            ripple.className = 'ambient-ripple';
-            
-            const x = Math.random() * window.innerWidth;
-            const y = Math.random() * window.innerHeight;
-            const size = 300 + Math.random() * 400;
-            const duration = 3 + Math.random() * 3;
-            const isWhite = Math.random() > 0.5;
-            
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.style.width = size + 'px';
-            ripple.style.height = size + 'px';
-            ripple.style.borderColor = isWhite 
-                ? `rgba(255, 255, 255, ${0.1 + Math.random() * 0.2})` 
-                : `rgba(0, 0, 0, ${0.1 + Math.random() * 0.2})`;
-            ripple.style.animationDuration = duration + 's';
-            
-            document.body.appendChild(ripple);
-            
-            setTimeout(() => ripple.remove(), duration * 1000);
-        }
-
-        function startAmbientRipples() {
-            createAmbientRipple();
-            setTimeout(startAmbientRipples, 1500 + Math.random() * 2000);
-        }
-
-        startAmbientRipples();
-
-        // Tags functionality
-        const tagsModal = document.getElementById('tagsModal');
-        const closeTagsModal = document.getElementById('closeTagsModal');
-        const tagsList = document.getElementById('tagsList');
-
-        // Collect all tags from posts
-        function collectTags() {
-            const tagCounts = {};
-            posts.forEach(post => {
-                const tags = post.dataset.tags.split(',');
-                tags.forEach(tag => {
-                    tag = tag.trim();
-                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-                });
-            });
-            return tagCounts;
-        }
-
-        // Display tags in modal
-        function displayTags() {
-            const tagCounts = collectTags();
-            tagsList.innerHTML = '';
-            
-            Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).forEach(([tag, count]) => {
-                const tagItem = document.createElement('div');
-                tagItem.className = 'tag-item';
-                tagItem.innerHTML = `
-                    ${tag}
-                    <span class="tag-count">(${count})</span>
-                `;
-                tagItem.addEventListener('click', () => {
-                    filterByTag(tag);
-                    tagsModal.classList.remove('active');
-                });
-                tagsList.appendChild(tagItem);
-            });
-        }
-
-        // Filter posts by tag
-        function filterByTag(selectedTag) {
-            // Navigate to home page first
-            navigateTo('home');
-
-            // Reset category filter
-            categoryBtns.forEach(btn => btn.classList.remove('active'));
-            categoryBtns[0].classList.add('active');
-
-            posts.forEach(post => {
-                const tags = post.dataset.tags.split(',').map(t => t.trim());
-                if (tags.includes(selectedTag)) {
-                    post.style.display = 'block';
-                } else {
-                    post.style.display = 'none';
-                }
-            });
-
-            // Scroll to posts
-            setTimeout(() => {
-                document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        }
-
-        // Open tags modal
-        function openTagsModal(e) {
-            e.preventDefault();
-            displayTags();
-            tagsModal.classList.add('active');
-        }
-
-        closeTagsModal.addEventListener('click', () => {
-            tagsModal.classList.remove('active');
-        });
-
-        tagsModal.addEventListener('click', (e) => {
-            if (e.target === tagsModal) {
-                tagsModal.classList.remove('active');
-            }
-        });
-    
-// 文章卡片點擊事件
-document.querySelectorAll('.post-card').forEach(card => {
-    card.addEventListener('click', function() {
-        const title = this.querySelector('.post-title').textContent;
-        
-        // 根據標題判斷要顯示哪篇文章
-        if (title.includes('特選前的心得')) {
-            showPostTXQ();
-        }
-        else if (title.includes('深夜廢話')) {
-            showPostTXQDeep();
-        }
-        else if (title.includes('《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響')) {
-            showPostAlien();
-        }
-        // 未來可以加更多文章判斷
-        // else if (title.includes('其他文章標題')) {
-        //     showOtherPost();
-        // }
-    });
+   <script src="https://cdn.jsdelivr.net/npm/countapi-js@1.0.1/dist/countapi.min.js"></script>
+<script>
+const posts = ['txq','deep','alien','murmur','murmur2'];
+posts.forEach(id=>{
+  countapi.get('midnightmurmur2025',id).then(r=>document.getElementById('views-'+id).innerText=r.value.toLocaleString());
 });
 
-// 顯示特選心得文章
-// 顯示特選心得文章
-function showPostTXQ() {
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-        page.style.display = 'none';
-    });
-    document.getElementById('post-txq').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(showRelatedPosts, 300);   // 關鍵：一定要加這行
+function showPost(id){
+  document.getElementById('home').style.display='none';
+  document.querySelectorAll('.article-page').forEach(p=>p.style.display='none');
+  document.getElementById('post-'+id).style.display='block';
+  window.scrollTo(0,0);
+
+  // 計數 +1 並即時更新
+  countapi.hit('murmur2025',id).then(result=>{
+    document.getElementById('article-views-'+id).innerText=result.value.toLocaleString();
+    document.getElementById('views-'+id).innerText=result.value.toLocaleString();
+  });
 }
-
-// 顯示深夜廢話
-function showPostTXQDeep() {
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-        page.style.display = 'none';
-    });
-    document.getElementById('post-txq-deep').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(showRelatedPosts, 300);   // 關鍵：一定要加這行
+function showHome(){
+  document.getElementById('home').style.display='block';
+  document.querySelectorAll('.article-page').forEach(p=>p.style.display='none');
 }
-
-// 顯示異鄉人書評
-function showPostAlien() {
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-        page.style.display = 'none';
-    });
-    document.getElementById('post-alien').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(showRelatedPosts, 300);   // 關鍵：一定要加這行
-}
-// 返回首頁
-// 返回首頁
-// 返回首頁
-// 返回首頁
-function showHome() {
-    // 隱藏所有文章頁面
-    document.querySelectorAll('[id^="post-"]').forEach(post => {
-        post.style.display = 'none';
-    });
-    
-    // 重置所有 page 的狀態
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-        page.style.display = 'none';
-    });
-    
-    // 顯示首頁
-    const homePage = document.getElementById('homePage');
-    if (homePage) {
-        homePage.style.display = 'block';
-        homePage.classList.add('active');
-    }
-    
-    // 更新當前頁面變數
-    currentPage = 'home';
-    
-    // 更新導航連結狀態
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-        if (link.dataset.page === 'home') {
-            link.classList.add('active');
-        }
-    });
-    
-    // 關閉手機選單
-    document.getElementById('mobileNav').classList.remove('active');
-    
-    // 重置分類篩選器
-    categoryBtns.forEach(btn => btn.classList.remove('active'));
-    categoryBtns[0].classList.add('active');
-    
-    // 顯示所有文章
-    posts.forEach(post => {
-        post.style.display = 'block';
-    });
-    
-    // 捲動到頂部
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-// ====================== 全站搜尋功能 ======================
-const searchInput = document.getElementById('searchInput');
-const searchResults = document.getElementById('searchResults');
-
-// 所有文章的資料（標題 + 內容 + 日期 + 標籤 + 對應顯示函式）
-const searchData = [
-    {
-        title: "特選前的心得 -Overview",
-        date: "2025-11-26",
-        tags: "心得,想法",
-        content: ``,
-        show: showPostTXQ
-    },
-    {
-        title: "深夜廢話",
-        date: "2025-11-27",
-        tags: "想法,廢話",
-        content: ``,
-        show: showPostTXQDeep
-    },
-    {
-        title: "《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響",
-        date: "2025-05-10",
-        tags: "生活,思考",
-        content: '',
-        show: showPostAlien
-    }
-    // 以後每新增一篇，就在這裡多加一筆物件即可
-];
-
-searchInput.addEventListener('input', function(e) {
-    const query = e.target.value.trim().toLowerCase();
-    searchResults.innerHTML = '';
-    
-    if (query === '') {
-        searchResults.classList.remove('active');
-        return;
-    }
-
-    const matches = searchData.filter(item => 
-        item.title.toLowerCase().includes(query) ||
-        item.content.toLowerCase().includes(query) ||
-        item.tags.toLowerCase().includes(query)
-    );
-
-    if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="search-result-item" style="text-align:center; color:var(--color-text-muted);">找不到相關文章 :(</div>';
-        searchResults.classList.add('active');
-        return;
-    }
-
-    matches.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'search-result-item';
-        div.innerHTML = `
-            <div class="search-result-title">${item.title}</div>
-            <div class="search-result-excerpt">${item.date} · ${item.tags}</div>
-        `;
-        div.addEventListener('click', () => {
-            item.show();           //  // 直接跳到該文章
-            searchInput.value = '';
-            searchResults.classList.remove('active');
-        });
-        searchResults.appendChild(div);
-    });
-
-    searchResults.classList.add('active');
-});
-
-// 點擊其他地方關閉搜尋結果
-document.addEventListener('click', (e) => {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-        searchResults.classList.remove('active');
-    }
-});
-const archiveData = [
-    {
-        title: "特選前的心得 -Overview",
-        date: "2025-11-26",
-        excerpt: "",
-        tags: ["心得", "想法"],
-        show: showPostTXQ
-    },
-    {
-        title: "深夜廢話",
-        date: "2025-11-27",
-        excerpt: "",
-        tags: ["想法", "廢話"],
-        show: showPostTXQDeep
-    },
-    {
-        title: "《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響",
-        date: "2025-05-10",
-        excerpt: "",
-        tags: ["生活", "思考", "書評"],
-        show: showPostAlien
-    }
-    // 未來新增文章只要在這裡多加一筆就好！
-];function renderArchive() {
-    const container = document.getElementById('archiveList');
-    const counter = document.getElementById('postCount');
-    
-    counter.textContent = archiveData.length;
-    container.innerHTML = '';
-
-    // 照日期從新到舊排序
-    const sorted = [...archiveData].sort((a,b) => new Date(b.date) - new Date(a.date));
-
-    sorted.forEach(post => {
-        const div = document.createElement('div');
-        div.className = 'archive-item';
-        
-        let tagsHTML = '';
-        post.tags.forEach(t => {
-            tagsHTML += `<span class="tag">${t}</span>`;
-        });
-
-        div.innerHTML = `
-            <div class="archive-date">${post.date}</div>
-            <div class="archive-title">${post.title}</div>
-            <div class="archive-excerpt">${post.excerpt}</div>
-            <div class="archive-tags">${tagsHTML}</div>
-        `;
-
-        div.addEventListener('click', () => {
-            post.show();
-        });
-
-        container.appendChild(div);
-    });
-}
-const allPosts = [
-    {
-        id: "txq",
-        title: "特選前的心得 -Overview",
-        date: "2025-11-26",
-        tags: ["心得", "想法", "成長", "升學"],
-        show: showPostTXQ
-    },
-    {
-        id: "deep",
-        title: "深夜廢話",
-        date: "2025-11-27",
-        tags: ["想法", "廢話", "哲學", "執著", "多巴胺"],
-        show: showPostTXQDeep
-    },
-    {
-        id: "alien",
-        title: "《異鄉人》書評 - 如何面對標籤化社會帶來的負面影響",
-        date: "2025-05-10",
-        tags: ["書評", "思考", "生活", "卡繆", "標籤化", "存在主義"],
-        show: showPostAlien
-    }
-    // 以後新增文章只要這裡加一筆就好
-];
-function getSimilarity(postA, postB) {
-    const tagsA = new Set(postA.tags);
-    const tagsB = new Set(postB.tags);
-    let intersect = 0;
-    tagsA.forEach(tag => {
-        if (tagsB.has(tag)) intersect++;
-    });
-    return intersect;
-}
-
-// 顯示相關文章（自動判斷目前在哪一篇）
-// 顯示相關文章（改良版：自動找目前顯示的那個容器）
-function showRelatedPosts() {
-    let currentPostId = null;
-    let container = null;
-
-    // 自動偵測目前顯示哪一篇 + 對應的容器
-    if (document.getElementById('post-txq').style.display === 'block') {
-        currentPostId = "txq";
-        container = document.querySelector('#post-txq #relatedPosts, #post-txq #relatedPosts2, #post-txq #relatedPosts3') || 
-                   document.querySelector('#post-txq .related-posts-grid');
-    }
-    else if (document.getElementById('post-txq-deep').style.display === 'block') {
-        currentPostId = "deep";
-        container = document.querySelector('#post-txq-deep .related-posts-grid');
-    }
-    else if (document.getElementById('post-alien').style.display === 'block') {
-        currentPostId = "alien";
-        container = document.querySelector('#post-alien .related-posts-grid');
-    }
-
-    if (!currentPostId || !container) return;
-
-    const current = allPosts.find(p => p.id === currentPostId);
-    container.innerHTML = '';
-
-    const related = allPosts
-        .filter(p => p.id !== currentPostId)
-        .map(p => ({ post: p, score: getSimilarity(current, p) }))
-        .sort((a, b) => b.score - a.score || new Date(b.post.date) - new Date(a.post.date))
-        .slice(0, 4)
-        .map(item => item.post);
-
-    if (related.length === 0) {
-        container.innerHTML = '<p style="color:var(--color-text-muted); text-align:center; grid-column:1/-1;">暫無相關文章</p>';
-        return;
-    }
-
-    related.forEach(post => {
-        const card = document.createElement('div');
-        card.className = 'related-post-card';
-        let tagsHTML = post.tags.slice(0, 3).map(t => `<span class="tag">${t}</span>`).join('');
-        
-        card.innerHTML = `
-            <div class="related-post-date">${post.date}</div>
-            <div class="related-post-title">${post.title}</div>
-            <div class="related-post-tags">${tagsHTML}</div>
-        `;
-        card.onclick = () => {
-            post.show();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-        container.appendChild(card);
-    });
-}
-// ==================== 質感全包啟動 ====================
-
-// 1. 閱讀進度條
-window.addEventListener('scroll', () => {
-    const winScroll = document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) || 0;
-    document.getElementById('readingProgress').style.transform = `scaleX(${scrolled})`;
-});
-
-// 2. 返回頂部按鈕
-const backToTop = document.getElementById('backToTop');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 500) {
-        backToTop.classList.add('visible');
-    } else {
-        backToTop.classList.remove('visible');
-    }
-});
-backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-
-
-
-// 4. 首頁文章加上閱讀時間 + 字數
-document.querySelectorAll('.post-card').forEach(card => {
-    const title = card.querySelector('.post-title').textContent;
-    const wordCount = title.includes('特選前') ? 1850 : title.includes('深夜廢話') ? 920 : 2100;
-    const readTime = Math.ceil(wordCount / 250);
-    const meta = document.createElement('div');
-    meta.className = 'post-meta';
-    meta.innerHTML = `${readTime} 分鐘閱讀 · ${wordCount.toLocaleString()} 字`;
-    card.appendChild(meta);
-});
-
-// 5. Hero 區打字動畫
-document.querySelector('.hero-description').innerHTML = 
-    '<span class="typing-text">分享一些想法和心得</span>';
-    // ─────── 超帥游標 + 真正有效的打字機動畫 ───────
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. 真正的打字機動畫（會一個字一個字出來）
-    const typingElement = document.querySelector('.hero-description');
-    const text = "分享一些想法和心得";
-    typingElement.innerHTML = '';  // 先清空
-    let i = 0;
-    const timer = setInterval(() => {
-        typingElement.innerHTML += text.charAt(i);
-        i++;
-        if (i > text.length) {
-            clearInterval(timer);
-            typingElement.style.borderRight = 'none'; // 打完後移除游標
-        }
-    }, 100);
-
-
-});
-// ===== 真正的訪客計數器 + 文章瀏覽數（已測試 100% 成功）=====
-document.addEventListener('DOMContentLoaded', () => {
-    // 自動取得目前頁面 URL 當作唯一 ID
-    const pageKey = location.pathname === '/' ? 'home' : location.pathname.split('/').pop() || 'unknown';
-
-    // 更新總訪客數（全站）
-    fetch(`https://api.yimin.zone/count/api.js?page=total&key=${pageKey}`)
-        .then(r => r.json())
-        .then(data => {
-            document.querySelectorAll('#totalViews').forEach(el => {
-                el.textContent = (data.total || 1).toLocaleString();
-            });
-        })
-        .catch(() => {
-            document.querySelectorAll('#totalViews').forEach(el => el.textContent = '1,234');
-        });
-
-    // 更新單篇文章瀏覽數（只有文章頁有 #viewCount 才會觸發）
-    const viewCountEls = document.querySelectorAll('#viewCount');
-    if (viewCountEls.length > 0) {
-        fetch(`https://api.yimin.zone/count/api.js?page=${pageKey}&key=${pageKey}`)
-            .then(r => r.json())
-            .then(data => {
-                const count = (data.count || 0) + 1; // 每次打開就 +1
-                viewCountEls.forEach(el => {
-                    el.textContent = count.toLocaleString();
-                });
-            })
-            .catch(() => {
-                viewCountEls.forEach(el => el.textContent = '888');
-            });
-    }
-});
-    </script>
+showHome();
+</script>
 </body>
 </html>
